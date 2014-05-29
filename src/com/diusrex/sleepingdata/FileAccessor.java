@@ -1,19 +1,13 @@
 package com.diusrex.sleepingdata;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import android.os.Environment;
 import android.util.Log;
 
 public class FileAccessor {
     static private String LOG_TAG = "FileAccessor";
-    static private String fileName = "SleepingData.txt";
     
     static public class NoAccessException extends Exception {
         private static final long serialVersionUID = 4274163361971136233L;
@@ -24,12 +18,12 @@ public class FileAccessor {
       }
 	
 	
-	static public File OpenFile() throws IOException, NoAccessException
+	static public File OpenFile(String fileName) throws IOException, NoAccessException
 	{
 	    if (!isExternalStorageAccessable()) {
 	        throw new NoAccessException();
 	    }
-		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data"), fileName);
+		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data.txt"), fileName);
 		
 		Log.w(LOG_TAG, file.getAbsolutePath());
 		
