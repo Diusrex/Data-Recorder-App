@@ -1,8 +1,66 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.diusrex.sleepingdata.MainActivity"
-    tools:ignore="MergeRootFrame" />
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.diusrex.sleepingdata.MainActivity$PlaceholderFragment"
+    android:orientation="vertical" >
+    
+    <TableRow
+        android:id="@+id/tableRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
 
+        <!-- A ScrollView is a scrollable box that contains
+        other components that can be added dynamically. The
+        ScrollView allows the user to scroll through components
+        that can't fit on the users screen -->
+        
+        <ScrollView
+            android:id="@+id/inputGroupsScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="2"
+            android:padding="5dp" >
+            
+            <TableLayout
+                android:id="@+id/stockTableScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:stretchColumns="yes" >
+            </TableLayout>
+        </ScrollView>
+
+    </TableRow>
+    
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+
+        <!-- A ScrollView is a scrollable box that contains
+        other components that can be added dynamically. The
+        ScrollView allows the user to scroll through components
+        that can't fit on the users screen -->
+        
+        <Button
+        android:id="@+id/CreateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_button"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:onClick="CreateButtonClicked" />
+
+    </TableRow>
+    
+    
+    
+    
+    
+</TableLayout>
