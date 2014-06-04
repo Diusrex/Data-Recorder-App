@@ -23,11 +23,7 @@ public class FileAccessor {
 	    if (!isExternalStorageAccessable()) {
 	        throw new NoAccessException();
 	    }
-		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data.txt"), fileName);
-		
-		Log.w(LOG_TAG, file.getAbsolutePath());
-		
-		//file.delete();
+		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data"), fileName);
 		
 		if (!file.exists())
 		{
