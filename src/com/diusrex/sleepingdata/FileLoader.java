@@ -14,8 +14,9 @@ import android.util.Log;
 
 public class FileLoader {
     static private String LOG_TAG = "FileLoader";
-    static private String DataFile = "SleepingData.txt";
-    static private String PromptsFile = "Prompts.txt";
+    
+    static String DATA_FOLDER = "";
+    static String PROMPTS_FOLDER = ".Prompts";
     
     static public class FailedToLoad extends Exception {
         private static final long serialVersionUID = 1L;
@@ -25,11 +26,11 @@ public class FileLoader {
         public FailedToLoad(Throwable cause) { super(cause); }
     }
     
-    static public List<String> LoadPrompts() throws IOException
+    static public List<String> LoadPrompts(String promptsFile) throws IOException
     {
         BufferedReader reader;
         try {
-            reader = GetReader(PromptsFile);
+            reader = GetReader(PROMPTS_FOLDER, promptsFile);
         } catch (FailedToLoad e1) {
             return new ArrayList<String>();
         }
@@ -39,11 +40,11 @@ public class FileLoader {
         return Arrays.asList(line.split(", "));
     }
     
-    static public DataContainer LoadData() throws IOException
+    static public DataContainer LoadData(String dataFile) throws IOException
     {
         BufferedReader reader;
         try {
-            reader = GetReader(DataFile);
+            reader = GetReader(DATA_FOLDER, dataFile);
         } catch (FailedToLoad e1) {
             return new DataContainer();
         }
@@ -69,13 +70,13 @@ public class FileLoader {
     
     
     
-    static private BufferedReader GetReader(String fileToLoad) throws FailedToLoad, IOException
+    static private BufferedReader GetReader(String folderToLoad, String fileToLoad) throws FailedToLoad, IOException
     {
         File loadFile = null;
         
         try
         {
-            loadFile = FileAccessor.OpenFile(fileToLoad);
+            loadFile = FileAccessor.OpenFile(folderToLoad, fileToLoad);
         }
         catch (FileAccessor.NoAccessException e)
         {

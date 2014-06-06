@@ -7,16 +7,17 @@ import java.io.IOException;
 import com.diusrex.sleepingdata.FileAccessor.NoAccessException;
 
 public class FileSaver {
-    static private String LOG_TAG = "FileSaver";
-    static private String DataFile = "SleepingData.txt";
-    static private String PromptsFile = "Prompts.txt";
+    static String LOG_TAG = "FileSaver";
     
-    static public boolean WriteData(DataContainer data, Boolean reachedEndOfLine) throws IOException
+    static String DATA_FOLDER = "";
+    static String PROMPTS_FOLDER = ".Prompts";
+    
+    static public boolean WriteData(String dataFile, DataContainer data) throws IOException
     {
         File loadFile = null;
-         
+        
         try {
-            loadFile = FileAccessor.OpenFile(DataFile);
+            loadFile = FileAccessor.OpenFile(DATA_FOLDER, dataFile);
         } catch(NoAccessException e) {
             return false;
         }
@@ -28,9 +29,8 @@ public class FileSaver {
                 writer.write(outputItem + ", ");
             }
             
-            if (reachedEndOfLine) {
-                writer.write("\n");
-            }
+            writer.write("\n");
+            
             
             writer.close();
             
