@@ -18,12 +18,13 @@ public class FileAccessor {
       }
 	
 	
-	static public File OpenFile(String fileName) throws IOException, NoAccessException
+	static public File OpenFile(String folder, String fileName) throws IOException, NoAccessException
 	{
 	    if (!isExternalStorageAccessable()) {
 	        throw new NoAccessException();
 	    }
-		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data"), fileName);
+	    
+		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data\\" + folder), fileName);
 		
 		if (!file.exists())
 		{
