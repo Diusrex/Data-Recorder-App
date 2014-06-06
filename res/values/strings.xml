@@ -7,4 +7,5 @@
 
     <string name="new_input_group_name">Name of new input section?</string>
     <string name="add_new_prompt">Add new prompt</string>
+    <string name="change_name">Change the name</string>
 </resources>
