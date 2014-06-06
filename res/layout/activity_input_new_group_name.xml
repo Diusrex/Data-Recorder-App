@@ -48,6 +48,7 @@
              android:layout_height="wrap_content"
              android:layout_weight="1"
              android:text="@android:string/cancel"
+             android:onClick="CancelButtonClicked"
              />
 
          <Button
@@ -55,7 +56,8 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_weight="3"
-             android:text="@android:string/ok" />
+             android:text="@android:string/ok"
+             android:onClick="ContinueButtonClicked" />
 
      </TableRow>
 
