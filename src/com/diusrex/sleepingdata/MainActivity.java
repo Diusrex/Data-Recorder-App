@@ -1,10 +1,12 @@
 package com.diusrex.sleepingdata;
 
+import java.util.Arrays;
+import java.util.List;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,26 +17,29 @@ public class MainActivity extends ActionBarActivity {
     
     // Manages key valued pairs associated with stock symbols
       // Will be stored using name of save type for both value and key
-    private SharedPreferences availableInputGroups;
-    
+    private SharedPreferences availableInputGroupsPreference;
+
+    String[] inputGroups;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	    
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		availableInputGroups = getSharedPreferences("availableInputGroups", MODE_PRIVATE);
+		availableInputGroupsPreference = getSharedPreferences("availableInputGroups", MODE_PRIVATE);
 		
-		SharedPreferences.Editor preferencesEditor = availableInputGroups.edit();
+		inputGroups = availableInputGroupsPreference.getAll().keySet().toArray(new String[0]);
 	}
 	
 	
-	public void CreateButtonClicked(View view)
+	public void createButtonClicked(View view)
 	{
 	    Intent intent = new Intent(this, InputNewGroupNameActivity.class);
+	    intent.putExtra(InputNewGroupNameActivity.PREVIOUS_INPUT_GROUPS, inputGroups);
+
 	    startActivity(intent);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
