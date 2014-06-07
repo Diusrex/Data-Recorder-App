@@ -13,17 +13,26 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class InputNewGroupNameActivity extends ActionBarActivity {
+    // Data that is required to be added to the intent
+    static public String PREVIOUS_INPUT_GROUPS = "PreviousInputGroups";
+    
     static String LOG_TAG = "InputNewGroupNameActivity";
+    
     
     String SAVED_NAME = "SavedName";
     
     EditText input;
     Button finishButton;
     
+    String[] previousInputGroups;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_new_group_name);
+        
+        Intent intent = getIntent();
+        previousInputGroups = intent.getStringArrayExtra(PREVIOUS_INPUT_GROUPS);
         
         input = (EditText) findViewById(R.id.input);
         
@@ -40,19 +49,6 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
         }
     }
     
-    private boolean charactersAreValid(CharSequence word) {
-        if (word.charAt(0) == ' ') {
-            return false;
-        }
-        
-        for (int i = 0; i < word.length(); ++i) {
-            if (word.charAt(i) == '/')
-                return false;
-        }
-        
-        return true;
-    }
-    
     private TextWatcher inputListener = new TextWatcher(){
         @Override
         public void afterTextChanged(Editable arg0) {
@@ -66,24 +62,52 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (s != "") {
+            if (s.length() > 0) {
+                boolean canNowBeClicked = newInputGroup(s) && charactersAreValid(s);
                 
-                finishButton.setClickable(charactersAreValid(s));
+                finishButton.setClickable(canNowBeClicked);
+            } else {
+                finishButton.setClickable(false);
             }
         }
     };
     
-    public void ContinueButtonClicked(View view)
-    {
+    private boolean newInputGroup(CharSequence phrase) {
+        String convertedPhrase = phrase.toString();
+        
+        for (String word : previousInputGroups) {
+            if (word.equals(convertedPhrase)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private boolean charactersAreValid(CharSequence phrase) {
+        if (phrase.charAt(0) == ' ') {
+            return false;
+        }
+        
+        for (int i = 0; i < phrase.length(); ++i) {
+            if (phrase.charAt(i) == '/')
+                return false;
+        }
+        
+        return true;
+    }
+    
+    
+    public void continueButtonClicked(View view) {
+        Log.w(LOG_TAG, "Hi");
         Intent intent = new Intent(this, PromptSettingActivity.class);
         intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, input.getText().toString());
         
         startActivity(intent);
-        finish();
     }
     
-    public void CancelButtonClicked(View view)
-    {
+    public void cancelButtonClicked(View view) {
+        Log.w(LOG_TAG, "Hello");
         finish();
     }
     
