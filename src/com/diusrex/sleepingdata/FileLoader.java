@@ -37,6 +37,11 @@ public class FileLoader {
         
         String line = reader.readLine();
         
+        // Means that there were no prompts entered yet.
+        if (line == null) {
+            return new ArrayList<String>();
+        }
+        
         return Arrays.asList(line.split(", "));
     }
     
