@@ -1,9 +1,10 @@
 package com.diusrex.sleepingdata;
 
-import java.io.IOException;
-
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,29 +13,28 @@ import android.view.View;
 public class MainActivity extends ActionBarActivity {
     static String LOG_TAG = "MainActivity";
     
+    // Manages key valued pairs associated with stock symbols
+      // Will be stored using name of save type for both value and key
+    private SharedPreferences availableInputGroups;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	    
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		DataContainer container = null;
+		availableInputGroups = getSharedPreferences("availableInputGroups", MODE_PRIVATE);
 		
-		try {
-		    container = FileLoader.LoadData();
-        } catch (IOException e) {
-            e.printStackTrace();
-            container = new DataContainer();
-        }
-		
-		try {
-            FileSaver.WriteData(container, false);
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Failed to write to file");
-            e.printStackTrace();
-        }
+		SharedPreferences.Editor preferencesEditor = availableInputGroups.edit();
 	}
-
+	
+	
+	public void CreateButtonClicked(View view)
+	{
+	    Intent intent = new Intent(this, InputNewGroupNameActivity.class);
+	    startActivity(intent);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
