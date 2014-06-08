@@ -2,17 +2,22 @@
 
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/enterPromptRow"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:padding="@dimen/activity_horizontal_margin" >
 
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
     <EditText
-            android:id="@+id/input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text" >
-        </EditText>
+        android:id="@+id/input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:inputType="text" >
+    </EditText>
 
 </TableRow>

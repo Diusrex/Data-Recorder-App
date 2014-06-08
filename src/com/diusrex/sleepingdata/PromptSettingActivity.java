@@ -81,6 +81,9 @@ public class PromptSettingActivity extends Activity {
         // Create a new row
         View newStockRow = inflater.inflate(R.layout.prompt_enter_row, null);
         
+        TextView number = (TextView) newStockRow.findViewById(R.id.number);
+        number.setText("" + inputs.size() + ": ");
+        
         // Set up the EditText
         EditText newET = (EditText) newStockRow.findViewById(R.id.input);
         newET.setText(enteredText);
