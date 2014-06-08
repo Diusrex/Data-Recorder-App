@@ -143,6 +143,37 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
     
     public void cancelButtonClicked(View view) {
         Log.w(LOG_TAG, "Hello");
+        popup.dismiss();
+        finish();
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+      switch(requestCode) {
+        case (PromptSettingActivity.REQUEST_CODE) : {
+          if (resultCode == Activity.RESULT_OK) {
+              sendNameToParent();
+          } else if (resultCode == Activity.RESULT_CANCELED) {
+              didNotWantToCreate();
+          }
+          break;
+        }
+      }
+    }
+    
+    void sendNameToParent() {
+        Log.w(LOG_TAG, "Sending to parent");
+        Intent output = new Intent();
+        output.putExtra(NAME_OF_INPUT_GROUP, input.getText().toString());
+        setResult(RESULT_OK, output);
+        finish();
+    }
+    
+    void didNotWantToCreate() {
+        Log.w(LOG_TAG, "Was denied");
+        Intent output = new Intent();
+        setResult(RESULT_CANCELED, output);
         finish();
     }
     
