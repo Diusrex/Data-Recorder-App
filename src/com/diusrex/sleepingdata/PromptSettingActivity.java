@@ -58,22 +58,22 @@ public class PromptSettingActivity extends Activity {
             isNew = false;
             
             for (String item : existingInputs) {
-                AddPrompt(item);
+                addPrompt(item);
             }
             
         } else {
             isNew = true;
             
-            AddPrompt("");
+            addPrompt("");
         }
     }
     
-    public void AddPrompt(View view)
+    public void addPrompt(View view)
     {
-        AddPrompt("");
+        addPrompt("");
     }
     
-    private void AddPrompt(String enteredText)
+    private void addPrompt(String enteredText)
     {
         // Get the LayoutInflator service
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -92,7 +92,7 @@ public class PromptSettingActivity extends Activity {
         promptSettingTable.addView(newStockRow);
     }
     
-    public void ContinueButtonClicked(View view)
+    public void continueButtonClicked(View view)
     {
         List<String> prompts = new ArrayList<String>();
         
@@ -104,12 +104,16 @@ public class PromptSettingActivity extends Activity {
         boolean successfullySaved = FileSaver.SavePrompts(inputGroupName, prompts);
         
         if (!successfullySaved) {
-            
+            Log.w(LOG_TAG, "Was not saved.");
         }
+        
+        setResult(RESULT_OK, new Intent());
+        finish();
     }
     
-    public void CancelButtonClicked(View view)
+    public void cancelButtonClicked(View view)
     {
+        setResult(RESULT_CANCELED, new Intent());
         finish();
     }
     
