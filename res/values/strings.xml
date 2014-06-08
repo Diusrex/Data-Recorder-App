@@ -8,4 +8,9 @@
     <string name="new_input_group_name">Name of new input section?</string>
     <string name="add_new_prompt">Add new prompt</string>
     <string name="change_name">Change the name</string>
+    
+    <string name="name_unentered">Please enter a name</string>
+    <string name="name_invalid_characters">The name cannot contain the character \'/\'</string>
+    <string name="name_already_used">Cannot use the name, has already been used</string>
+    <string name="name_cannot_start_space">The name cannot start with a space</string>
 </resources>

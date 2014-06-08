@@ -1,23 +1,34 @@
 package com.diusrex.sleepingdata;
 
+import android.app.ActionBar.LayoutParams;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 public class InputNewGroupNameActivity extends ActionBarActivity {
     // Data that is required to be added to the intent
-    static public String PREVIOUS_INPUT_GROUPS = "PreviousInputGroups";
+    static public final String PREVIOUS_INPUT_GROUPS = "PreviousInputGroups";
     
-    static String LOG_TAG = "InputNewGroupNameActivity";
+    // Data that is returned by this activity
+    static public final int REQUEST_CODE = 100;
+    static public final String NAME_OF_INPUT_GROUP = "NameOfIntent";
     
+    
+    static final String LOG_TAG = "InputNewGroupNameActivity";
+    
+    PopupWindow popup;
+ 
+    static public final String WANTED_TO_CREATE_INPUT_GROUP = "WantedToCreateInputGroup";
     
     String SAVED_NAME = "SavedName";
     
@@ -38,10 +49,6 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
         
         finishButton = (Button) findViewById(R.id.EnterButton);
         
-        finishButton.setClickable(false);
-        
-        input.addTextChangedListener(inputListener);
-        
         if (savedInstanceState != null) {
             String name = savedInstanceState.getString(SAVED_NAME);
             
@@ -49,39 +56,35 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
         }
     }
     
-    private TextWatcher inputListener = new TextWatcher(){
-        @Override
-        public void afterTextChanged(Editable arg0) {
-            
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (s.length() > 0) {
-                boolean canNowBeClicked = newInputGroup(s) && charactersAreValid(s);
-                
-                finishButton.setClickable(canNowBeClicked);
-            } else {
-                finishButton.setClickable(false);
-            }
-        }
-    };
     
-    private boolean newInputGroup(CharSequence phrase) {
-        String convertedPhrase = phrase.toString();
-        
-        for (String word : previousInputGroups) {
-            if (word.equals(convertedPhrase)) {
-                return false;
-            }
+    
+    
+    
+    public void continueButtonClicked(View view) {        
+        if (popup != null) {
+            popup.dismiss();
         }
         
-        return true;
+        String name = input.getText().toString();
+        
+        if (name.length() == 0) { // Length of 0
+            String warning = getString(R.string.name_unentered);
+            createWarningPopup(warning);
+            
+        } else if (!charactersAreValid(name)) { // Has invalid character
+            String warning = getString(R.string.name_invalid_characters);
+            createWarningPopup(warning);
+            
+        } else if (!newInputGroup(name)) { // Already exists
+            String warning = getString(R.string.name_already_used);
+            createWarningPopup(warning);
+            
+        } else {
+            Intent intent = new Intent(this, PromptSettingActivity.class);
+            intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, name);
+            
+            startActivityForResult(intent, PromptSettingActivity.REQUEST_CODE);
+        }
     }
     
     private boolean charactersAreValid(CharSequence phrase) {
@@ -97,13 +100,45 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
         return true;
     }
     
-    
-    public void continueButtonClicked(View view) {
-        Log.w(LOG_TAG, "Hi");
-        Intent intent = new Intent(this, PromptSettingActivity.class);
-        intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, input.getText().toString());
+    private boolean newInputGroup(CharSequence phrase) {
+        String convertedPhrase = phrase.toString();
         
-        startActivity(intent);
+        for (String word : previousInputGroups) {
+            if (word.equals(convertedPhrase)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    
+    void createWarningPopup(String phrase) {
+        LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        
+        View popupView = layoutInflater.inflate(R.layout.error_popup, null);
+        
+        popup = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        
+        TextView warningText = (TextView) popupView.findViewById(R.id.warningText);
+        warningText.setText(phrase);
+        
+        Button dismissButton = (Button) popupView.findViewById(R.id.dismissButton);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+            }
+        });
+        
+        popup.showAsDropDown(input, 50, -30);
+    }
+    
+    @Override
+    public void onStop() {
+        popup.dismiss();
+        super.onStop();
     }
     
     public void cancelButtonClicked(View view) {
