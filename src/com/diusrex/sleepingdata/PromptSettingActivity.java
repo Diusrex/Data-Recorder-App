@@ -22,6 +22,9 @@ public class PromptSettingActivity extends Activity {
     
     static String LOG_TAG = "InitialPromptInputActivity";
     
+    // Data that is for if the user did not cancel
+    static final int REQUEST_CODE = 101;
+    
     // The prompt setting table will contain the inputs
     TableLayout promptSettingTable;
     List<EditText> inputs;
@@ -79,20 +82,20 @@ public class PromptSettingActivity extends Activity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
         // Create a new row
-        View newStockRow = inflater.inflate(R.layout.prompt_enter_row, null);
+        View newPromptRow = inflater.inflate(R.layout.prompt_enter_row, null);
         
-        TextView number = (TextView) newStockRow.findViewById(R.id.number);
+        TextView number = (TextView) newPromptRow.findViewById(R.id.number);
         number.setText("" + inputs.size() + ": ");
         
         // Set up the EditText
-        EditText newET = (EditText) newStockRow.findViewById(R.id.input);
+        EditText newET = (EditText) newPromptRow.findViewById(R.id.input);
         newET.setText(enteredText);
         
         // Add the newET to the inputs, and to the table
         
         // TODO: The position that the ET should be added to should be able to be changed. Also, will need to prompt to ask what output should be added.
         inputs.add(newET);
-        promptSettingTable.addView(newStockRow);
+        promptSettingTable.addView(newPromptRow);
     }
     
     public void continueButtonClicked(View view)
