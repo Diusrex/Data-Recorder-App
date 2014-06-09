@@ -13,7 +13,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 
@@ -62,6 +65,7 @@ public class MainActivity extends ActionBarActivity {
 	  super.onActivityResult(requestCode, resultCode, data);
 	  switch(requestCode) {
 	    case (InputNewGroupNameActivity.REQUEST_CODE) : {
+
 	      if (resultCode == Activity.RESULT_OK) {
 	        String newName = data.getStringExtra(InputNewGroupNameActivity.NAME_OF_INPUT_GROUP);
 	        saveNewInputGroup(newName);
@@ -103,14 +107,33 @@ public class MainActivity extends ActionBarActivity {
         //Button enterForPrompt = (Button) newInputGroupRow.findViewById(R.id.inputGroupButton);
         //enterForPrompt.setOnClickListener(inputGroupEnterListener);
         
-        //Button changePrompts = (Button) newInputGroupRow.findViewById(R.id.changeInputGroupButton);
-        //changePrompts.setOnClickListener(getStockFromWebsiteListener);
+        Button changePrompts = (Button) newInputGroupRow.findViewById(R.id.changeInputGroupButton);
+        changePrompts.setOnClickListener(changeInputGroupListener);
         
         // Add the new components for the stock to the TableLayout
         inputGroupsTable.addView(newInputGroupRow, position);
 	}
 	
+	OnClickListener changeInputGroupListener = new OnClickListener() {
+        
+        @Override
+        public void onClick(View theView) {
+            TableRow tableRow = (TableRow) theView.getParent();
+            TextView nameTextView = (TextView) tableRow.findViewById(R.id.name);
+            
+            String inputGroupName = nameTextView.getText().toString();
+            
+            startPromptSettingActivity(inputGroupName);
+        }
+    };
 	
+    void startPromptSettingActivity(String inputGroupName) {
+        Intent intent = new Intent(this, PromptSettingActivity.class);
+        intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, inputGroupName);
+
+        startActivityForResult(intent, PromptSettingActivity.REQUEST_CODE);
+    }
+    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
