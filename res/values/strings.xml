@@ -13,4 +13,8 @@
     <string name="name_invalid_characters">The name cannot contain the character \'/\'</string>
     <string name="name_already_used">Cannot use the name, has already been used</string>
     <string name="name_cannot_start_space">The name cannot start with a space</string>
+    
+    <string name="input_group_enter">Enter</string>
+    <string name="input_group_change">Change</string>
+    <string name="input_group_remove">Remove</string>
 </resources>
