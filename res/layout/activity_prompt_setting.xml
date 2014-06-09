@@ -21,26 +21,20 @@
 
     </TableRow>
 
-    <TableRow
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <ScrollView
-            android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
+        
+        <TableLayout
+            android:id="@+id/promptSettingTable"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_span="2"
             android:padding="5dp" >
-            
-            <TableLayout
-                android:id="@+id/promptSettingTable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:stretchColumns="yes" >
-            </TableLayout>
-        </ScrollView>
+        </TableLayout>
+    </ScrollView>
 
-    </TableRow>
 
      <TableRow
          android:layout_width="wrap_content"
