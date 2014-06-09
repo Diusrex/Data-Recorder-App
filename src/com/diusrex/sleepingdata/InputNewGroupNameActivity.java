@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -137,19 +136,24 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
     
     @Override
     public void onStop() {
-        popup.dismiss();
+        if (popup != null) {
+            popup.dismiss();
+        }
         super.onStop();
     }
     
     public void cancelButtonClicked(View view) {
-        Log.w(LOG_TAG, "Hello");
-        popup.dismiss();
+        if (popup != null) {
+            popup.dismiss();
+        }
+        
         finish();
     }
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
+      
       switch(requestCode) {
         case (PromptSettingActivity.REQUEST_CODE) : {
           if (resultCode == Activity.RESULT_OK) {
@@ -160,10 +164,10 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
           break;
         }
       }
+      
     }
     
     void sendNameToParent() {
-        Log.w(LOG_TAG, "Sending to parent");
         Intent output = new Intent();
         output.putExtra(NAME_OF_INPUT_GROUP, input.getText().toString());
         setResult(RESULT_OK, output);
@@ -171,7 +175,6 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
     }
     
     void didNotWantToCreate() {
-        Log.w(LOG_TAG, "Was denied");
         Intent output = new Intent();
         setResult(RESULT_CANCELED, output);
         finish();
