@@ -9,6 +9,9 @@ import android.util.Log;
 public class FileAccessor {
     static private String LOG_TAG = "FileAccessor";
     
+    static String DATA_FOLDER = "";
+    static String PROMPTS_FOLDER = ".Prompts";
+    
     static public class NoAccessException extends Exception {
         private static final long serialVersionUID = 4274163361971136233L;
         public NoAccessException() { super(); }
@@ -18,13 +21,23 @@ public class FileAccessor {
       }
 	
 	
-	static public File OpenFile(String folder, String fileName) throws IOException, NoAccessException
+    static public File OpenDataFile(String fileName) throws IOException, NoAccessException
+    {
+        return OpenFile(DATA_FOLDER, fileName);
+    }
+    
+    static public File OpenPromptFile(String fileName) throws IOException, NoAccessException
+    {
+        return OpenFile(PROMPTS_FOLDER, fileName);
+    }
+    
+	static File OpenFile(String folder, String fileName) throws IOException, NoAccessException
 	{
 	    if (!isExternalStorageAccessable()) {
 	        throw new NoAccessException();
 	    }
 	    
-		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data\\" + folder), fileName);
+		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data/" + folder), fileName);
 		
 		if (!file.exists())
 		{

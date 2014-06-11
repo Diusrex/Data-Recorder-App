@@ -15,8 +15,7 @@ import android.util.Log;
 public class FileLoader {
     static private String LOG_TAG = "FileLoader";
     
-    static String DATA_FOLDER = "";
-    static String PROMPTS_FOLDER = ".Prompts";
+    
     
     static public class FailedToLoad extends Exception {
         private static final long serialVersionUID = 1L;
@@ -30,7 +29,7 @@ public class FileLoader {
     {
         BufferedReader reader;
         try {
-            reader = GetReader(PROMPTS_FOLDER, promptsFile);
+            reader = GetReader(promptsFile, false);
         } catch (FailedToLoad e1) {
             return new ArrayList<String>();
         }
@@ -49,7 +48,7 @@ public class FileLoader {
     {
         BufferedReader reader;
         try {
-            reader = GetReader(DATA_FOLDER, dataFile);
+            reader = GetReader(dataFile, true);
         } catch (FailedToLoad e1) {
             return new DataContainer();
         }
@@ -75,14 +74,19 @@ public class FileLoader {
     
     
     
-    static private BufferedReader GetReader(String folderToLoad, String fileToLoad) throws FailedToLoad, IOException
+    static private BufferedReader GetReader(String fileToLoad, boolean isData) throws FailedToLoad, IOException
     {
         File loadFile = null;
         
         try
         {
-            loadFile = FileAccessor.OpenFile(folderToLoad, fileToLoad);
+            if (isData) {
+                loadFile = FileAccessor.OpenDataFile(fileToLoad);
+            } else {
+                loadFile = FileAccessor.OpenPromptFile(fileToLoad);
+            }
         }
+        
         catch (FileAccessor.NoAccessException e)
         {
             Log.e(LOG_TAG, "Not able to access file.");

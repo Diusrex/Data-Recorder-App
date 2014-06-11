@@ -5,20 +5,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import android.util.Log;
+
 import com.diusrex.sleepingdata.FileAccessor.NoAccessException;
 
 public class FileSaver {
     static String LOG_TAG = "FileSaver";
-    
-    static String DATA_FOLDER = "";
-    static String PROMPTS_FOLDER = ".Prompts";
     
     static public boolean WriteData(String inputGroup, DataContainer data) throws IOException
     {
         File saveFile = null;
         
         try {
-            saveFile = FileAccessor.OpenFile(DATA_FOLDER, inputGroup);
+            saveFile = FileAccessor.OpenDataFile(inputGroup);
         } catch(NoAccessException e) {
             return false;
         }
@@ -31,7 +30,6 @@ public class FileSaver {
             }
             
             writer.write("\n");
-            
             
             writer.close();
             
