@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.diusrex.sleepingdata.FileAccessor.NoAccessException;
+
 import android.util.Log;
 
 public class FileLoader {
     static private String LOG_TAG = "FileLoader";
-    
-    
     
     static public class FailedToLoad extends Exception {
         private static final long serialVersionUID = 1L;
@@ -25,11 +25,20 @@ public class FileLoader {
         public FailedToLoad(Throwable cause) { super(cause); }
     }
     
-    static public List<String> LoadPrompts(String promptsFile) throws IOException
+    static public List<String> loadPrompts(String promptsFile) throws IOException
     {
+        File loadFile = null;
+        
+        try
+        {
+            loadFile = FileAccessor.openPromptFile(promptsFile);
+        } catch (NoAccessException e) {
+            return new ArrayList<String>();
+        }
+        
         BufferedReader reader;
         try {
-            reader = GetReader(promptsFile, false);
+            reader = getReader(loadFile);
         } catch (FailedToLoad e1) {
             return new ArrayList<String>();
         }
@@ -44,11 +53,20 @@ public class FileLoader {
         return Arrays.asList(line.split(", "));
     }
     
-    static public DataContainer LoadData(String dataFile) throws IOException
+    static public DataContainer loadData(String dataFile) throws IOException
     {
+        File loadFile = null;
+        
+        try
+        {
+            loadFile = FileAccessor.openDataFile(dataFile);
+        } catch (NoAccessException e) {
+            return new DataContainer();
+        }
+        
         BufferedReader reader;
         try {
-            reader = GetReader(dataFile, true);
+            reader = getReader(loadFile);
         } catch (FailedToLoad e1) {
             return new DataContainer();
         }
@@ -74,25 +92,8 @@ public class FileLoader {
     
     
     
-    static private BufferedReader GetReader(String fileToLoad, boolean isData) throws FailedToLoad, IOException
+    static private BufferedReader getReader(File loadFile) throws FailedToLoad, IOException
     {
-        File loadFile = null;
-        
-        try
-        {
-            if (isData) {
-                loadFile = FileAccessor.OpenDataFile(fileToLoad);
-            } else {
-                loadFile = FileAccessor.OpenPromptFile(fileToLoad);
-            }
-        }
-        
-        catch (FileAccessor.NoAccessException e)
-        {
-            Log.e(LOG_TAG, "Not able to access file.");
-            throw new FailedToLoad();
-        }
-        
         FileInputStream fileIn = null;
         try {
             fileIn = new FileInputStream(loadFile);

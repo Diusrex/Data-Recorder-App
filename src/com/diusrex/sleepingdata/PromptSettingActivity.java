@@ -50,7 +50,7 @@ public class PromptSettingActivity extends Activity {
         
         List<String> existingInputs;
         try {
-            existingInputs = FileLoader.LoadPrompts(inputGroupName);
+            existingInputs = FileLoader.loadPrompts(inputGroupName);
         } catch (IOException e) {
             existingInputs = new ArrayList<String>();
         }
@@ -107,7 +107,7 @@ public class PromptSettingActivity extends Activity {
             prompts.add(text.getText().toString());
         }
         
-        boolean successfullySaved = FileSaver.SavePrompts(inputGroupName, prompts);
+        boolean successfullySaved = FileSaver.savePrompts(inputGroupName, prompts);
         
         if (!successfullySaved) {
             Log.w(LOG_TAG, "Was not saved.");

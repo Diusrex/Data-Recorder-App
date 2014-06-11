@@ -55,10 +55,6 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
         }
     }
     
-    
-    
-    
-    
     public void continueButtonClicked(View view) {        
         if (popup != null) {
             popup.dismiss();

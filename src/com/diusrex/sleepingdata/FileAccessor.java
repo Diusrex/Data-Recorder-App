@@ -21,17 +21,17 @@ public class FileAccessor {
       }
 	
 	
-    static public File OpenDataFile(String fileName) throws IOException, NoAccessException
+    static public File openDataFile(String fileName) throws IOException, NoAccessException
     {
-        return OpenFile(DATA_FOLDER, fileName);
+        return openFile(DATA_FOLDER, fileName);
     }
     
-    static public File OpenPromptFile(String fileName) throws IOException, NoAccessException
+    static public File openPromptFile(String fileName) throws IOException, NoAccessException
     {
-        return OpenFile(PROMPTS_FOLDER, fileName);
+        return openFile(PROMPTS_FOLDER, fileName);
     }
     
-	static File OpenFile(String folder, String fileName) throws IOException, NoAccessException
+	static File openFile(String folder, String fileName) throws IOException, NoAccessException
 	{
 	    if (!isExternalStorageAccessable()) {
 	        throw new NoAccessException();
