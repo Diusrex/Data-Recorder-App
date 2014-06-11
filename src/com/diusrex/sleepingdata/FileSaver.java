@@ -46,7 +46,7 @@ public class FileSaver {
         File saveFile = null;
         
         try {
-            saveFile = FileAccessor.OpenFile(DATA_FOLDER, inputGroup);
+            saveFile = FileAccessor.OpenPromptFile(inputGroup);
         } catch(Exception e) {
             return false;
         }
