@@ -38,8 +38,9 @@
 
     
      <TableRow
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content" >
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center_horizontal" >
 
          <Button
              android:id="@+id/AddPromptButton"
@@ -47,7 +48,7 @@
              android:layout_height="wrap_content"
              android:layout_gravity="center_horizontal"
              android:onClick="addPrompt"
-             android:text="@string/add_new_prompt" />
+             android:text="@string/prompt_create_new" />
          
      </TableRow>
      
