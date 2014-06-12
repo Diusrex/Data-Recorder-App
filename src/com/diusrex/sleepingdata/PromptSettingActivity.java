@@ -148,9 +148,9 @@ public class PromptSettingActivity extends Activity {
     final View.OnClickListener choosePositionListener = new View.OnClickListener() {        
         @Override
         public void onClick(View v) {
-            View parentView = (View) v.getParent();
+            // Need to do double get parent because is nested in a linear layout
+            View parentView = (View) v.getParent().getParent();
             EditText numberInput = (EditText) parentView.findViewById(R.id.positionChosen);
-            
             
             String numberInputString = numberInput.getText().toString();
             int wantedPosition = -1;
