@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.ActionBar.LayoutParams;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,10 +38,13 @@ public class PromptSettingActivity extends Activity {
     
     String inputGroupName;
     
-    PopupWindow positionPopup;
-    PopupWindow errorPopup;
+    EditText positionToAddET;
+    EditText dataToAddET;
     
-    boolean isNew;
+    boolean hasDataEntered;
+    
+    AlertDialog.Builder promptPositionBuilder;
+    AlertDialog.Builder dataAddBuilder;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +60,6 @@ public class PromptSettingActivity extends Activity {
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
         inputGroupNameTV.setText(inputGroupName);
         
-        
         List<String> existingInputs;
         try {
             existingInputs = FileLoader.loadPrompts(inputGroupName);
@@ -65,47 +70,150 @@ public class PromptSettingActivity extends Activity {
         inputs = new ArrayList<EditText>();
         
         if (existingInputs.size() > 0) {
-            isNew = false;
             
             for (String item : existingInputs) {
                 addPromptToEnd(item);
             }
             
         } else {
-            isNew = true;
             
             addPromptToEnd("");
         }
+        
+        hasDataEntered = FileLoader.dataExists(inputGroupName);
+        
+        setUpPositionToAddBuilder();
+        
     }
+
     
-    public void addPrompt(View view)
+    void setUpPositionToAddBuilder()
     {
-        // Need to create a popup to ask about the position.
-        LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        promptPositionBuilder = new AlertDialog.Builder(this);
         
-        View popupView = layoutInflater.inflate(R.layout.prompt_position_popup, null);
+        promptPositionBuilder.setTitle(getString(R.string.prompt_position));
         
-        positionPopup = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        positionPopup.setFocusable(true);
-        
-        TextView warningText = (TextView) popupView.findViewById(R.id.infoText);
-        String output = getString(R.string.prompt_position_pt1);
-        
-        warningText.setText(String.format(output, inputs.size()));
-        
-        Button confirmButton = (Button) popupView.findViewById(R.id.confirmButton);
-        confirmButton.setOnClickListener(choosePositionListener);
-        
-        Button cancelButton = (Button) popupView.findViewById(R.id.cancelButton);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        promptPositionBuilder.setNegativeButton(getString(android.R.string.cancel), new OnClickListener() {
             
             @Override
-            public void onClick(View v) {
-                positionPopup.dismiss();
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
             }
         });
         
-        positionPopup.showAtLocation(view, Gravity.CENTER, 0, 0);
+        promptPositionBuilder.setPositiveButton(getString(android.R.string.ok), choosePositionListener);
+    }
+    
+    public void choosePromptPosition(View view)
+    {
+        // Need to do this part here because it would otherwise not update
+        View inputInfo = inflateView(R.layout.prompt_position_layout);
+        TextView rangeAvailableTV = (TextView) inputInfo.findViewById(R.id.rangeAvailable);
+        String rangeAvailable = getString(R.string.prompt_range_available);
+        
+        rangeAvailableTV.setText(String.format(rangeAvailable, inputs.size()));
+        
+        positionToAddET = (EditText) inputInfo.findViewById(R.id.positionChosen);
+        
+        promptPositionBuilder.setView(inputInfo);
+        
+        AlertDialog alertDialog = promptPositionBuilder.create();
+        alertDialog.show();
+    }
+    
+    final OnClickListener choosePositionListener = new OnClickListener() {        
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            
+            String numberInputString = positionToAddET.getText().toString();
+            int wantedPosition = -1;
+            
+            try {
+                wantedPosition = Integer.parseInt(numberInputString);
+            } catch (NumberFormatException e) {
+            }
+            
+            if (wantedPosition >= 0 && wantedPosition <= inputs.size())
+            {
+                chooseValueToAddToExistingData(wantedPosition);
+                
+            } else {
+                createErrorDialog(getString(R.string.prompt_position_invalid));
+            }
+            
+            dialog.dismiss();
+        }
+    };
+    
+    // TODO: This builder should NOT be placed into it's own class
+    void setUpDataToAddBuilder()
+    {
+        // Only need to do this if data already exists
+        dataAddBuilder = new AlertDialog.Builder(this);
+        
+        dataAddBuilder.setTitle(getString(R.string.prompt_add_data));
+        
+        dataAddBuilder.setNegativeButton(getString(android.R.string.cancel), new OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        
+        
+    }
+    
+    // ToDo: This could easily be placed into the builder class for 
+    private void createErrorDialog(String phrase)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        
+        builder.setMessage(phrase);
+        builder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        
+        builder.show();
+    }
+    
+    void chooseValueToAddToExistingData(final int position)
+    {
+        if (!hasDataEntered) {
+            Log.w(LOG_TAG, "Does not have data entered");
+            addPromptToPosition("", position);
+            return;
+        }
+        
+        Log.e(LOG_TAG, "Balls");
+        
+        dataAddBuilder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {        
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String textToAdd = dataToAddET.getText().toString();
+                
+                try {
+                    FileSaver.updateData(inputGroupName, textToAdd, position);
+                } catch (IOException e) {
+                    // TODO How to handle this better?
+                }
+                
+                addPromptToPosition("", position);
+            }
+        });
+        
+        View inputInfo = inflateView(R.layout.data_add_layout);
+        
+        dataToAddET = (EditText) inputInfo.findViewById(R.id.input);
+        
+        dataAddBuilder.setView(inputInfo);
+        
+        AlertDialog alertDialog = dataAddBuilder.create();
+        alertDialog.show();
     }
     
     private void addPromptToEnd(String enteredText)
@@ -144,66 +252,17 @@ public class PromptSettingActivity extends Activity {
             number.setText("" + (i + 1) + ": ");
         }
     }
-        
-    final View.OnClickListener choosePositionListener = new View.OnClickListener() {        
-        @Override
-        public void onClick(View v) {
-            // Need to do double get parent because is nested in a linear layout
-            View parentView = (View) v.getParent().getParent();
-            EditText numberInput = (EditText) parentView.findViewById(R.id.positionChosen);
-            
-            String numberInputString = numberInput.getText().toString();
-            int wantedPosition = -1;
-            
-            try {
-                wantedPosition = Integer.parseInt(numberInputString);
-            } catch (NumberFormatException e) {
-                View buttonView = parentView.findViewById(R.id.confirmButton);
-                createPromptPositionErrorPopup(buttonView);
-            }
-            
-            if (wantedPosition >= 0 && wantedPosition <= inputs.size())
-            {
-                addPromptToPosition("", wantedPosition);
-                positionPopup.dismiss();
-            } else {
-                View buttonView = parentView.findViewById(R.id.confirmButton);
-                createPromptPositionErrorPopup(buttonView);
-            }
-        }
-        
-        private void createPromptPositionErrorPopup(View parentButton)
-        {
-            LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-            
-            View popupView = layoutInflater.inflate(R.layout.error_popup, null);
-            
-            errorPopup = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            
-            TextView warningText = (TextView) popupView.findViewById(R.id.warningText);
-            warningText.setText(getString(R.string.prompt_position_invalid));
-            
-            Button dismissButton = (Button) popupView.findViewById(R.id.dismissButton);
-            dismissButton.setOnClickListener(new View.OnClickListener() {
-                
-                @Override
-                public void onClick(View v) {
-                    errorPopup.dismiss();
-                }
-            });
-            
-            errorPopup.showAtLocation(popupView, Gravity.CENTER, 0, 50);
-        }
-    };
     
     
+    View inflateView(int id)
+    {
+        LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        return layoutInflater.inflate(id, null);
+    }
     
     public void continueButtonClicked(View view)
     {
-        if (positionPopup != null) {
-            positionPopup.dismiss();
-        }
-        
         List<String> prompts = new ArrayList<String>();
         
         for (EditText text : inputs)
@@ -223,14 +282,6 @@ public class PromptSettingActivity extends Activity {
     
     public void cancelButtonClicked(View view)
     {
-        if (positionPopup != null) {
-            positionPopup.dismiss();
-        }
-        
-        if (errorPopup != null) {
-            errorPopup.dismiss();
-        }
-        
         setResult(RESULT_CANCELED, new Intent());
         
         finish();
