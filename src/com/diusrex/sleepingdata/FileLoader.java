@@ -53,6 +53,65 @@ public class FileLoader {
         return Arrays.asList(line.split(", "));
     }
     
+    static public boolean dataExists(String dataFile)
+    {
+        String line = null;
+        try
+        {
+            File loadFile = FileAccessor.openDataFile(dataFile);
+
+            BufferedReader reader;
+
+            reader = getReader(loadFile);
+
+            line = reader.readLine();
+            
+        } catch (IOException e) {
+            return false;
+        } catch (NoAccessException e) {
+            return false;
+        } catch (FailedToLoad e) {
+            return false;
+        }
+        
+        return (line != null);
+    }
+    
+    public static List<String[]> loadAllData(String inputGroup) throws IOException {
+        File loadFile = null;
+        
+        try
+        {
+            loadFile = FileAccessor.openDataFile(inputGroup);
+        } catch (NoAccessException e) {
+            return new ArrayList<String[]>();
+        }
+        
+        BufferedReader reader;
+        try {
+            reader = getReader(loadFile);
+        } catch (FailedToLoad e1) {
+            return new ArrayList<String[]>();
+        }
+        
+        ArrayList<String[]> allLines = new ArrayList<String[]>();
+        
+        String line;
+
+        // This way, previousLine will be the line at the end of the file.
+        line = reader.readLine();
+        
+        while (line != null)
+        {
+            allLines.add(line.split(", "));
+            line = reader.readLine();
+        }
+        
+        reader.close();
+        
+        return allLines;
+    }
+    
     static public DataContainer loadData(String dataFile) throws IOException
     {
         File loadFile = null;
@@ -103,4 +162,6 @@ public class FileLoader {
         
         return new BufferedReader(reader);
     }
+
+    
 }
