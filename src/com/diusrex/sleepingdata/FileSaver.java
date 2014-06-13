@@ -41,7 +41,48 @@ public class FileSaver {
         return true;
     }
     
-    static public boolean loadData(String inputGroup, DataContainer data) throws IOException
+    static public void updateData(String inputGroup, String textToAdd, int positionToAddTo) throws IOException
+    {
+        List<String[]> data = FileLoader.loadAllData(inputGroup);
+        
+        File saveFile = null;
+        
+        try {
+            saveFile = FileAccessor.openDataFile(inputGroup);
+        } catch(NoAccessException e) {
+            return;
+        }
+        
+        try {
+            FileWriter writer = new FileWriter(saveFile, true);
+            
+            for (String[] line : data)
+            {
+                for (int pos = 0; pos < line.length; ++pos) {
+                    
+                    if (pos == positionToAddTo) {
+                        writer.write(textToAdd + ", ");
+                    }
+                    
+                    writer.write(line[pos] + ", ");
+                }
+                
+                if (positionToAddTo == line.length) {
+                    writer.write(textToAdd + ", ");
+                }
+                    
+                writer.write("\n");
+            }
+            
+            
+            writer.close();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    static public boolean saveData(String inputGroup, DataContainer data) throws IOException
     {
         File saveFile = null;
         
