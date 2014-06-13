@@ -21,8 +21,8 @@
     <string name="input_group_remove">Remove</string>
     
     <string name="prompt_create_new">Add new prompt</string>
-    <string name="prompt_position_pt1">Enter the position from the prompt. May range from 0 - %d.</string>
-    <string name="prompt_position_pt2">0 will place first. Any other number will place one after the current prompt with that number.</string>
-    
+    <string name="prompt_position">Position to place Prompt</string>
+    <string name="prompt_range_available">(0 - %d)</string>
     <string name="prompt_position_invalid">Sorry, that position is invalid.</string>
+    <string name="prompt_add_data">Add data to earlier inputs</string>
 </resources>
