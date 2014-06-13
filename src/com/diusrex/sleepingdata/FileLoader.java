@@ -72,20 +72,17 @@ public class FileLoader {
         }
         
         String line, previousLine = "";
-        try {
-            // This way, previousLine will be the line at the end of the file.
+
+        // This way, previousLine will be the line at the end of the file.
+        line = reader.readLine();
+        
+        while (line != null)
+        {
+            previousLine = line;
             line = reader.readLine();
-            
-            while (line != null)
-            {
-                previousLine = line;
-                line = reader.readLine();
-            }
-            
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        
+        reader.close();
         
         return new DataContainer(previousLine);
     }
