@@ -111,7 +111,7 @@ public class InputNewGroupNameActivity extends ActionBarActivity {
     void createWarningPopup(String phrase) {
         LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         
-        View popupView = layoutInflater.inflate(R.layout.error_popup, null);
+        View popupView = layoutInflater.inflate(R.layout.error_layout, null);
         
         popup = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         
