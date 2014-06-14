@@ -46,6 +46,8 @@ public class PromptSettingActivity extends Activity {
     AlertDialog.Builder promptPositionBuilder;
     AlertDialog.Builder dataAddBuilder;
     
+    int resultCode;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,9 @@ public class PromptSettingActivity extends Activity {
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
         
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
-        inputGroupNameTV.setText(inputGroupName);
+        String inputGroupNameFormatting = getString(R.string.current_input_group);
+        
+        inputGroupNameTV.setText(String.format(inputGroupNameFormatting, inputGroupName));
         
         List<String> existingInputs;
         try {
@@ -84,8 +88,8 @@ public class PromptSettingActivity extends Activity {
         
         setUpPositionToAddBuilder();
         
+        resultCode = RESULT_CANCELED;
     }
-
     
     void setUpPositionToAddBuilder()
     {
@@ -261,7 +265,32 @@ public class PromptSettingActivity extends Activity {
         return layoutInflater.inflate(id, null);
     }
     
-    public void continueButtonClicked(View view)
+    
+    
+    public void backButtonClicked(View view)
+    {
+        saveData();
+        
+        setResult(resultCode, new Intent());
+        finish();
+    }
+    
+    void saveData()
+    {
+        
+    }
+    
+    boolean loadPreviousData()
+    {
+        return false;
+    }
+    
+    public void clearButtonClicked(View view)
+    {
+        // TODO: reload data (from file). Will use a function that is also used in 'onCreate'
+    }
+    
+    public void saveButtonClicked(View view)
     {
         List<String> prompts = new ArrayList<String>();
         
@@ -276,17 +305,8 @@ public class PromptSettingActivity extends Activity {
             Log.w(LOG_TAG, "Was not saved.");
         }
         
-        setResult(RESULT_OK, new Intent());
-        finish();
+        resultCode = RESULT_OK;
     }
-    
-    public void cancelButtonClicked(View view)
-    {
-        setResult(RESULT_CANCELED, new Intent());
-        
-        finish();
-    }
-    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
