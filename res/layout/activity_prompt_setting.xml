@@ -12,11 +12,11 @@
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
-    
+        
         <TextView
             android:id="@+id/inputGroupName"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_gravity="center" />
 
@@ -25,7 +25,8 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp" >
+        android:padding="5dp"
+        android:layout_weight="1" >
         
         <TableLayout
             android:id="@+id/promptSettingTable"
@@ -55,24 +56,35 @@
      
      <TableRow
          android:layout_width="fill_parent"
-         android:layout_height="wrap_content" >
+         android:layout_height="wrap_content"
+         style="?android:attr/buttonBarStyle" >
 
          <Button
-             android:id="@+id/CancelButton"
-             android:layout_width="wrap_content"
+             android:id="@+id/backButton"
+             android:layout_width="0dp"
              android:layout_height="wrap_content"
              android:layout_weight="1"
-             android:text="@android:string/cancel"
-             android:onClick="cancelButtonClicked"
-             />
+             android:text="@string/back"
+             android:onClick="backButtonClicked"
+             style="?android:attr/buttonBarButtonStyle" />
 
          <Button
-             android:id="@+id/EnterButton"
-             android:layout_width="wrap_content"
+             android:id="@+id/clearButton"
+             android:layout_width="0dp"
              android:layout_height="wrap_content"
-             android:layout_weight="3"
-             android:text="@android:string/ok"
-             android:onClick="continueButtonClicked" />
+             android:layout_weight="1"
+             android:text="@string/clear"
+             android:onClick="clearChangesButtonClicked"
+             style="?android:attr/buttonBarButtonStyle" />
+         
+         <Button
+             android:id="@+id/saveButton"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="@string/save"
+             android:onClick="saveButtonClicked"
+             style="?android:attr/buttonBarButtonStyle" />
 
      </TableRow>
      
