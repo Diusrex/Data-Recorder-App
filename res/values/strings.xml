@@ -7,6 +7,10 @@
 
     <string name="dismiss">Dismiss</string>
     
+    <string name="back">Back</string>
+    <string name="clear">Clear Changes</string>
+    <string name="save">Save</string>
+    
     <string name="new_input_group_name">Name of new input section?</string>
    
     <string name="change_name">Change the name</string>
@@ -16,6 +20,7 @@
     <string name="name_already_used">Cannot use the name, has already been used</string>
     <string name="name_cannot_start_space">The name cannot start with a space</string>
     
+    <string name="current_input_group">Input Group \'%s\':</string>
     <string name="input_group_enter">Enter</string>
     <string name="input_group_change">Change</string>
     <string name="input_group_remove">Remove</string>
