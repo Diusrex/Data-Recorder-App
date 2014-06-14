@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,14 +12,12 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -188,12 +185,9 @@ public class PromptSettingActivity extends Activity {
     void chooseValueToAddToExistingData(final int position)
     {
         if (!hasDataEntered) {
-            Log.w(LOG_TAG, "Does not have data entered");
             addPromptToPosition("", position);
             return;
         }
-        
-        Log.e(LOG_TAG, "Balls");
         
         dataAddBuilder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {        
             @Override
@@ -227,6 +221,10 @@ public class PromptSettingActivity extends Activity {
     
     private void addPromptToPosition(String enteredText, int position)
     {
+        // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        
         // Get the LayoutInflator service
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
