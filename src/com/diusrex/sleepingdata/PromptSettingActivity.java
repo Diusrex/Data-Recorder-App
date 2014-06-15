@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -22,7 +23,10 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PromptSettingActivity extends Activity {
+import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
+import com.diusrex.sleepingdata.dialogs.PromptPositionDialogListener;
+
+public class PromptSettingActivity extends Activity implements PromptPositionDialogListener {
     static public String INPUT_GROUP_NAME = "InputGroupName";
     
     static String LOG_TAG = "InitialPromptInputActivity";
@@ -41,7 +45,6 @@ public class PromptSettingActivity extends Activity {
     
     boolean hasDataEntered;
     
-    AlertDialog.Builder promptPositionBuilder;
     AlertDialog.Builder dataAddBuilder;
     
     int resultCode;
@@ -84,90 +87,23 @@ public class PromptSettingActivity extends Activity {
         
         hasDataEntered = FileLoader.dataExists(inputGroupName);
         
-        setUpPositionToAddBuilder();
-        
         resultCode = RESULT_CANCELED;
-    }
-    
-    void setUpPositionToAddBuilder()
-    {
-        promptPositionBuilder = new AlertDialog.Builder(this);
-        
-        promptPositionBuilder.setTitle(getString(R.string.prompt_position));
-        
-        promptPositionBuilder.setNegativeButton(getString(android.R.string.cancel), new OnClickListener() {
-            
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        
-        promptPositionBuilder.setPositiveButton(getString(android.R.string.ok), choosePositionListener);
     }
     
     public void choosePromptPosition(View view)
     {
-        // Need to do this part here because it would otherwise not update
-        View inputInfo = inflateView(R.layout.prompt_position_layout);
-        TextView rangeAvailableTV = (TextView) inputInfo.findViewById(R.id.rangeAvailable);
-        String rangeAvailable = getString(R.string.prompt_range_available);
-        
-        rangeAvailableTV.setText(String.format(rangeAvailable, inputs.size()));
-        
-        positionToAddET = (EditText) inputInfo.findViewById(R.id.positionChosen);
-        
-        promptPositionBuilder.setView(inputInfo);
-        
-        AlertDialog alertDialog = promptPositionBuilder.create();
-        alertDialog.show();
+        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0, inputs.size(), (PromptPositionDialogListener) this); 
+        fragment.show(getFragmentManager(), "dialog");
     }
     
-    final OnClickListener choosePositionListener = new OnClickListener() {        
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            
-            String numberInputString = positionToAddET.getText().toString();
-            int wantedPosition = -1;
-            
-            try {
-                wantedPosition = Integer.parseInt(numberInputString);
-            } catch (NumberFormatException e) {
-            }
-            
-            if (wantedPosition >= 0 && wantedPosition <= inputs.size())
-            {
-                chooseValueToAddToExistingData(wantedPosition);
-                
-            } else {
-                createErrorDialog(getString(R.string.prompt_position_invalid));
-            }
-            
-            dialog.dismiss();
-        }
-    };
-    
-    // TODO: This builder should NOT be placed into it's own class
-    void setUpDataToAddBuilder()
+    @Override
+    public void positionChosen(int position)
     {
-        // Only need to do this if data already exists
-        dataAddBuilder = new AlertDialog.Builder(this);
-        
-        dataAddBuilder.setTitle(getString(R.string.prompt_add_data));
-        
-        dataAddBuilder.setNegativeButton(getString(android.R.string.cancel), new OnClickListener() {
-            
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        
         
     }
     
-    // ToDo: This could easily be placed into the builder class for 
-    private void createErrorDialog(String phrase)
+    @Override
+    public void createErrorDialog(String phrase)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         
@@ -182,6 +118,24 @@ public class PromptSettingActivity extends Activity {
         
         builder.show();
     }
+    
+    // TODO: This builder should be placed into it's own class
+    void setUpDataToAddBuilder()
+    {
+        // Only need to do this if data already exists
+        dataAddBuilder = new AlertDialog.Builder(this);
+        
+        dataAddBuilder.setTitle(getString(R.string.prompt_add_data));
+        
+        dataAddBuilder.setNegativeButton(getString(android.R.string.cancel), new OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+    }
+    
     
     void chooseValueToAddToExistingData(final int position)
     {

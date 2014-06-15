@@ -27,7 +27,7 @@
     
     <string name="prompt_create_new">Add new prompt</string>
     <string name="prompt_position">Position to place Prompt</string>
-    <string name="prompt_range_available">(0 - %d)</string>
+    <string name="prompt_range_available">(%d - %d)</string>
     <string name="prompt_position_invalid">That position is invalid</string>
     <string name="prompt_add_data">Add data to earlier inputs</string>
     
