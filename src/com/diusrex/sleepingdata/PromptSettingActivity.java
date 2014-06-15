@@ -35,12 +35,10 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     static final int REQUEST_CODE = 101;
     
     // The prompt setting table will contain the inputs
-    TableLayout promptSettingTable;
-    List<EditText> inputs;
+    PromptSettingManager manager;
     
     String inputGroupName;
     
-    EditText positionToAddET;
     EditText dataToAddET;
     
     boolean hasDataEntered;
@@ -55,51 +53,43 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         setContentView(R.layout.activity_prompt_setting);
         
        
-        promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
-        Intent intent = getIntent();
+        TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
         
+        Intent intent = getIntent();
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
+        
+        LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        manager = new PromptSettingManager(promptSettingTable, inputGroupName, layoutInflater);
         
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
         String inputGroupNameFormatting = getString(R.string.current_input_group);
         
         inputGroupNameTV.setText(String.format(inputGroupNameFormatting, inputGroupName));
         
-        List<String> existingInputs;
-        try {
-            existingInputs = FileLoader.loadPrompts(inputGroupName);
-        } catch (IOException e) {
-            existingInputs = new ArrayList<String>();
-        }
-        
-        inputs = new ArrayList<EditText>();
-        
-        if (existingInputs.size() > 0) {
-            
-            for (String item : existingInputs) {
-                addPromptToEnd(item);
-            }
-            
-        } else {
-            
-            addPromptToEnd("");
-        }
-        
         hasDataEntered = FileLoader.dataExists(inputGroupName);
         
         resultCode = RESULT_CANCELED;
+        
+        // Do not want the keyboard to popup yet
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
     
     public void choosePromptPosition(View view)
     {
-        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0, inputs.size(), (PromptPositionListener) this); 
+        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0, manager.getNumberPrompts(), (PromptPositionListener) this); 
         fragment.show(getFragmentManager(), "dialog");
     }
     
     @Override
     public void positionChosen(int position)
     {
+        // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
+        // TODO: Hook this up so that it will try to get the Data thing to run
+        manager.addPromptToPosition("", position);
     }
     
     @Override
@@ -140,7 +130,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     void chooseValueToAddToExistingData(final int position)
     {
         if (!hasDataEntered) {
-            addPromptToPosition("", position);
+            manager.addPromptToPosition("", position);
             return;
         }
         
@@ -155,7 +145,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
                     // TODO How to handle this better?
                 }
                 
-                addPromptToPosition("", position);
+                manager.addPromptToPosition("", position);
             }
         });
         
@@ -169,47 +159,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         alertDialog.show();
     }
     
-    private void addPromptToEnd(String enteredText)
-    {
-        addPromptToPosition(enteredText, inputs.size());
-    }
-    
-    private void addPromptToPosition(String enteredText, int position)
-    {
-        // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        
-        // Get the LayoutInflator service
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        
-        // Create a new row
-        View newPromptRow = inflater.inflate(R.layout.prompt_enter_row, null);
-        
-        TextView number = (TextView) newPromptRow.findViewById(R.id.number);
-        number.setText("" + (position + 1) + ": ");
-        
-        // Set up the EditText
-        EditText newET = (EditText) newPromptRow.findViewById(R.id.input);
-        newET.setText(enteredText);
-        
-        inputs.add(position, newET);
-        promptSettingTable.addView(newPromptRow, position);
-        
-        updateLaterPositionNumbers(position);
-    }
-    
-    private void updateLaterPositionNumbers(int position)
-    {
-        for (int i = position + 1; i < inputs.size(); ++i)
-        {
-            View currentPromptRow = promptSettingTable.getChildAt(i);
-            TextView number = (TextView) currentPromptRow.findViewById(R.id.number);
-            
-            number.setText("" + (i + 1) + ": ");
-        }
-    }
-    
     
     View inflateView(int id)
     {
@@ -219,40 +168,23 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     }
     
     
-    
     public void backButtonClicked(View view)
     {
-        saveData();
+        // TODO: Should create a Toast based on if the temp save was successful
+        manager.saveTemporaryPrompts();
         
         setResult(resultCode, new Intent());
         finish();
     }
     
-    void saveData()
+    public void resetButtonClicked(View view)
     {
-        
-    }
-    
-    boolean loadPreviousData()
-    {
-        return false;
-    }
-    
-    public void clearButtonClicked(View view)
-    {
-        // TODO: reload data (from file). Will use a function that is also used in 'onCreate'
+        manager.reset();
     }
     
     public void saveButtonClicked(View view)
     {
-        List<String> prompts = new ArrayList<String>();
-        
-        for (EditText text : inputs)
-        {
-            prompts.add(text.getText().toString());
-        }
-        
-        boolean successfullySaved = FileSaver.savePrompts(inputGroupName, prompts);
+        boolean successfullySaved = manager.savePromptsToFile();
         
         String output;
         
