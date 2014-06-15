@@ -35,6 +35,8 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 	    
 		super.onCreate(savedInstanceState);
+		FileAccessor.init(this);
+		
 		setContentView(R.layout.activity_main);
 		
 		inputGroupsTable = (TableLayout) findViewById(R.id.inputGroupsTable);
@@ -90,8 +92,6 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	void insertInputGroupInScrollView(String groupName, int position) {
-	    Log.w(LOG_TAG, "Trying to add " + groupName + " to position " + position);
-	    
 	    // Get the LayoutInflator service
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         

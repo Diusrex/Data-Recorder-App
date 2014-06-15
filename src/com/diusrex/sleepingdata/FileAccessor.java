@@ -3,15 +3,18 @@ package com.diusrex.sleepingdata;
 import java.io.File;
 import java.io.IOException;
 
+import android.content.Context;
+import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
 
 public class FileAccessor {
     static private String LOG_TAG = "FileAccessor";
     
-    static String DATA_FOLDER = "";
-    static String PROMPTS_FOLDER = ".Prompts";
+    static final String DATA_FOLDER = "";
+    static final String PROMPTS_FOLDER = "Prompts";
     
+    static Context appContext;
     static public class NoAccessException extends Exception {
         private static final long serialVersionUID = 4274163361971136233L;
         public NoAccessException() { super(); }
@@ -20,7 +23,11 @@ public class FileAccessor {
         public NoAccessException(Throwable cause) { super(cause); }
       }
 	
-	
+    static public void init(Context currentAppContext)
+    {
+        appContext = currentAppContext;
+    }
+    
     static public File openDataFile(String fileName) throws IOException, NoAccessException
     {
         return openFile(DATA_FOLDER, fileName);
@@ -37,7 +44,7 @@ public class FileAccessor {
 	        throw new NoAccessException();
 	    }
 	    
-		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data/" + folder), fileName);
+		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data/" + folder), fileName + ".txt");
 		
 		if (!file.exists())
 		{
@@ -48,6 +55,8 @@ public class FileAccessor {
 		    if (!file.createNewFile())
 		    {
 		        Log.e(LOG_TAG, "File was unable to be created");
+		    } else {
+		        MediaScannerConnection.scanFile(appContext.getApplicationContext(), new String[] { file.getAbsolutePath() }, null, null);
 		    }
 		}
 		
