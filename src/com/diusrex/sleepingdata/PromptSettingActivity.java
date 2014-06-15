@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PromptSettingActivity extends Activity {
     static public String INPUT_GROUP_NAME = "InputGroupName";
@@ -299,11 +300,18 @@ public class PromptSettingActivity extends Activity {
         
         boolean successfullySaved = FileSaver.savePrompts(inputGroupName, prompts);
         
+        String output;
+        
         if (!successfullySaved) {
             Log.w(LOG_TAG, "Was not saved.");
+            output = getString(R.string.save_failed);
+        } else {
+            output = getString(R.string.save_successful);
+            resultCode = RESULT_OK;
         }
         
-        resultCode = RESULT_OK;
+        Toast.makeText(getApplicationContext(), output, 
+                Toast.LENGTH_SHORT).show();
     }
     
     @Override
