@@ -32,6 +32,7 @@
     <string name="prompt_range_available" formatted="false">(%d - %d)</string>
     <string name="prompt_position_invalid">That position is invalid</string>
     <string name="prompt_add_data">Add data to earlier inputs</string>
+    <string name="prompt_temp_save">Temporarily Saved</string>
     
     <string name="save_successful">Saved</string>
     <string name="save_failed">Save failed</string>

@@ -2,9 +2,13 @@ package com.diusrex.sleepingdata;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import android.util.Log;
+import com.google.common.base.Joiner;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -13,19 +17,23 @@ import android.widget.TextView;
 
 public class PromptSettingManager {
     static final String LOG_TAG = "PromptSettingManager";
+    static final String PREFS_FILE = "PromptPreferences";
     
     final TableLayout promptTable;
     final String inputGroupName;
     final LayoutInflater layoutInflater;
+    final SharedPreferences settings;
     
     List<EditText> inputs;
     
     
-    public PromptSettingManager(TableLayout promptTable, String inputGroupName, LayoutInflater layoutInflater)
+    public PromptSettingManager(TableLayout promptTable, String inputGroupName, LayoutInflater layoutInflater, Context appContext)
     {
         this.promptTable = promptTable;
         this.inputGroupName = inputGroupName;
         this.layoutInflater = layoutInflater;
+        
+        settings = appContext.getSharedPreferences(PREFS_FILE, 0);
         
         loadPrompts();
     }
@@ -56,14 +64,33 @@ public class PromptSettingManager {
         }
     }
     
-    // TODO: Implement these. Should also clear the previously saved data when done.
     List<String> loadTemporaryPrompts()
     {
-        return new ArrayList<String>();
+        String savedWords = settings.getString(inputGroupName, null);
+        
+        if (savedWords == null){
+            return new ArrayList<String>();
+        }
+        
+        String[] brokenUp = savedWords.split(", ");
+        return Arrays.asList(brokenUp);
     }
     
     public void saveTemporaryPrompts()
     {
+        SharedPreferences.Editor editor = settings.edit();
+        
+        List<String> prompts = new ArrayList<String>();
+        
+        for (EditText text : inputs)
+        {
+            prompts.add(text.getText().toString());
+        }
+        
+        String promptsAsString = Joiner.on(", ").join(prompts);
+        
+        editor.putString(inputGroupName, promptsAsString);
+        editor.commit();
     }
     
     public void reset()

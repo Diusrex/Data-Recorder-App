@@ -1,8 +1,6 @@
 package com.diusrex.sleepingdata;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -58,8 +56,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         Intent intent = getIntent();
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
         
-        LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        manager = new PromptSettingManager(promptSettingTable, inputGroupName, layoutInflater);
+        manager = new PromptSettingManager(promptSettingTable, inputGroupName, (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
         
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
         String inputGroupNameFormatting = getString(R.string.current_input_group);
@@ -139,6 +136,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
             public void onClick(DialogInterface dialog, int which) {
                 String textToAdd = dataToAddET.getText().toString();
                 
+                // TODO: Save this into a small class contained in PromptSettingActivity
                 try {
                     FileSaver.updateData(inputGroupName, textToAdd, position);
                 } catch (IOException e) {
@@ -160,18 +158,22 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     }
     
     
+    // TODO: May be able to remove this from the class
     View inflateView(int id)
     {
         LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-
+        
+        
         return layoutInflater.inflate(id, null);
     }
     
     
     public void backButtonClicked(View view)
     {
-        // TODO: Should create a Toast based on if the temp save was successful
         manager.saveTemporaryPrompts();
+        
+        Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
+                Toast.LENGTH_SHORT).show();
         
         setResult(resultCode, new Intent());
         finish();
