@@ -21,9 +21,9 @@ public class PromptPositionDialogFragment extends DialogFragment {
     
     EditText positionToAddET;
     
-    PromptPositionDialogListener listener;
+    PromptPositionListener listener;
     
-    public static PromptPositionDialogFragment newInstance(int min, int max, PromptPositionDialogListener listener) {
+    public static PromptPositionDialogFragment newInstance(int min, int max, PromptPositionListener listener) {
         PromptPositionDialogFragment f = new PromptPositionDialogFragment();
         
         Bundle args = new Bundle();

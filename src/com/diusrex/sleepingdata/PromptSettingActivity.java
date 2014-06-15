@@ -24,9 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
-import com.diusrex.sleepingdata.dialogs.PromptPositionDialogListener;
+import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
 
-public class PromptSettingActivity extends Activity implements PromptPositionDialogListener {
+public class PromptSettingActivity extends Activity implements PromptPositionListener {
     static public String INPUT_GROUP_NAME = "InputGroupName";
     
     static String LOG_TAG = "InitialPromptInputActivity";
@@ -92,7 +92,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionDia
     
     public void choosePromptPosition(View view)
     {
-        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0, inputs.size(), (PromptPositionDialogListener) this); 
+        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0, inputs.size(), (PromptPositionListener) this); 
         fragment.show(getFragmentManager(), "dialog");
     }
     
