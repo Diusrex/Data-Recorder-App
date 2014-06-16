@@ -1,6 +1,7 @@
 package com.diusrex.sleepingdata;
 
 import java.io.IOException;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,10 +22,13 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.diusrex.sleepingdata.dialogs.PromptDataAddDialogFragment;
 import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
 import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
+import com.diusrex.sleepingdata.dialogs.PromptDataAddListener;
 
-public class PromptSettingActivity extends Activity implements PromptPositionListener {
+public class PromptSettingActivity extends Activity implements PromptPositionListener, PromptDataAddListener {
+    
     static public String INPUT_GROUP_NAME = "InputGroupName";
     
     static String LOG_TAG = "InitialPromptInputActivity";
@@ -32,16 +36,20 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     // Data that is for if the user did not cancel
     static final int REQUEST_CODE = 101;
     
+    // TODO: Move into separate class
+    private class ChangeInformation {
+        public int positionToAdd;
+        public String phraseToAdd;
+    }
+    
+    List<ChangeInformation> infoToChange;
+    
     // The prompt setting table will contain the inputs
     PromptSettingManager manager;
     
     String inputGroupName;
     
-    EditText dataToAddET;
-    
     boolean hasDataEntered;
-    
-    AlertDialog.Builder dataAddBuilder;
     
     int resultCode;
     
@@ -81,12 +89,29 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     @Override
     public void positionChosen(int position)
     {
-        // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
+        if (!hasDataEntered) {
+            // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
+            getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            
+            manager.addPromptToPosition("", position);
+        } else {
+            DialogFragment fragment = PromptDataAddDialogFragment.newInstance(position, (PromptDataAddListener) this);
+            fragment.show(getFragmentManager(), "dialog");
+        }
+    }
+    
+    @Override
+    public void dataChosen(int position, String dataToAdd)
+    {
+     // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
-        // TODO: Hook this up so that it will try to get the Data thing to run
+        // Need to add the prompt
         manager.addPromptToPosition("", position);
+        
+        // TODO: add dataToAdd to the records
     }
     
     @Override
@@ -104,57 +129,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         });
         
         builder.show();
-    }
-    
-    // TODO: This builder should be placed into it's own class
-    void setUpDataToAddBuilder()
-    {
-        // Only need to do this if data already exists
-        dataAddBuilder = new AlertDialog.Builder(this);
-        
-        dataAddBuilder.setTitle(getString(R.string.prompt_add_data));
-        
-        dataAddBuilder.setNegativeButton(getString(android.R.string.cancel), new OnClickListener() {
-            
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-    }
-    
-    
-    void chooseValueToAddToExistingData(final int position)
-    {
-        if (!hasDataEntered) {
-            manager.addPromptToPosition("", position);
-            return;
-        }
-        
-        dataAddBuilder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {        
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String textToAdd = dataToAddET.getText().toString();
-                
-                // TODO: Save this into a small class contained in PromptSettingActivity
-                try {
-                    FileSaver.updateData(inputGroupName, textToAdd, position);
-                } catch (IOException e) {
-                    // TODO How to handle this better?
-                }
-                
-                manager.addPromptToPosition("", position);
-            }
-        });
-        
-        View inputInfo = inflateView(R.layout.data_add_layout);
-        
-        dataToAddET = (EditText) inputInfo.findViewById(R.id.input);
-        
-        dataAddBuilder.setView(inputInfo);
-        
-        AlertDialog alertDialog = dataAddBuilder.create();
-        alertDialog.show();
     }
     
     
