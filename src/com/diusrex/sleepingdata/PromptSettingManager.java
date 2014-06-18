@@ -9,6 +9,8 @@ import com.google.common.base.Joiner;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -148,12 +150,35 @@ public class PromptSettingManager {
         // Set up the EditText
         EditText newET = (EditText) newPromptRow.findViewById(R.id.input);
         newET.setText(enteredText);
-        
+        newET.addTextChangedListener(textChangeListener);
         inputs.add(position, newET);
         promptTable.addView(newPromptRow, position);
         
         updateLaterPositionNumbers(position);
     }
+    
+    
+    TextWatcher textChangeListener = new TextWatcher() {
+        
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            
+        }
+        
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                int after) {
+        }
+        
+        @Override
+        public void afterTextChanged(Editable s) {
+            for (int i = 0; i < s.length(); ++i) {
+                if (s.charAt(i) == ',') {
+                    s.delete(i, i + 1);
+                }
+            }
+        }
+    };
     
     private void updateLaterPositionNumbers(int position)
     {

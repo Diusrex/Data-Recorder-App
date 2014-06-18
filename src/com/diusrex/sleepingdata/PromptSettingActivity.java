@@ -132,16 +132,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     }
     
     
-    // TODO: May be able to remove this from the class
-    View inflateView(int id)
-    {
-        LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        
-        
-        return layoutInflater.inflate(id, null);
-    }
-    
-    
     public void backButtonClicked(View view)
     {
         manager.saveTemporaryPrompts();
