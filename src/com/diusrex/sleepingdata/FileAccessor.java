@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -56,13 +57,26 @@ public class FileAccessor {
 		    {
 		        Log.e(LOG_TAG, "File was unable to be created");
 		    } else {
-		        MediaScannerConnection.scanFile(appContext.getApplicationContext(), new String[] { file.getAbsolutePath() }, null, null);
+		        flagFileChanges(file.getAbsolutePath());
 		    }
 		}
 		
 		return file;
 	}
 	
+	static public void flagFileChanges(String filePath)
+	{
+	    Log.w(LOG_TAG, "Path is " + filePath);
+	    
+	    MediaScannerConnection.scanFile(appContext,
+                new String[] { filePath }, null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+            public void onScanCompleted(String path, Uri uri) {
+                Log.i("ExternalStorage", "Scanned " + path + ":");
+                Log.i("ExternalStorage", "-> uri=" + uri);
+            }
+        });
+	}
 
 	static private boolean isExternalStorageAccessable() {
 	    String state = Environment.getExternalStorageState();
