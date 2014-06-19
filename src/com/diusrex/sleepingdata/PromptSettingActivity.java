@@ -36,13 +36,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     // Data that is for if the user did not cancel
     static final int REQUEST_CODE = 101;
     
-    // TODO: Move into separate class
-    private class ChangeInformation {
-        public int positionToAdd;
-        public String phraseToAdd;
-    }
-    
-    List<ChangeInformation> infoToChange;
+    DataChangeHandler dataChangeHandler;
     
     // The prompt setting table will contain the inputs
     PromptSettingManager manager;
@@ -51,13 +45,14 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     boolean hasDataEntered;
     
+    boolean changed;
+    
     int resultCode;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prompt_setting);
-        
        
         TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
         
@@ -65,6 +60,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
         
         manager = new PromptSettingManager(promptSettingTable, inputGroupName, (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
+        dataChangeHandler = new DataChangeHandler(inputGroupName, (Context) this);
         
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
         String inputGroupNameFormatting = getString(R.string.current_input_group);
@@ -89,11 +85,13 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     @Override
     public void positionChosen(int position)
     {
+        
         if (!hasDataEntered) {
             // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
             getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             
+            changed = true;
             manager.addPromptToPosition("", position);
         } else {
             DialogFragment fragment = PromptDataAddDialogFragment.newInstance(position, (PromptDataAddListener) this);
@@ -104,14 +102,17 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     @Override
     public void dataChosen(int position, String dataToAdd)
     {
+        Log.w(LOG_TAG, "Reached here");
+        
+        changed = true;
+        
      // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         // Need to add the prompt
         manager.addPromptToPosition("", position);
-        
-        // TODO: add dataToAdd to the records
+        dataChangeHandler.promptAdded(position, dataToAdd);
     }
     
     @Override
@@ -131,13 +132,26 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         builder.show();
     }
     
+    @Override
+    public void onBackPressed()
+    {
+        saveTemporarily();
+    }
     
     public void backButtonClicked(View view)
     {
+        saveTemporarily();
+    }
+    
+    void saveTemporarily()
+    {
         manager.saveTemporaryPrompts();
+        dataChangeHandler.saveDataChanges();
         
-        Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
+        if (changed) {
+            Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
                 Toast.LENGTH_SHORT).show();
+        }
         
         setResult(resultCode, new Intent());
         finish();
@@ -146,11 +160,13 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     public void resetButtonClicked(View view)
     {
         manager.reset();
+        dataChangeHandler.reset();
     }
     
     public void saveButtonClicked(View view)
     {
         boolean successfullySaved = manager.savePromptsToFile();
+        dataChangeHandler.applyDataChanges();
         
         String output;
         
@@ -160,10 +176,13 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         } else {
             output = getString(R.string.save_successful);
             resultCode = RESULT_OK;
+            
+            changed = false;
         }
         
         Toast.makeText(getApplicationContext(), output, 
                 Toast.LENGTH_SHORT).show();
+        
     }
     
     @Override
