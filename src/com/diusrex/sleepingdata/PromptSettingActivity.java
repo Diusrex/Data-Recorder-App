@@ -85,12 +85,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     @Override
     public void positionChosen(int position)
     {
-        
         if (!hasDataEntered) {
-            // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
-            getWindow().setSoftInputMode(
-                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            
             changed = true;
             manager.addPromptToPosition("", position);
         } else {
@@ -102,13 +97,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     @Override
     public void dataChosen(int position, String dataToAdd)
     {
-        Log.w(LOG_TAG, "Reached here");
-        
         changed = true;
-        
-     // For some reason, the first prompt will be selected, so this will stop keyboard from popping up
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         
         // Need to add the prompt
         manager.addPromptToPosition("", position);
@@ -145,15 +134,18 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     void saveTemporarily()
     {
-        manager.saveTemporaryPrompts();
-        dataChangeHandler.saveDataChanges();
-        
         if (changed) {
-            Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
-                Toast.LENGTH_SHORT).show();
+            manager.saveTemporaryPrompts();
+            dataChangeHandler.saveDataChanges();
+            
+            
+                Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
+                    Toast.LENGTH_SHORT).show();
+            
+            
+            setResult(resultCode, new Intent());
         }
         
-        setResult(resultCode, new Intent());
         finish();
     }
     
@@ -165,24 +157,24 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     public void saveButtonClicked(View view)
     {
-        boolean successfullySaved = manager.savePromptsToFile();
-        dataChangeHandler.applyDataChanges();
-        
-        String output;
-        
-        if (!successfullySaved) {
-            Log.w(LOG_TAG, "Was not saved.");
-            output = getString(R.string.save_failed);
-        } else {
-            output = getString(R.string.save_successful);
-            resultCode = RESULT_OK;
+        if (changed) {
+            boolean successfullySaved = manager.savePromptsToFile();
+            dataChangeHandler.applyDataChanges();
             
-            changed = false;
+            String output;
+            
+            if (!successfullySaved) {
+                output = getString(R.string.save_failed);
+            } else {
+                output = getString(R.string.save_successful);
+                resultCode = RESULT_OK;
+                
+                changed = false;
+            }
+            
+            Toast.makeText(getApplicationContext(), output, 
+                    Toast.LENGTH_SHORT).show();
         }
-        
-        Toast.makeText(getApplicationContext(), output, 
-                Toast.LENGTH_SHORT).show();
-        
     }
     
     @Override

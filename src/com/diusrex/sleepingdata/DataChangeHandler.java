@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Joiner;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
