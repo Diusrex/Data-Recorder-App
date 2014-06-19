@@ -109,7 +109,7 @@ public class DataChangeHandler {
                 }
                 
                 else {
-                    Log.w(LOG_TAG, "The id " + id + " was not recognized");
+                    Log.w(LOG_TAG, "The id '" + id + "' was not recognized");
                 }
             }
             
@@ -134,6 +134,10 @@ public class DataChangeHandler {
     
     public void saveDataChanges()
     {
+        if (allChanges.size() == 0) {
+            return;
+        }
+        
         String line = "", separator = "";
         
         for (ChangeInfo current : allChanges) {
@@ -158,15 +162,13 @@ public class DataChangeHandler {
             return;
         }
         
-        Log.w(LOG_TAG, "The size of it is " + allChanges.size());
-        
         for (int i = 0; i < allData.size(); ++i) {
             for (ChangeInfo current : allChanges) {
-                Log.w(LOG_TAG, "Befoe: " + allData.get(i));
                 allData.set(i, current.applyToData(allData.get(i)));
-                Log.w(LOG_TAG, "After: " + allData.get(i));
             }
         }
+        
+        allChanges = new ArrayList<ChangeInfo>();
         
         FileSaver.saveAllData(inputGroupName, allData);
     }
