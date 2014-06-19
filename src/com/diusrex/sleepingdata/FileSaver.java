@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import android.util.Log;
+
 import com.diusrex.sleepingdata.FileAccessor.NoAccessException;
 
 public class FileSaver {
@@ -30,8 +32,9 @@ public class FileSaver {
             
             writer.write("\n");
             
-            
             writer.close();
+
+            FileAccessor.flagFileChanges(saveFile.getAbsolutePath());
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,47 +42,6 @@ public class FileSaver {
         }
         
         return true;
-    }
-    
-    static public void updateData(String inputGroup, String textToAdd, int positionToAddTo) throws IOException
-    {
-        List<String[]> data = FileLoader.loadAllData(inputGroup);
-        
-        File saveFile = null;
-        
-        try {
-            saveFile = FileAccessor.openDataFile(inputGroup);
-        } catch(NoAccessException e) {
-            return;
-        }
-        
-        try {
-            FileWriter writer = new FileWriter(saveFile, true);
-            
-            for (String[] line : data)
-            {
-                for (int pos = 0; pos < line.length; ++pos) {
-                    
-                    if (pos == positionToAddTo) {
-                        writer.write(textToAdd + ", ");
-                    }
-                    
-                    writer.write(line[pos] + ", ");
-                }
-                
-                if (positionToAddTo == line.length) {
-                    writer.write(textToAdd + ", ");
-                }
-                    
-                writer.write("\n");
-            }
-            
-            
-            writer.close();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     
     static public boolean saveAllData(String inputGroup, List<String[]> allData) 
@@ -101,10 +63,13 @@ public class FileSaver {
                 for (String outputItem : data) {
                     writer.write(outputItem + ", ");
                 }
+                
+                writer.write("\n");
             }
-            writer.write("\n");
             
             writer.close();
+            
+            FileAccessor.flagFileChanges(saveFile.getAbsolutePath());
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -134,6 +99,8 @@ public class FileSaver {
             writer.write("\n");
             
             writer.close();
+            
+            FileAccessor.flagFileChanges(saveFile.getAbsolutePath());
             
         } catch (IOException e) {
             e.printStackTrace();
