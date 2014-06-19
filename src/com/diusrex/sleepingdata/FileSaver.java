@@ -82,7 +82,39 @@ public class FileSaver {
         }
     }
     
-    static public boolean saveData(String inputGroup, DataContainer data) throws IOException
+    static public boolean saveAllData(String inputGroup, List<String[]> allData) 
+    {
+        File saveFile = null;
+        
+        try {
+            saveFile = FileAccessor.openDataFile(inputGroup);
+        } catch(NoAccessException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
+        
+        try {
+            FileWriter writer = new FileWriter(saveFile, true);
+            
+            for (String[] data : allData) {
+                for (String outputItem : data) {
+                    writer.write(outputItem + ", ");
+                }
+            }
+            writer.write("\n");
+            
+            writer.close();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    static public boolean saveData(String inputGroup, String[] data) throws IOException
     {
         File saveFile = null;
         
@@ -95,7 +127,7 @@ public class FileSaver {
         try {
             FileWriter writer = new FileWriter(saveFile, true);
             
-            for (String outputItem : data.itemsLoaded) {
+            for (String outputItem : data) {
                 writer.write(outputItem + ", ");
             }
             
