@@ -74,7 +74,14 @@ public class PromptSettingManager {
             return new ArrayList<String>();
         }
         
+        SharedPreferences.Editor editor = settings.edit();
+        
+        editor.remove(inputGroupName);
+        editor.commit();
+        
         String[] brokenUp = savedWords.split(", ");
+        
+        
         return Arrays.asList(brokenUp);
     }
     
@@ -162,7 +169,6 @@ public class PromptSettingManager {
         
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            
         }
         
         @Override
