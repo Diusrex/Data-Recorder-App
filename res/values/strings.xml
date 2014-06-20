@@ -27,6 +27,7 @@
     
     <string name="prompt_name">Prompt name</string>
     <string name="prompt_create_new">Add new prompt</string>
+    <string name="prompt_delete">Delete</string>
     <string name="prompt_position">Position to place Prompt</string>
     <string name="prompt_position_short">Position</string>
     <string name="prompt_range_available" formatted="false">(%d - %d)</string>

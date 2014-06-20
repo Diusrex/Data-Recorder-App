@@ -55,14 +55,16 @@ public class FileSaver {
         }
         
         try {
-            FileWriter writer = new FileWriter(saveFile, true);
+            FileWriter writer = new FileWriter(saveFile);
             
             for (String[] data : allData) {
                 for (String outputItem : data) {
                     writer.write(outputItem + ", ");
                 }
                 
-                writer.write("\n");
+                if (data.length > 0) {
+                    writer.write("\n");
+                }
             }
             
             writer.close();

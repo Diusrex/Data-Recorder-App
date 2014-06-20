@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -65,17 +64,9 @@ public class FileAccessor {
 	}
 	
 	static public void flagFileChanges(String filePath)
-	{
-	    Log.w(LOG_TAG, "Path is " + filePath);
-	    
+	{	    
 	    MediaScannerConnection.scanFile(appContext,
-                new String[] { filePath }, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-            public void onScanCompleted(String path, Uri uri) {
-                Log.i("ExternalStorage", "Scanned " + path + ":");
-                Log.i("ExternalStorage", "-> uri=" + uri);
-            }
-        });
+                new String[] { filePath }, null, null);
 	}
 
 	static private boolean isExternalStorageAccessable() {
