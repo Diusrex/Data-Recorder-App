@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.common.base.Joiner;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.Editable;
@@ -16,6 +14,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
+import com.google.common.base.Joiner;
 
 public class PromptSettingManager {
     static final String LOG_TAG = "PromptSettingManager";
@@ -28,6 +28,7 @@ public class PromptSettingManager {
     
     List<EditText> inputs;
     
+    boolean wasChanged;
     
     public PromptSettingManager(TableLayout promptTable, String inputGroupName, LayoutInflater layoutInflater, Context appContext)
     {
@@ -52,7 +53,10 @@ public class PromptSettingManager {
         List<String> existingInputs = loadTemporaryPrompts();
         
         if (existingInputs.size() == 0) {
+            wasChanged = false;
             existingInputs = loadPromptsFromFile();
+        } else {
+            wasChanged = true;
         }
         
         if (existingInputs.size() > 0) {
@@ -151,9 +155,6 @@ public class PromptSettingManager {
         // Create a new row
         View newPromptRow = layoutInflater.inflate(R.layout.prompt_enter_row, null);
         
-        TextView number = (TextView) newPromptRow.findViewById(R.id.number);
-        number.setText("" + (position + 1) + ": ");
-        
         // Set up the EditText
         EditText newET = (EditText) newPromptRow.findViewById(R.id.input);
         newET.setText(enteredText);
@@ -161,7 +162,7 @@ public class PromptSettingManager {
         inputs.add(position, newET);
         promptTable.addView(newPromptRow, position);
         
-        updateLaterPositionNumbers(position);
+        updatePositionNumbersIncludingAndAfter(position);
     }
     
     
@@ -186,14 +187,37 @@ public class PromptSettingManager {
         }
     };
     
-    private void updateLaterPositionNumbers(int position)
+    void updatePositionNumbersIncludingAndAfter(int position)
     {
-        for (int i = position + 1; i < inputs.size(); ++i)
+        for (int i = position; i < inputs.size(); ++i)
         {
             View currentPromptRow = promptTable.getChildAt(i);
-            TextView number = (TextView) currentPromptRow.findViewById(R.id.number);
             
+            TextView hiddenNumber = (TextView) currentPromptRow.findViewById(R.id.number);
+            hiddenNumber.setText("" + i);
+            
+            TextView number = (TextView) currentPromptRow.findViewById(R.id.displayNumber);
             number.setText("" + (i + 1) + ": ");
         }
+    }
+    
+    public static int getPositionOfRow(View button)
+    {
+        View parentView = (View) button.getParent();
+        TextView actualNumber = (TextView) parentView.findViewById(R.id.number);
+        
+        return Integer.parseInt(actualNumber.getText().toString());
+    }
+
+    public void removePrompt(int position) 
+    {
+        inputs.remove(position);
+        promptTable.removeViewAt(position);
+        
+        updatePositionNumbersIncludingAndAfter(position);
+    }
+
+    public boolean wasChanged() {
+        return wasChanged;
     }
 }
