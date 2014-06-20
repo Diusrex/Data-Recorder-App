@@ -46,14 +46,17 @@ public class DataChangeHandler {
             while (position < allWords.length) {
                 String id = allWords[position++];
                 
-                if (id == AddData.IDENTIFIER) {
+                if (id.equals(AddData.IDENTIFIER)) {
                     AddData newChange = new AddData();
                     position = newChange.loadFromArray(allWords, position);
                     allChanges.add(newChange);
+                } else if (id.equals(DeleteData.IDENTIFIER)) {
+                    DeleteData newChange = new DeleteData();
+                    position = newChange.loadFromArray(allWords, position);
+                    allChanges.add(newChange);
                 }
-                
                 else {
-                    Log.w(LOG_TAG, "The id '" + id + "' was not recognized");
+                    Log.e(LOG_TAG, "The id '" + id + "' was not recognized");
                 }
             }
             
@@ -66,14 +69,16 @@ public class DataChangeHandler {
     
     public void promptAdded(int position, String dataToAdd)
     {
-        Log.w(LOG_TAG, "Reached here");
-        
         allChanges.add(new AddData(dataToAdd, position));
+    }
+    
+    public void promptRemoved(int position) {
+        allChanges.add(new DeleteData(position));
     }
     
     public void reset()
     {
-        allChanges = new ArrayList<DataChangeHandler.ChangeInfo>();
+        allChanges = new ArrayList<ChangeInfo>();
     }
     
     public void saveDataChanges()
