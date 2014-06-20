@@ -1,8 +1,5 @@
 package com.diusrex.sleepingdata;
 
-import java.io.IOException;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
@@ -11,21 +8,19 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.diusrex.sleepingdata.dialogs.PromptDataAddDialogFragment;
+import com.diusrex.sleepingdata.dialogs.PromptDataAddListener;
 import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
 import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
-import com.diusrex.sleepingdata.dialogs.PromptDataAddListener;
 
 public class PromptSettingActivity extends Activity implements PromptPositionListener, PromptDataAddListener {
     
@@ -60,6 +55,8 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
         
         manager = new PromptSettingManager(promptSettingTable, inputGroupName, (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
+        changed = manager.wasChanged();
+        
         dataChangeHandler = new DataChangeHandler(inputGroupName, (Context) this);
         
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
@@ -119,6 +116,19 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         });
         
         builder.show();
+    }
+    
+    public void deletePromptButtonClicked(View view)
+    {
+        final int position = PromptSettingManager.getPositionOfRow(view);
+        
+        manager.removePrompt(position);
+        
+        if (hasDataEntered) {
+            dataChangeHandler.promptRemoved(position);
+        }
+        
+        changed = true;
     }
     
     @Override
