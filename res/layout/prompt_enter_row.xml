@@ -6,9 +6,14 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:padding="@dimen/activity_horizontal_margin" >
-
+    
     <TextView
         android:id="@+id/number"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+    
+    <TextView
+        android:id="@+id/displayNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     
@@ -22,4 +27,11 @@
             <requestFocus />
         </EditText>
 
+    <Button
+        android:id="@+id/deletePrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/prompt_delete"
+        android:onClick="deletePromptButtonClicked"
+        style="?android:attr/buttonBarButtonStyle" />
 </TableRow>
