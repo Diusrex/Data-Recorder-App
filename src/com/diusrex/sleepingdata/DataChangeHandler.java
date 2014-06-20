@@ -19,61 +19,7 @@ public class DataChangeHandler {
     
     List<ChangeInfo> allChanges;
     
-    interface ChangeInfo
-    {
-        public int loadFromArray(String[] words, int position);
-        public String[] applyToData(String[] data);
-    }
     
-    class AddData implements ChangeInfo
-    {
-        public static final String IDENTIFIER = "ADD";
-        
-        AddData()
-        {
-        }
-        
-        AddData(String addToData, int position)
-        {
-            this.addToData = addToData;
-            this.position = position;
-        }
-        
-        String addToData;
-        int position;
-        
-        @Override
-        public String[] applyToData(String[] data)
-        {
-            String[] newData = new String[data.length + 1];
-            
-            for (int i = 0; i < position; ++i) {
-                newData[i] = data[i];
-            }
-            
-            newData[position] = addToData;
-            
-            for (int i = position; i < data.length; ++i) {
-                newData[i + 1] = data[i];
-            }
-            
-            return newData;
-        }
-        
-        @Override
-        public int loadFromArray(String[] words, int positionInArray) {
-            addToData = words[positionInArray++];
-            position = Integer.parseInt(words[positionInArray++]);
-            
-            return positionInArray;
-        }
-        
-        @Override
-        public String toString()
-        {
-            return IDENTIFIER + " " + addToData + " " + position;
-        }
-    }
     
     List<EditText> inputs;
     
