@@ -12,7 +12,7 @@
         
     <TextView
         android:id="@+id/inputGroupName"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_alignParentTop="true" 
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:layout_below="@id/inputGroupName"
-        android:layout_above="@+id/AddPromptButton" >
+        android:layout_above="@+id/addPromptButton" >
         
         <TableLayout
             android:id="@+id/promptSettingTable"
@@ -36,7 +36,7 @@
 
 
      <Button
-         android:id="@+id/AddPromptButton"
+         android:id="@+id/addPromptButton"
          style="?android:attr/buttonBarButtonStyle"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"

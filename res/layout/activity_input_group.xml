@@ -14,10 +14,9 @@
         android:id="@+id/inputGroupName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentTop="true" 
-        android:layout_centerHorizontal="true"
-        android:text="inputGroupName" />
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
      
 
      <TextView
@@ -26,16 +25,14 @@
          android:layout_height="wrap_content"
          android:layout_below="@+id/inputGroupName"
          android:layout_marginTop="30dp"
-         android:text="numberOfPrompts"
          android:textAppearance="?android:attr/textAppearanceMedium" />
 
      <TextView
-         android:id="@+id/numberOfDataPoints"
+         android:id="@+id/numberOfDataRows"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_below="@+id/numberOfPrompts"
          android:layout_marginTop="20dp"
-         android:text="numberOfDataPoints"
          android:textAppearance="?android:attr/textAppearanceMedium" />
 
      <LinearLayout
