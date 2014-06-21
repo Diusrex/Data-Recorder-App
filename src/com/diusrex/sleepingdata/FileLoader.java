@@ -25,6 +25,10 @@ public class FileLoader {
         public FailedToLoad(Throwable cause) { super(cause); }
     }
     
+    public static int numberOfPrompts(String inputGroupName) {
+        return loadPrompts(inputGroupName).size();
+    }
+    
     static public List<String> loadPrompts(String promptsFile)
     {
         try
@@ -53,24 +57,11 @@ public class FileLoader {
     
     static public boolean dataExists(String dataFile)
     {
-        String line = null;
-        try
-        {
-            File loadFile = FileAccessor.openDataFile(dataFile);
+        return (numberOfDataRows(dataFile) > 0);
+    }
 
-            BufferedReader reader = getReader(loadFile);
-
-            line = reader.readLine();
-            
-        } catch (IOException e) {
-            return false;
-        } catch (NoAccessException e) {
-            return false;
-        } catch (FailedToLoad e) {
-            return false;
-        }
-        
-        return (line != null);
+    public static int numberOfDataRows(String inputGroupName) {
+        return loadAllData(inputGroupName).size();
     }
 
     public static List<String[]> loadAllData(String inputGroup) {
@@ -103,42 +94,6 @@ public class FileLoader {
             return new ArrayList<String[]>();
         }
     }
-    
-    static public DataContainer loadData(String dataFile) throws IOException
-    {
-        File loadFile = null;
-        
-        try
-        {
-            loadFile = FileAccessor.openDataFile(dataFile);
-        } catch (NoAccessException e) {
-            return new DataContainer();
-        }
-        
-        BufferedReader reader;
-        try {
-            reader = getReader(loadFile);
-        } catch (FailedToLoad e1) {
-            return new DataContainer();
-        }
-        
-        String line, previousLine = "";
-
-        // This way, previousLine will be the line at the end of the file.
-        line = reader.readLine();
-        
-        while (line != null)
-        {
-            previousLine = line;
-            line = reader.readLine();
-        }
-        
-        reader.close();
-        
-        return new DataContainer(previousLine);
-    }
-    
-    
     
     static private BufferedReader getReader(File loadFile) throws FailedToLoad, IOException
     {
