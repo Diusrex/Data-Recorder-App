@@ -3,7 +3,6 @@ package com.diusrex.sleepingdata;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,8 +32,22 @@ public class InputGroupActivity extends Activity {
     }
     
     @Override
+    public void onStop() {
+        super.onStop();
+        
+        Bundle args = new Bundle();
+        args.putString(INPUT_GROUP_NAME, inputGroupName);
+        getIntent().putExtras(args);
+    }
+    
+    @Override
     public void onResume() {
         super.onResume();
+        
+        Bundle args = getIntent().getExtras();
+        
+        inputGroupName = args.getString(INPUT_GROUP_NAME);
+        
         setUpInformation();
     }
     

@@ -28,6 +28,12 @@
     <string name="input_group_change">Change</string>
     <string name="input_group_remove">Remove</string>
     
+    <string name="input_group_num_prompts_single">There is 1 prompt in this input group</string>
+    <string name="input_group_num_prompts_multiple" formatted="true">There are %1$d prompts in this input group</string>
+    
+    <string name="input_group_num_data_rows_single">There is 1 row of data in this input group</string>
+    <string name="input_group_num_data_rows_multiple" formatted="true">There are %1$d rows of data in this input group</string>
+    
     <string name="prompt_name">Prompt name</string>
     <string name="prompt_create_new">Add new prompt</string>
     <string name="prompt_delete">Delete</string>

@@ -95,7 +95,7 @@ public class PromptPositionDialogFragment extends DialogFragment {
     {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
 
-        View inputInfo = layoutInflater.inflate(R.layout.prompt_position_layout, null);
+        View inputInfo = layoutInflater.inflate(R.layout.dialog_prompt_position, null);
         
         TextView rangeAvailableTV = (TextView) inputInfo.findViewById(R.id.rangeAvailable);
         
