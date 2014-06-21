@@ -36,8 +36,6 @@ public class PromptSettingManager {
         this.layoutInflater = layoutInflater;
         
         settings = appContext.getSharedPreferences(PREFS_FILE, 0);
-        
-        loadPrompts();
     }
     
     public int getNumberPrompts()
@@ -45,7 +43,7 @@ public class PromptSettingManager {
         return inputs.size();
     }
     
-    void loadPrompts()
+    public void loadAndDisplayPrompts()
     {
         inputs = new ArrayList<EditText>();
         

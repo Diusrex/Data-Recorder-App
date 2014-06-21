@@ -29,9 +29,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     static String LOG_TAG = "InitialPromptInputActivity";
     
-    // Data that is for if the user did not cancel
-    static final int REQUEST_CODE = 101;
-    
     DataChangeHandler dataChangeHandler;
     
     // The prompt setting table will contain the inputs
@@ -51,12 +48,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         Intent intent = getIntent();
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
         
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
         TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
         
         manager = new PromptSettingManager(promptSettingTable, inputGroupName, (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
@@ -70,6 +61,13 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         inputGroupNameTV.setText(String.format(inputGroupNameFormatting, inputGroupName));
         
         hasDataEntered = FileLoader.dataExists(inputGroupName);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        manager.loadAndDisplayPrompts();
         
         // Do not want the keyboard to popup yet
         getWindow().setSoftInputMode(
@@ -129,7 +127,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         changed = true;
     }
     
-    @Override
     public void onBackPressed() {
         
         boolean wasSaved = saveTempInformation();
