@@ -1,6 +1,5 @@
 package com.diusrex.sleepingdata;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -126,11 +125,7 @@ public class PromptSettingManager {
     
     List<String> loadPromptsFromFile()
     {
-        try {
-            return FileLoader.loadPrompts(inputGroupName);
-        } catch (IOException e) {
-            return new ArrayList<String>();
-        }
+        return FileLoader.loadPrompts(inputGroupName);
     }
     
     public boolean savePromptsToFile()

@@ -1,6 +1,5 @@
 package com.diusrex.sleepingdata;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,12 +103,7 @@ public class DataChangeHandler {
     {
         List<String[]> allData;
         
-        try {
-            allData = FileLoader.loadAllData(inputGroupName);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
+        allData = FileLoader.loadAllData(inputGroupName);
         
         for (int i = 0; i < allData.size(); ++i) {
             for (ChangeInfo current : allChanges) {
