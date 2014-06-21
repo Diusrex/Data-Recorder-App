@@ -31,9 +31,7 @@ public class FileLoader {
         {
             File loadFile = FileAccessor.openPromptFile(promptsFile);
         
-            BufferedReader reader;
-
-            reader = getReader(loadFile);
+            BufferedReader reader = getReader(loadFile);
         
         
             String line = reader.readLine();
@@ -60,9 +58,7 @@ public class FileLoader {
         {
             File loadFile = FileAccessor.openDataFile(dataFile);
 
-            BufferedReader reader;
-
-            reader = getReader(loadFile);
+            BufferedReader reader = getReader(loadFile);
 
             line = reader.readLine();
             
@@ -76,40 +72,36 @@ public class FileLoader {
         
         return (line != null);
     }
-    
-    public static List<String[]> loadAllData(String inputGroup) throws IOException {
-        File loadFile = null;
-        
+
+    public static List<String[]> loadAllData(String inputGroup) {
         try
         {
-            loadFile = FileAccessor.openDataFile(inputGroup);
+            File loadFile = FileAccessor.openDataFile(inputGroup);
+
+            BufferedReader reader = getReader(loadFile);
+
+        
+            ArrayList<String[]> allLines = new ArrayList<String[]>();
+            
+            String line = reader.readLine();
+            
+            while (line != null)
+            {
+                allLines.add(line.split(", "));
+                line = reader.readLine();
+            }
+            
+            reader.close();
+        
+            return allLines;
+            
         } catch (NoAccessException e) {
             return new ArrayList<String[]>();
-        }
-        
-        BufferedReader reader;
-        try {
-            reader = getReader(loadFile);
-        } catch (FailedToLoad e1) {
+        } catch (IOException e) {
+            return new ArrayList<String[]>();
+        } catch (FailedToLoad e) {
             return new ArrayList<String[]>();
         }
-        
-        ArrayList<String[]> allLines = new ArrayList<String[]>();
-        
-        String line;
-
-        // This way, previousLine will be the line at the end of the file.
-        line = reader.readLine();
-        
-        while (line != null)
-        {
-            allLines.add(line.split(", "));
-            line = reader.readLine();
-        }
-        
-        reader.close();
-        
-        return allLines;
     }
     
     static public DataContainer loadData(String dataFile) throws IOException
@@ -162,6 +154,8 @@ public class FileLoader {
         
         return new BufferedReader(reader);
     }
+
+    
 
     
 
