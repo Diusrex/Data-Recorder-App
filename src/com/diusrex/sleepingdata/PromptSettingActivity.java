@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,8 +43,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     boolean changed;
     
-    int resultCode;
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +68,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         // Do not want the keyboard to popup yet
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        
-        resultCode = RESULT_CANCELED;
     }
     
     public void choosePromptPosition(View view) {
@@ -136,8 +133,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
                 Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
                     Toast.LENGTH_SHORT).show();
             
-            
-            setResult(resultCode, new Intent());
         }
         
         finish();
@@ -159,7 +154,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
                 output = getString(R.string.save_failed);
             } else {
                 output = getString(R.string.save_successful);
-                resultCode = RESULT_OK;
                 
                 changed = false;
             }
