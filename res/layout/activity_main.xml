@@ -32,7 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/create_button"
-        android:onClick="createButtonClicked" />
+        android:onClick="createButtonClicked"
+        style="?android:attr/buttonBarButtonStyle" />
 
     </TableRow>
 </TableLayout>
