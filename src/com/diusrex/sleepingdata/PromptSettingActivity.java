@@ -124,14 +124,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     @Override
     public void onBackPressed() {
-        saveTemporarily();
-    }
-    
-    public void backButtonClicked(View view) {
-        saveTemporarily();
-    }
-    
-    void saveTemporarily() {
         if (changed || manager.wasChanged()) {
             manager.saveTemporaryPrompts();
             dataChangeHandler.saveDataChanges();

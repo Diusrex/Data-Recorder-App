@@ -54,15 +54,6 @@
          android:layout_alignParentBottom="true" >
 
          <Button
-             android:id="@+id/backButton"
-             android:layout_width="0dp"
-             android:layout_height="wrap_content"
-             android:layout_weight="1"
-             android:text="@string/back"
-             android:onClick="backButtonClicked"
-             style="?android:attr/buttonBarButtonStyle" />
-
-         <Button
              android:id="@+id/resetButton"
              android:layout_width="0dp"
              android:layout_height="wrap_content"
