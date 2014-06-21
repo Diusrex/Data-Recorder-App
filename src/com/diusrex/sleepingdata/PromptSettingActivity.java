@@ -67,21 +67,15 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         hasDataEntered = FileLoader.dataExists(inputGroupName);
         
         resultCode = RESULT_CANCELED;
-        
-        // Do not want the keyboard to popup yet
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
     
-    public void choosePromptPosition(View view)
-    {
+    public void choosePromptPosition(View view) {
         DialogFragment fragment = PromptPositionDialogFragment.newInstance(0, manager.getNumberPrompts(), (PromptPositionListener) this); 
         fragment.show(getFragmentManager(), "dialog");
     }
     
     @Override
-    public void positionChosen(int position)
-    {
+    public void positionChosen(int position) {
         if (!hasDataEntered) {
             changed = true;
             manager.addPromptToPosition("", position);
@@ -92,8 +86,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     }
     
     @Override
-    public void dataChosen(int position, String dataToAdd)
-    {
+    public void dataChosen(int position, String dataToAdd){
         changed = true;
         
         // Need to add the prompt
@@ -102,8 +95,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     }
     
     @Override
-    public void createErrorDialog(String phrase)
-    {
+    public void createErrorDialog(String phrase) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         
         builder.setMessage(phrase);
@@ -118,8 +110,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         builder.show();
     }
     
-    public void deletePromptButtonClicked(View view)
-    {
+    public void deletePromptButtonClicked(View view) {
         final int position = PromptSettingManager.getPositionOfRow(view);
         
         manager.removePrompt(position);
@@ -132,18 +123,15 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     }
     
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         saveTemporarily();
     }
     
-    public void backButtonClicked(View view)
-    {
+    public void backButtonClicked(View view) {
         saveTemporarily();
     }
     
-    void saveTemporarily()
-    {
+    void saveTemporarily() {
         if (changed || manager.wasChanged()) {
             manager.saveTemporaryPrompts();
             dataChangeHandler.saveDataChanges();
@@ -159,14 +147,12 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         finish();
     }
     
-    public void resetButtonClicked(View view)
-    {
+    public void resetButtonClicked(View view) {
         manager.reset();
         dataChangeHandler.reset();
     }
     
-    public void saveButtonClicked(View view)
-    {
+    public void saveButtonClicked(View view) {
         if (changed || manager.wasChanged()) {
             boolean successfullySaved = manager.savePromptsToFile();
             dataChangeHandler.applyDataChanges();
