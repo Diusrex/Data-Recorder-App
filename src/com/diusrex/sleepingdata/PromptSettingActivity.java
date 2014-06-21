@@ -48,10 +48,16 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prompt_setting);
        
-        TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
-        
         Intent intent = getIntent();
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
+        
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
         
         manager = new PromptSettingManager(promptSettingTable, inputGroupName, (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
         changed = manager.wasChanged();
@@ -125,17 +131,37 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     @Override
     public void onBackPressed() {
-        if (changed || manager.wasChanged()) {
-            manager.saveTemporaryPrompts();
-            dataChangeHandler.saveDataChanges();
-            
-            
-                Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
-                    Toast.LENGTH_SHORT).show();
+        
+        boolean wasSaved = saveTempInformation();
+        
+        if (wasSaved) {
+            Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
+                Toast.LENGTH_SHORT).show();
             
         }
         
         finish();
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        
+        saveTempInformation();
+        
+        super.onPause();
+    }
+    
+    
+    boolean saveTempInformation() {
+        if (changed || manager.wasChanged()) {
+            manager.saveTemporaryPrompts();
+            dataChangeHandler.saveDataChanges();
+            changed = false;
+            return true;
+        }
+        
+        return false;
     }
     
     public void resetButtonClicked(View view) {
