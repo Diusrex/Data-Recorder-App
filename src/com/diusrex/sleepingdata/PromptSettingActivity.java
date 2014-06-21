@@ -144,7 +144,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     void saveTemporarily()
     {
-        if (changed) {
+        if (changed || manager.wasChanged()) {
             manager.saveTemporaryPrompts();
             dataChangeHandler.saveDataChanges();
             
@@ -167,7 +167,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     public void saveButtonClicked(View view)
     {
-        if (changed) {
+        if (changed || manager.wasChanged()) {
             boolean successfullySaved = manager.savePromptsToFile();
             dataChangeHandler.applyDataChanges();
             

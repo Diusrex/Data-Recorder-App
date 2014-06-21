@@ -142,6 +142,8 @@ public class PromptSettingManager {
             prompts.add(text.getText().toString());
         }
         
+        wasChanged = false;
+        
         return FileSaver.savePrompts(inputGroupName, prompts);
     }
     
@@ -184,6 +186,8 @@ public class PromptSettingManager {
                     s.delete(i, i + 1);
                 }
             }
+            
+            wasChanged = true;
         }
     };
     
