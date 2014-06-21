@@ -25,32 +25,32 @@ public class FileLoader {
         public FailedToLoad(Throwable cause) { super(cause); }
     }
     
-    static public List<String> loadPrompts(String promptsFile) throws IOException
+    static public List<String> loadPrompts(String promptsFile)
     {
-        File loadFile = null;
-        
         try
         {
-            loadFile = FileAccessor.openPromptFile(promptsFile);
+            File loadFile = FileAccessor.openPromptFile(promptsFile);
+        
+            BufferedReader reader;
+
+            reader = getReader(loadFile);
+        
+        
+            String line = reader.readLine();
+            
+            // Means that there were no prompts entered yet.
+            if (line == null) {
+                return new ArrayList<String>();
+            }
+            
+            return Arrays.asList(line.split(", "));
+        } catch (FailedToLoad e1) {
+            return new ArrayList<String>();
+        } catch (IOException e) {
+            return new ArrayList<String>();
         } catch (NoAccessException e) {
             return new ArrayList<String>();
         }
-        
-        BufferedReader reader;
-        try {
-            reader = getReader(loadFile);
-        } catch (FailedToLoad e1) {
-            return new ArrayList<String>();
-        }
-        
-        String line = reader.readLine();
-        
-        // Means that there were no prompts entered yet.
-        if (line == null) {
-            return new ArrayList<String>();
-        }
-        
-        return Arrays.asList(line.split(", "));
     }
     
     static public boolean dataExists(String dataFile)
@@ -162,6 +162,8 @@ public class FileLoader {
         
         return new BufferedReader(reader);
     }
+
+    
 
     
 }
