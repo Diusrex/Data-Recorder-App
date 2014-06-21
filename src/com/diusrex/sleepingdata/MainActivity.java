@@ -2,7 +2,6 @@ package com.diusrex.sleepingdata;
 
 import java.util.Arrays;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -55,27 +52,6 @@ public class MainActivity extends ActionBarActivity {
 	
 	public void createButtonClicked(View view)
 	{
-	    Intent intent = new Intent(this, InputNewGroupNameActivity.class);
-	    intent.putExtra(InputNewGroupNameActivity.PREVIOUS_INPUT_GROUPS, inputGroups);
-
-	    startActivityForResult(intent, InputNewGroupNameActivity.REQUEST_CODE);
-	}
-	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	  super.onActivityResult(requestCode, resultCode, data);
-	  switch(requestCode) {
-	    case (InputNewGroupNameActivity.REQUEST_CODE) : {
-
-	      if (resultCode == Activity.RESULT_OK) {
-	        String newName = data.getStringExtra(InputNewGroupNameActivity.NAME_OF_INPUT_GROUP);
-	        saveNewInputGroup(newName);
-	        
-	      }
-	      
-	      break;
-	    } 
-	  }
 	}
 	
     void saveNewInputGroup(String newInputGroup) {
@@ -95,7 +71,7 @@ public class MainActivity extends ActionBarActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
         // Use the inflater to inflate a stock row from stock_quote_row.xml
-        View newInputGroupRow = inflater.inflate(R.layout.item_group_row, null);
+        View newInputGroupRow = inflater.inflate(R.layout.input_group_row, null);
         
         // Create the TextView for the ScrollView Row
         TextView nameTextView = (TextView) newInputGroupRow.findViewById(R.id.name);
@@ -103,35 +79,21 @@ public class MainActivity extends ActionBarActivity {
         // Add the stock symbol to the TextView
         nameTextView.setText(groupName);
         
-        //Button enterForPrompt = (Button) newInputGroupRow.findViewById(R.id.inputGroupButton);
-        //enterForPrompt.setOnClickListener(inputGroupEnterListener);
-        
-        Button changePrompts = (Button) newInputGroupRow.findViewById(R.id.changeInputGroupButton);
-        changePrompts.setOnClickListener(changeInputGroupListener);
-        
         // Add the new components for the stock to the TableLayout
         inputGroupsTable.addView(newInputGroupRow, position);
 	}
 	
-	OnClickListener changeInputGroupListener = new OnClickListener() {
+	public void selectButtonClicked(View view) {
+        TableRow tableRow = (TableRow) view.getParent();
+        TextView nameTextView = (TextView) tableRow.findViewById(R.id.name);
         
-        @Override
-        public void onClick(View theView) {
-            TableRow tableRow = (TableRow) theView.getParent();
-            TextView nameTextView = (TextView) tableRow.findViewById(R.id.name);
-            
-            String inputGroupName = nameTextView.getText().toString();
-            
-            startPromptSettingActivity(inputGroupName);
-        }
-    };
-	
-    void startPromptSettingActivity(String inputGroupName) {
-        Intent intent = new Intent(this, PromptSettingActivity.class);
-        intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, inputGroupName);
+        String inputGroupName = nameTextView.getText().toString();
+        
+        Intent intent = new Intent(this, InputGroupActivity.class);
+        intent.putExtra(InputGroupActivity.INPUT_GROUP_NAME, inputGroupName);
 
-        startActivityForResult(intent, PromptSettingActivity.REQUEST_CODE);
-    }
+        startActivity(intent);
+    };
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
