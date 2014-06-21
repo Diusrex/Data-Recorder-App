@@ -7,12 +7,15 @@
 
     <string name="dismiss">Dismiss</string>
     
-    <string name="back">Back</string>
+    <string name="delete">Delete</string>
+    <string name="change">Change</string>
+    <string name="input">Input</string>
     <string name="clear">Reset</string>
     <string name="save">Save</string>
+    <string name="select">Select</string>
     
-    <string name="new_input_group_name">Name of new input section?</string>
-   
+    <string name="new_input_group_name">Name of new input group?</string>
+    
     <string name="change_name">Change the name</string>
     
     <string name="name_unentered">Please enter a name</string>
@@ -20,7 +23,7 @@
     <string name="name_already_used">Cannot use the name, has already been used</string>
     <string name="name_cannot_start_space">The name cannot start with a space</string>
     
-    <string name="current_input_group" formatted="false">Input Group \'%s\':</string>
+    <string name="current_input_group" formatted="true">Input Group \'%1$s\':</string>
     <string name="input_group_enter">Enter</string>
     <string name="input_group_change">Change</string>
     <string name="input_group_remove">Remove</string>
@@ -30,7 +33,7 @@
     <string name="prompt_delete">Delete</string>
     <string name="prompt_position">Position to place Prompt</string>
     <string name="prompt_position_short">Position</string>
-    <string name="prompt_range_available" formatted="false">(%d - %d)</string>
+    <string name="prompt_range_available" formatted="true">(%1$d - %2$d)</string>
     <string name="prompt_position_invalid">That position is invalid</string>
     <string name="prompt_add_data">Add data to earlier inputs</string>
     <string name="prompt_temp_save">Temporarily Saved</string>
