@@ -66,6 +66,10 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         
         hasDataEntered = FileLoader.dataExists(inputGroupName);
         
+        // Do not want the keyboard to popup yet
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        
         resultCode = RESULT_CANCELED;
     }
     
