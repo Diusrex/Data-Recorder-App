@@ -48,9 +48,9 @@ public class InputDataTableManager {
         
         if (existingInputs.size() == 0) {
             // Has not been entered yet
-            existingInputs = new ArrayList<String>(prompts.size());
+            existingInputs = new ArrayList<String>();
             for (int i = 0; i < prompts.size(); ++i) {
-                existingInputs.set(i, "");
+                existingInputs.add("");
             }
         }
         
@@ -62,7 +62,7 @@ public class InputDataTableManager {
     List<String> loadTemporaryData() {
         String savedWords = settings.getString(inputGroupName, null);
         
-        if (savedWords == null){
+        if (savedWords == null) {
             return new ArrayList<String>();
         }
         
@@ -96,8 +96,9 @@ public class InputDataTableManager {
         promptName.setText(prompText);
         
         EditText input = (EditText) newPromptRow.findViewById(R.id.input);
-        input.setText(prompText);
+        input.setText(dataText);
         input.addTextChangedListener(textChangeListener);
+        input.clearFocus();
         
         inputs.add(input);
         dataTable.addView(newPromptRow);
@@ -122,7 +123,6 @@ public class InputDataTableManager {
                     s.delete(i, i + 1);
                 }
             }
-            
         }
     };
     
@@ -168,6 +168,6 @@ public class InputDataTableManager {
             prompts.add(text.getText().toString());
         }
         
-        return FileSaver.savePrompts(inputGroupName, prompts);
+        return FileSaver.saveData(inputGroupName, prompts);
     }
 }

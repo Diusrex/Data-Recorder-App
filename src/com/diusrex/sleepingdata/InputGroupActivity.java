@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 public class InputGroupActivity extends Activity {
     static public String INPUT_GROUP_NAME = "InputGroupName";
-    static public String ENTER_PROMPTS = "EnterPrompts";
+    static public String NEW_INPUT_GROUP = "NewInputGroup";
     
     static String LOG_TAG = "InitialPromptInputActivity";
     
@@ -22,18 +22,18 @@ public class InputGroupActivity extends Activity {
         Intent intent = getIntent();
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
         
-        boolean enterPrompts = intent.getBooleanExtra(ENTER_PROMPTS, false);
+        boolean isNew = intent.getBooleanExtra(NEW_INPUT_GROUP, false);
         
-        if (enterPrompts) {
-            runPromptSetting();
+        if (isNew) {
+            // TODO: Implement this
+            // First, enter name popup.
+            // Then, run prompt setting
         }
-        
-        setUpInformation();
     }
     
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         
         Bundle args = new Bundle();
         args.putString(INPUT_GROUP_NAME, inputGroupName);
@@ -58,6 +58,7 @@ public class InputGroupActivity extends Activity {
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
         inputGroupNameTV.setText(String.format(groupNameInfo, inputGroupName));
         
+        //inputGroupNameTV.setOnClickListener(l);
         
         int numberOfPrompts = FileLoader.numberOfPrompts(inputGroupName);
         
@@ -100,7 +101,10 @@ public class InputGroupActivity extends Activity {
     }
     
     public void inputButtonClicked(View view) {
-        
+        Intent intent = new Intent(this, InputDataActivity.class);
+        intent.putExtra(InputDataActivity.INPUT_GROUP_NAME, inputGroupName);
+
+        startActivity(intent);
     }
 
     public void deleteButtonClicked(View view) {

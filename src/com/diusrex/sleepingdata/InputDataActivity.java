@@ -1,10 +1,5 @@
 package com.diusrex.sleepingdata;
 
-import com.diusrex.sleepingdata.dialogs.PromptDataAddDialogFragment;
-import com.diusrex.sleepingdata.dialogs.PromptDataAddListener;
-import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
-import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
@@ -21,6 +16,9 @@ import android.view.WindowManager;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
+import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
 
 public class InputDataActivity  extends Activity {
     static public String INPUT_GROUP_NAME = "InputGroupName";
@@ -54,6 +52,10 @@ public class InputDataActivity  extends Activity {
         super.onResume();
         
         manager.loadAndDisplay();
+        
+        // Do not want the keyboard to popup yet
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
     
     public void choosePromptPosition(View view) {
@@ -81,9 +83,7 @@ public class InputDataActivity  extends Activity {
     }
     
     
-    public void clearButtonClicked(View view) {
-        manager.clearInputs();
-    }
+    
     
     public void saveButtonClicked(View view) {
         if (manager.mayBeSaved()) {
@@ -99,9 +99,30 @@ public class InputDataActivity  extends Activity {
             
             Toast.makeText(getApplicationContext(), output, 
                     Toast.LENGTH_SHORT).show();
+            
+            clearButtonClicked(null);
         } else {
-            /// TODO: Display unable to save popup
+            createErrorDialog(getString(R.string.data_must_be_entered));
         }
+    }
+    
+    public void clearButtonClicked(View view) {
+        manager.clearInputs();
+    }
+    
+    void createErrorDialog(String phrase) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        
+        builder.setMessage(phrase);
+        builder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        
+        builder.show();
     }
     
     @Override
