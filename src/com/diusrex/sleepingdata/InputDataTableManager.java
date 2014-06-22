@@ -76,19 +76,7 @@ public class InputDataTableManager {
         return Arrays.asList(brokenUp);
     }
     
-
-    // Different
-    public void reset()
-    {
-        List<String> prompts = FileLoader.loadPrompts(inputGroupName);
-
-        List<String> existingInputs = new ArrayList<String>(prompts.size());
-        for (int i = 0; i < prompts.size(); ++i) {
-            existingInputs.set(i, "");
-        }
-        
-        createDataTable(existingInputs, prompts);
-    }
+    
     
     void createDataTable(List<String> existingInputs, List<String> prompts) {
         inputs = new ArrayList<EditText>();
@@ -99,8 +87,8 @@ public class InputDataTableManager {
         }
     }
     
-    void addDataAndPrompt(String dataText, String prompText)
-    {
+    
+    void addDataAndPrompt(String dataText, String prompText) {
         // Create a new row
         View newPromptRow = layoutInflater.inflate(R.layout.row_input_data, null);
         
@@ -138,8 +126,14 @@ public class InputDataTableManager {
         }
     };
     
+    public void clearInputs() {
+        for (EditText text : inputs) {
+            text.setText("");
+        }
+    }
+    
     // Same
-    public void saveTemporaryPrompts() {
+    public void saveTemporaryData() {
         SharedPreferences.Editor editor = settings.edit();
         
         List<String> prompts = new ArrayList<String>();
@@ -155,9 +149,18 @@ public class InputDataTableManager {
         editor.commit();
     }
     
+    public boolean mayBeSaved() {
+        for (EditText input : inputs) {
+            if (input.getText().toString().equals("")) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     // Similar (too different I feel though
-    public boolean savePromptsToFile()
-    {
+    public boolean saveDataToFile() {
         List<String> prompts = new ArrayList<String>();
         
         for (EditText text : inputs)
