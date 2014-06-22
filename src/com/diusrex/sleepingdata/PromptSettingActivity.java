@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +50,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
         
         manager = new PromptSettingManager(promptSettingTable, inputGroupName, (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
-        changed = manager.wasChanged();
         
         dataChangeHandler = new DataChangeHandler(inputGroupName, (Context) this);
         
@@ -68,6 +66,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         super.onResume();
         
         manager.loadAndDisplayPrompts();
+        changed = manager.wasChanged();
         
         // Do not want the keyboard to popup yet
         getWindow().setSoftInputMode(
@@ -127,6 +126,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         changed = true;
     }
     
+    @Override
     public void onBackPressed() {
         
         boolean wasSaved = saveTempInformation();
