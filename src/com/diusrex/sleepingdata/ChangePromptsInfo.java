@@ -1,13 +1,13 @@
 package com.diusrex.sleepingdata;
 
 
-interface ChangeInfo
+interface ChangePromptsInfo
 {
     public int loadFromArray(String[] words, int position);
     public String[] applyToData(String[] data);
 }
 
-class AddData implements ChangeInfo
+class AddData implements ChangePromptsInfo
 {
     public static final String IDENTIFIER = "ADD";
     
@@ -57,7 +57,7 @@ class AddData implements ChangeInfo
     }
 }
 
-class DeleteData implements ChangeInfo
+class DeleteData implements ChangePromptsInfo
 {
     public static final String IDENTIFIER = "DELETE";
     

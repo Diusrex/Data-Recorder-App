@@ -16,7 +16,7 @@ public class DataChangeHandler {
     final SharedPreferences settings;
     String inputGroupName;
     
-    List<ChangeInfo> allChanges;
+    List<ChangePromptsInfo> allChanges;
     
     
     
@@ -34,7 +34,7 @@ public class DataChangeHandler {
     
     void loadExistingDataChanges()
     {
-        allChanges = new ArrayList<ChangeInfo>();
+        allChanges = new ArrayList<ChangePromptsInfo>();
         
         String line = settings.getString(inputGroupName, null);
         
@@ -77,7 +77,7 @@ public class DataChangeHandler {
     
     public void reset()
     {
-        allChanges = new ArrayList<ChangeInfo>();
+        allChanges = new ArrayList<ChangePromptsInfo>();
     }
     
     public void saveDataChanges()
@@ -88,7 +88,7 @@ public class DataChangeHandler {
         
         String line = "", separator = "";
         
-        for (ChangeInfo current : allChanges) {
+        for (ChangePromptsInfo current : allChanges) {
             line += separator + current.toString();
             separator = " ";
         }
@@ -106,12 +106,12 @@ public class DataChangeHandler {
         allData = FileLoader.loadAllData(inputGroupName);
         
         for (int i = 0; i < allData.size(); ++i) {
-            for (ChangeInfo current : allChanges) {
+            for (ChangePromptsInfo current : allChanges) {
                 allData.set(i, current.applyToData(allData.get(i)));
             }
         }
         
-        allChanges = new ArrayList<ChangeInfo>();
+        allChanges = new ArrayList<ChangePromptsInfo>();
         
         FileSaver.saveAllData(inputGroupName, allData);
     }
