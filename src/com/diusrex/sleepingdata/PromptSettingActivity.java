@@ -168,21 +168,25 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     public void saveButtonClicked(View view) {
         if (changed || manager.wasChanged()) {
-            boolean successfullySaved = manager.savePromptsToFile();
-            dataChangeHandler.applyDataChanges();
-            
-            String output;
-            
-            if (!successfullySaved) {
-                output = getString(R.string.save_failed);
-            } else {
-                output = getString(R.string.save_successful);
+            if (manager.mayBeSaved()) {
+                boolean successfullySaved = manager.savePromptsToFile();
+                dataChangeHandler.applyDataChanges();
                 
-                changed = false;
+                String output;
+                
+                if (!successfullySaved) {
+                    output = getString(R.string.save_failed);
+                } else {
+                    output = getString(R.string.save_successful);
+                    
+                    changed = false;
+                }
+                
+                Toast.makeText(getApplicationContext(), output, 
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                createErrorDialog(getString(R.string.enter_name_for_all_inputs));
             }
-            
-            Toast.makeText(getApplicationContext(), output, 
-                    Toast.LENGTH_SHORT).show();
         }
     }
     
