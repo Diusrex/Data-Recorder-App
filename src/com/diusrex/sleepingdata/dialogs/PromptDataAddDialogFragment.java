@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import com.diusrex.sleepingdata.GeneralTextChangeWatcher;
 import com.diusrex.sleepingdata.R;
 
 public class PromptDataAddDialogFragment extends DialogFragment {
@@ -49,6 +50,7 @@ public class PromptDataAddDialogFragment extends DialogFragment {
         View inputInfo = inflater.inflate(R.layout.data_add_layout, null);
         
         dataToAdd = (EditText) inputInfo.findViewById(R.id.input);
+        dataToAdd.addTextChangedListener(new GeneralTextChangeWatcher());
         
         builder.setView(inputInfo);
         
@@ -69,11 +71,12 @@ public class PromptDataAddDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String textToAdd = dataToAdd.getText().toString();
-                if (textToAdd.indexOf(",") == -1) {
+                
+                if (!textToAdd.equals("")) {
                     listener.dataChosen(position, textToAdd);
                     dialog.dismiss();
                 } else {
-                    listener.createErrorDialog(getString(R.string.cannot_contain_comma));
+                    listener.createErrorDialog(getString(R.string.enter_name));
                 }
             }
         });

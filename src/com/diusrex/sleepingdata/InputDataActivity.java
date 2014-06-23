@@ -82,10 +82,7 @@ public class InputDataActivity  extends Activity {
         super.onPause();
     }
     
-    
-    
-    
-    public void saveButtonClicked(View view) {
+    public void finishButtonClicked(View view) {
         if (manager.mayBeSaved()) {
             boolean successfullySaved = manager.saveDataToFile();
             
