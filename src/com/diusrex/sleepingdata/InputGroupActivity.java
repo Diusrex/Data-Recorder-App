@@ -1,18 +1,30 @@
 package com.diusrex.sleepingdata;
 
+import com.diusrex.sleepingdata.dialogs.ConfirmDialogFragment;
+import com.diusrex.sleepingdata.dialogs.ConfirmListener;
+import com.diusrex.sleepingdata.dialogs.PromptDataAddDialogFragment;
+import com.diusrex.sleepingdata.dialogs.PromptDataAddListener;
+
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class InputGroupActivity extends Activity {
-    static public String INPUT_GROUP_NAME = "InputGroupName";
-    static public String NEW_INPUT_GROUP = "NewInputGroup";
+public class InputGroupActivity extends Activity implements ConfirmListener {
+    static final public String INPUT_GROUP_NAME = "InputGroupName";
+    static final public String NEW_INPUT_GROUP = "NewInputGroup";
     
-    static String LOG_TAG = "InitialPromptInputActivity";
+    static final String LOG_TAG = "InitialPromptInputActivity";
+    
+    static final int DELETE_CODE = 5;
     
     String inputGroupName;
+    
+    boolean isNew;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +32,8 @@ public class InputGroupActivity extends Activity {
         setContentView(R.layout.activity_input_group);
         
         Intent intent = getIntent();
-        inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
         
-        boolean isNew = intent.getBooleanExtra(NEW_INPUT_GROUP, false);
+        isNew = intent.getBooleanExtra(NEW_INPUT_GROUP, false);
         
         if (isNew) {
             // TODO: Implement this
@@ -94,10 +105,14 @@ public class InputGroupActivity extends Activity {
     }
     
     void runPromptSetting() {
-        Intent intent = new Intent(this, PromptSettingActivity.class);
-        intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, inputGroupName);
-
-        startActivity(intent);
+        if (FileLoader.loadPrompts(inputGroupName).size() != 0) {
+            Intent intent = new Intent(this, PromptSettingActivity.class);
+            intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, inputGroupName);
+    
+            startActivity(intent);
+        } else {
+            // TODO: Error popup
+        }
     }
     
     public void inputButtonClicked(View view) {
@@ -108,6 +123,25 @@ public class InputGroupActivity extends Activity {
     }
 
     public void deleteButtonClicked(View view) {
+        DialogFragment fragment = ConfirmDialogFragment.newInstance(getString(R.string.confirm_delete), DELETE_CODE, (ConfirmListener) this);
+        fragment.show(getFragmentManager(), "dialog");
+    }
+    
+    @Override
+    public void wasConfirmed(int code) {
+        switch (code) {
+        case DELETE_CODE:
+            deleteInputGroup();
+            break;
+            
+        default:
+            break;
+        }
+    }
+    
+    void deleteInputGroup() {
+        MainActivity.deleteInputGroup(inputGroupName, (Context) this);
         
+        finish();
     }
 }
