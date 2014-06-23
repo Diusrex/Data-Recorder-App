@@ -79,17 +79,11 @@ public class FileSaver {
         return true;
     }
     
-    static public boolean saveData(String inputGroup, String[] data) throws IOException
+    static public boolean saveData(String inputGroup, List<String> data)
     {
-        File saveFile = null;
-        
         try {
-            saveFile = FileAccessor.openDataFile(inputGroup);
-        } catch(NoAccessException e) {
-            return false;
-        }
-        
-        try {
+            File saveFile = FileAccessor.openDataFile(inputGroup);
+
             FileWriter writer = new FileWriter(saveFile, true);
             
             for (String outputItem : data) {
@@ -104,6 +98,8 @@ public class FileSaver {
             
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
+        } catch(NoAccessException e) {
             return false;
         }
         
