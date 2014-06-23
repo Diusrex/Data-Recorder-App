@@ -7,7 +7,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -28,6 +27,28 @@ public class PromptSettingManager {
     List<EditText> inputs;
     
     boolean wasChanged;
+    
+    public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
+        String previousTemp = prefs.getString(oldInputGroupName, null);
+        
+        if (previousTemp != null) {
+            SharedPreferences.Editor editor = prefs.edit();
+            
+            editor.putString(newInputGroupName, previousTemp);
+            
+            editor.remove(oldInputGroupName);
+            editor.commit();
+        }
+    }
+    
+    public static void deleteTemporaryData(String inputGroupName, Context appContext) {
+        SharedPreferences prefs = appContext.getSharedPreferences(PREFS_FILE, 0);
+        SharedPreferences.Editor editor = prefs.edit();
+        
+        editor.remove(inputGroupName);
+        editor.commit();
+    }
     
     public PromptSettingManager(TableLayout promptTable, String inputGroupName, LayoutInflater layoutInflater, Context appContext)
     {
@@ -153,36 +174,21 @@ public class PromptSettingManager {
         // Set up the EditText
         EditText newET = (EditText) newPromptRow.findViewById(R.id.input);
         newET.setText(enteredText);
-        newET.addTextChangedListener(textChangeListener);
+        newET.addTextChangedListener(new PromptNameListener());
         inputs.add(position, newET);
         promptTable.addView(newPromptRow, position);
         
         updatePositionNumbersIncludingAndAfter(position);
     }
     
-    
-    TextWatcher textChangeListener = new TextWatcher() {
-        
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-        
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
-        }
-        
+    private class PromptNameListener extends GeneralTextChangeWatcher {
         @Override
         public void afterTextChanged(Editable s) {
-            for (int i = 0; i < s.length(); ++i) {
-                if (s.charAt(i) == ',') {
-                    s.delete(i, i + 1);
-                }
-            }
+            super.afterTextChanged(s);
             
             wasChanged = true;
         }
-    };
+    }
     
     void updatePositionNumbersIncludingAndAfter(int position)
     {
@@ -216,5 +222,17 @@ public class PromptSettingManager {
 
     public boolean wasChanged() {
         return wasChanged;
+    }
+
+    
+    // TODO: Same
+    public boolean mayBeSaved() {
+        for (EditText input : inputs) {
+            if (input.getText().toString().equals("")) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }

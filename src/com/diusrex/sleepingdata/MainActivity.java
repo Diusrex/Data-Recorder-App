@@ -2,6 +2,7 @@ package com.diusrex.sleepingdata;
 
 import java.util.Arrays;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity {
     static final String LOG_TAG = "MainActivity";
+    static final String PREF_FILE = "availableInputGroups";
     
     TableLayout inputGroupsTable;
     
@@ -37,8 +39,15 @@ public class MainActivity extends ActionBarActivity {
 		
 		inputGroupsTable = (TableLayout) findViewById(R.id.inputGroupsTable);
 		
-		availableInputGroupsPreference = getSharedPreferences("availableInputGroups", MODE_PRIVATE);
-		
+		availableInputGroupsPreference = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+	}
+	
+	@Override
+	protected void onResume() {
+	    super.onResume();
+	    
+	    inputGroupsTable.removeAllViews();
+	    
 		inputGroups = availableInputGroupsPreference.getAll().keySet().toArray(new String[0]);
 		
 		// Sort the stocks in alphabetical order
@@ -52,6 +61,7 @@ public class MainActivity extends ActionBarActivity {
 	
 	public void createButtonClicked(View view)
 	{
+	    // TODO: Implement this
 	}
 	
     void saveNewInputGroup(String newInputGroup) {
@@ -110,4 +120,40 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
+	    SharedPreferences prefFile = context.getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+        
+        SharedPreferences.Editor editor = prefFile.edit();
+        editor.remove(oldInputGroupName);
+        editor.putString(newInputGroupName, newInputGroupName);
+        editor.commit();
+        
+        FileAccessor.changeInputGroupName(oldInputGroupName, newInputGroupName);
+        
+        PromptSettingManager.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
+        DataChangeHandler.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
+        InputDataTableManager.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
+	}
+	
+    public static void deleteInputGroup(String inputGroupName, Context context) {
+        SharedPreferences prefFile = context.getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+        
+        SharedPreferences.Editor editor = prefFile.edit();
+        editor.remove(inputGroupName);
+        editor.commit();
+        
+        FileAccessor.deleteInputGroup(inputGroupName);
+        
+        PromptSettingManager.deleteTemporaryData(inputGroupName, context);
+        DataChangeHandler.deleteTemporaryData(inputGroupName, context);
+        InputDataTableManager.deleteTemporaryData(inputGroupName, context);
+    }
+
+    public static boolean isInputNameUsed(String inputGroupName, Activity activity) {
+        SharedPreferences availableInputGroupsPreference = activity.getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+        
+        return availableInputGroupsPreference.contains(inputGroupName);
+    }
+
+    
 }

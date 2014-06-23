@@ -2,6 +2,7 @@ package com.diusrex.sleepingdata;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
@@ -15,18 +16,48 @@ public class FileAccessor {
     static final String PROMPTS_FOLDER = "Prompts";
     
     static Context appContext;
+    
     static public class NoAccessException extends Exception {
         private static final long serialVersionUID = 4274163361971136233L;
         public NoAccessException() { super(); }
         public NoAccessException(String message) { super(message); }
         public NoAccessException(String message, Throwable cause) { super(message, cause); }
         public NoAccessException(Throwable cause) { super(cause); }
-      }
+    }
 	
-    static public void init(Context currentAppContext)
-    {
+    static public void init(Context currentAppContext) {
         appContext = currentAppContext;
     }
+    
+    public static void changeInputGroupName(String oldInputGroupName,
+            String newInputGroupName) {
+        List<String[]> allData = FileLoader.loadAllData(oldInputGroupName);
+        FileSaver.saveAllData(newInputGroupName, allData);
+        
+        List<String> allPrompts = FileLoader.loadPrompts(oldInputGroupName);
+        FileSaver.savePrompts(newInputGroupName, allPrompts);
+        
+        deleteInputGroup(oldInputGroupName);
+    }
+    
+    public static void deleteInputGroup(String inputGroupName) {
+        File dataFile;
+        File promptsFile;
+        
+        try {
+            dataFile = openDataFile(inputGroupName);
+            promptsFile = openPromptFile(inputGroupName);
+        } catch (IOException | NoAccessException e) {
+            return;
+        }
+        
+        dataFile.delete();
+        promptsFile.delete();
+    }
+    
+    
+    
+    
     
     static public File openDataFile(String fileName) throws IOException, NoAccessException
     {
@@ -76,5 +107,7 @@ public class FileAccessor {
 	    }
 	    return false;
 	}
+
+    
 
 }

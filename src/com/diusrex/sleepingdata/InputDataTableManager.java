@@ -27,6 +27,27 @@ public class InputDataTableManager {
     
     List<EditText> inputs;
     
+    public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
+        String previousTemp = prefs.getString(oldInputGroupName, null);
+        
+        if (previousTemp != null) {
+            SharedPreferences.Editor editor = prefs.edit();
+            
+            editor.putString(newInputGroupName, previousTemp);
+            
+            editor.remove(oldInputGroupName);
+            editor.commit();
+        }
+    }
+    public static void deleteTemporaryData(String inputGroupName, Context context) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_FILE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        
+        editor.remove(inputGroupName);
+        editor.commit();
+    }
+    
     public InputDataTableManager(TableLayout dataTable, String inputGroupName, LayoutInflater layoutInflater, Context appContext) {
         this.dataTable = dataTable;
         this.inputGroupName = inputGroupName;
@@ -97,34 +118,13 @@ public class InputDataTableManager {
         
         EditText input = (EditText) newPromptRow.findViewById(R.id.input);
         input.setText(dataText);
-        input.addTextChangedListener(textChangeListener);
+        input.addTextChangedListener(new GeneralTextChangeWatcher());
         input.clearFocus();
         
         inputs.add(input);
         dataTable.addView(newPromptRow);
     }
     
-    
-    TextWatcher textChangeListener = new TextWatcher() {
-        
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-        
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
-        }
-        
-        @Override
-        public void afterTextChanged(Editable s) {
-            for (int i = 0; i < s.length(); ++i) {
-                if (s.charAt(i) == ',') {
-                    s.delete(i, i + 1);
-                }
-            }
-        }
-    };
     
     public void clearInputs() {
         for (EditText text : inputs) {
@@ -170,4 +170,6 @@ public class InputDataTableManager {
         
         return FileSaver.saveData(inputGroupName, prompts);
     }
+
+    
 }

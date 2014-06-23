@@ -22,6 +22,28 @@ public class DataChangeHandler {
     
     List<EditText> inputs;
     
+    public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(CHANGES_FILE, 0);
+        String previousTemp = prefs.getString(oldInputGroupName, null);
+        
+        if (previousTemp != null) {
+            SharedPreferences.Editor editor = prefs.edit();
+            
+            editor.putString(newInputGroupName, previousTemp);
+            
+            editor.remove(oldInputGroupName);
+            editor.commit();
+        }
+    }
+    
+    public static void deleteTemporaryData(String inputGroupName, Context appContext) {
+        SharedPreferences prefs = appContext.getSharedPreferences(CHANGES_FILE, 0);
+        SharedPreferences.Editor editor = prefs.edit();
+        
+        editor.remove(inputGroupName);
+        editor.commit();
+    }
+    
     DataChangeHandler(String inputGroupName, Context appContext)
     {
         this.inputGroupName = inputGroupName;
@@ -115,4 +137,6 @@ public class DataChangeHandler {
         
         FileSaver.saveAllData(inputGroupName, allData);
     }
+
+    
 }
