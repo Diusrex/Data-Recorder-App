@@ -51,6 +51,7 @@
     <string name="prompt_temp_save">Temporarily Saved</string>
     <string name="cannot_contain_comma">Cannot contain commas</string>
     
+    <string name="no_prompts">There must be at least 1 prompt</string>
     <string name="data_enter">Enter data</string>
     <string name="data_must_be_entered">All data must have some value entered</string>
     <string name="save_successful">Saved</string>

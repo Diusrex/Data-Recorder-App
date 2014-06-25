@@ -1,8 +1,5 @@
 package com.diusrex.sleepingdata.dialogs;
 
-import com.diusrex.sleepingdata.MainActivity;
-import com.diusrex.sleepingdata.R;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -10,19 +7,23 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import com.diusrex.sleepingdata.MainActivity;
+import com.diusrex.sleepingdata.R;
 
 public class NameSetterDialogFragment extends DialogFragment {
     static final String NAME = "name";
+    static final String LOG_TAG = "NameSetterDialogFragment";
     
     NameSetterListener listener;
     
     EditText input;
     
-    String name;
+    String previousName;
     
     public static NameSetterDialogFragment newInstance(String name, NameSetterListener listener) {
         NameSetterDialogFragment f = new NameSetterDialogFragment();
@@ -31,6 +32,8 @@ public class NameSetterDialogFragment extends DialogFragment {
         
         args.putString(NAME, name);
         
+        Log.w(LOG_TAG, "The name is " + name);
+        
         f.setArguments(args);
         f.listener = listener;
         
@@ -38,7 +41,7 @@ public class NameSetterDialogFragment extends DialogFragment {
     }
     
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        name = getArguments().getString(NAME);
+        previousName = getArguments().getString(NAME);
         
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         
@@ -65,14 +68,13 @@ public class NameSetterDialogFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 String newName = input.getText().toString();
                 
-                // TODO: Make sure the inputtedText is new
                 if (newName.equals("")) {
-                    listener.createErrorDialog(getString(R.string.enter_name));
+                    createErrorDialog(getString(R.string.enter_name));
                     
                 } else if (MainActivity.isInputNameUsed(newName, getActivity())) {
-                    listener.createErrorDialog(getString(R.string.name_already_used));
+                    createErrorDialog(getString(R.string.name_already_used));
                     
-                } else if (!name.equals(newName)) { // If it does equal, no need to do anything
+                } else if (!previousName.equals(newName)) {
                     listener.nameChanged(newName);
                 }
             }
@@ -81,17 +83,17 @@ public class NameSetterDialogFragment extends DialogFragment {
         return builder;
     }
 
+    private void createErrorDialog(String output) {
+        listener.createErrorDialog(output);
+    }
+    
     AlertDialog.Builder setUpView(Builder builder) {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
 
         View inputInfo = layoutInflater.inflate(R.layout.dialog_name_setter, null);
         
-        TextView rangeAvailableTV = (TextView) inputInfo.findViewById(R.id.rangeAvailable);
-        
-        String rangeAvailableString = getString(R.string.prompt_range_available);
-        rangeAvailableTV.setText(String.format(rangeAvailableString, min, max));
-        
-        input = (EditText) inputInfo.findViewById(R.id.positionChosen);
+        input = (EditText) inputInfo.findViewById(R.id.name);
+        input.setText(previousName);
         
         builder.setView(inputInfo);
         

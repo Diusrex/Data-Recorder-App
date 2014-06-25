@@ -1,20 +1,22 @@
 package com.diusrex.sleepingdata;
 
-import com.diusrex.sleepingdata.dialogs.ConfirmDialogFragment;
-import com.diusrex.sleepingdata.dialogs.ConfirmListener;
-import com.diusrex.sleepingdata.dialogs.PromptDataAddDialogFragment;
-import com.diusrex.sleepingdata.dialogs.PromptDataAddListener;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-public class InputGroupActivity extends Activity implements ConfirmListener {
+import com.diusrex.sleepingdata.dialogs.ConfirmDialogFragment;
+import com.diusrex.sleepingdata.dialogs.ConfirmListener;
+import com.diusrex.sleepingdata.dialogs.NameSetterDialogFragment;
+import com.diusrex.sleepingdata.dialogs.NameSetterListener;
+
+public class InputGroupActivity extends Activity implements ConfirmListener, NameSetterListener {
     static final public String INPUT_GROUP_NAME = "InputGroupName";
     static final public String NEW_INPUT_GROUP = "NewInputGroup";
     
@@ -36,8 +38,8 @@ public class InputGroupActivity extends Activity implements ConfirmListener {
         isNew = intent.getBooleanExtra(NEW_INPUT_GROUP, false);
         
         if (isNew) {
-            // TODO: Implement this
-            // First, enter name popup.
+            inputGroupName = "";
+            changeInputGroupName();
             // Then, run prompt setting
         }
     }
@@ -64,12 +66,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener {
     
     void setUpInformation()
     {
-        String groupNameInfo = getString(R.string.current_input_group);
-
-        TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
-        inputGroupNameTV.setText(String.format(groupNameInfo, inputGroupName));
-        
-        //inputGroupNameTV.setOnClickListener(l);
+        setInputGroupNameTV();
         
         int numberOfPrompts = FileLoader.numberOfPrompts(inputGroupName);
         
@@ -100,26 +97,54 @@ public class InputGroupActivity extends Activity implements ConfirmListener {
         numberDataRowsInfo.setText(numberOfDataRowsOutput);
     }
     
+    void setInputGroupNameTV()
+    {
+        String groupNameInfo = getString(R.string.current_input_group);
+
+        TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
+        inputGroupNameTV.setText(String.format(groupNameInfo, inputGroupName));
+        inputGroupNameTV.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                changeInputGroupName();
+            }
+        });
+    }
+    
+    void changeInputGroupName() {
+        DialogFragment fragment = NameSetterDialogFragment.newInstance(inputGroupName, (NameSetterListener) this); 
+        fragment.show(getFragmentManager(), "dialog");
+    }
+    
+    @Override
+    public void nameChanged(String newName) {
+        MainActivity.changeInputGroupName(inputGroupName, newName, (Context) this);
+        inputGroupName = newName;
+        setInputGroupNameTV();
+    }
+    
     public void changeButtonClicked(View view) {
         runPromptSetting();
     }
     
     void runPromptSetting() {
-        if (FileLoader.loadPrompts(inputGroupName).size() != 0) {
-            Intent intent = new Intent(this, PromptSettingActivity.class);
-            intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, inputGroupName);
-    
-            startActivity(intent);
-        } else {
-            // TODO: Error popup
-        }
+        Intent intent = new Intent(this, PromptSettingActivity.class);
+        intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, inputGroupName);
+
+        startActivity(intent);
     }
     
     public void inputButtonClicked(View view) {
+        if (FileLoader.loadPrompts(inputGroupName).size() != 0) {
+            
         Intent intent = new Intent(this, InputDataActivity.class);
         intent.putExtra(InputDataActivity.INPUT_GROUP_NAME, inputGroupName);
 
         startActivity(intent);
+        } else {
+            createErrorDialog(getString(R.string.no_prompts));
+        }
     }
 
     public void deleteButtonClicked(View view) {
@@ -143,5 +168,21 @@ public class InputGroupActivity extends Activity implements ConfirmListener {
         MainActivity.deleteInputGroup(inputGroupName, (Context) this);
         
         finish();
+    }
+
+    @Override
+    public void createErrorDialog(String output) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        
+        builder.setMessage(output);
+        builder.setPositiveButton(getString(android.R.string.ok), new AlertDialog.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        
+        builder.show();
     }
 }
