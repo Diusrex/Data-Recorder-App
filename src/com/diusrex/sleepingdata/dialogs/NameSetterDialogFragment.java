@@ -63,6 +63,14 @@ public class NameSetterDialogFragment extends DialogFragment {
             }
         });
         
+        builder.setNegativeButton(getString(android.R.string.cancel), new OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                listener.nameChanged(previousName);
+            }
+        });
+        
         builder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {        
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -74,7 +82,7 @@ public class NameSetterDialogFragment extends DialogFragment {
                 } else if (MainActivity.isInputNameUsed(newName, getActivity())) {
                     createErrorDialog(getString(R.string.name_already_used));
                     
-                } else if (!previousName.equals(newName)) {
+                } else {
                     listener.nameChanged(newName);
                 }
             }

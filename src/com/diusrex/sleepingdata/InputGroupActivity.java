@@ -37,10 +37,11 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
         
         isNew = intent.getBooleanExtra(NEW_INPUT_GROUP, false);
         
+        inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
+        
         if (isNew) {
             inputGroupName = "";
             changeInputGroupName();
-            // Then, run prompt setting
         }
     }
     
@@ -57,13 +58,10 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
     public void onResume() {
         super.onResume();
         
-        Bundle args = getIntent().getExtras();
-        
-        inputGroupName = args.getString(INPUT_GROUP_NAME);
-        
         setUpInformation();
     }
     
+    // TODO: Split this up into smaller functions? (Put them at bottom)
     void setUpInformation()
     {
         setInputGroupNameTV();
@@ -119,9 +117,17 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
     
     @Override
     public void nameChanged(String newName) {
-        MainActivity.changeInputGroupName(inputGroupName, newName, (Context) this);
-        inputGroupName = newName;
-        setInputGroupNameTV();
+        if (!newName.equals(inputGroupName)) {
+            MainActivity.changeInputGroupName(inputGroupName, newName, (Context) this);
+            inputGroupName = newName;
+            setInputGroupNameTV();
+            
+            if (isNew) {
+                runPromptSetting();
+            }
+        } else if (isNew) {
+            finish();
+        }
     }
     
     public void changeButtonClicked(View view) {

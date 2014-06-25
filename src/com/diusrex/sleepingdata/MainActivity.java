@@ -61,7 +61,10 @@ public class MainActivity extends ActionBarActivity {
 	
 	public void createButtonClicked(View view)
 	{
-	    // TODO: Implement this
+	    Intent intent = new Intent(this, InputGroupActivity.class);
+        intent.putExtra(InputGroupActivity.NEW_INPUT_GROUP, true);
+
+        startActivity(intent);
 	}
 	
     void saveNewInputGroup(String newInputGroup) {
