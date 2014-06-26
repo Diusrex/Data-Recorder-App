@@ -121,21 +121,13 @@ public class DataChangeHandler {
         editor.commit();
     }
     
-    public void applyDataChanges()
+    public String[] applyDataChanges(String[] dataLine)
     {
-        List<String[]> allData;
-        
-        allData = FileLoader.loadAllData(inputGroupName);
-        
-        for (int i = 0; i < allData.size(); ++i) {
-            for (ChangePromptsInfo current : allChanges) {
-                allData.set(i, current.applyToData(allData.get(i)));
-            }
+        for (ChangePromptsInfo current : allChanges) {
+            dataLine = current.applyToData(dataLine);
         }
         
-        allChanges = new ArrayList<ChangePromptsInfo>();
-        
-        FileSaver.saveAllData(inputGroupName, allData);
+        return dataLine;
     }
 
     
