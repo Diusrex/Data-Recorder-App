@@ -6,15 +6,11 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
-import com.google.common.base.Joiner;
 
 public class InputDataTableManager {
     static final String LOG_TAG = "InputDataTableManager";
@@ -27,6 +23,23 @@ public class InputDataTableManager {
     
     List<EditText> inputs;
     
+    public static void applyDataChanges(String inputGroupName, DataChangeHandler dataChangeHandler, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
+        String temporaryData = prefs.getString(inputGroupName, null);
+        
+        if (temporaryData != null) {
+            String[] newTemp = TempSaver.split(temporaryData);
+            newTemp = dataChangeHandler.applyDataChanges(newTemp);
+            
+            SharedPreferences.Editor editor = prefs.edit();
+            
+            String newTempString = TempSaver.join(newTemp);
+            
+            editor.putString(inputGroupName, newTempString);
+            editor.commit();
+        }
+    }
+
     public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
         String previousTemp = prefs.getString(oldInputGroupName, null);
@@ -40,6 +53,7 @@ public class InputDataTableManager {
             editor.commit();
         }
     }
+    
     public static void deleteTemporaryData(String inputGroupName, Context context) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_FILE, 0);
         SharedPreferences.Editor editor = settings.edit();
@@ -92,7 +106,7 @@ public class InputDataTableManager {
         editor.remove(inputGroupName);
         editor.commit();
         
-        String[] brokenUp = savedWords.split(", ");
+        String[] brokenUp = TempSaver.split(savedWords);
         
         return Arrays.asList(brokenUp);
     }
@@ -136,18 +150,20 @@ public class InputDataTableManager {
     public void saveTemporaryData() {
         SharedPreferences.Editor editor = settings.edit();
         
-        List<String> prompts = new ArrayList<String>();
+        String[] data = new String[inputs.size()];
         
-        for (EditText text : inputs)
+        for (int i = 0; i < data.length; ++i)
         {
-            prompts.add(text.getText().toString());
+            data[i] = inputs.get(i).getText().toString();
         }
         
-        String promptsAsString = Joiner.on(", ").join(prompts);
+        String promptsAsString = TempSaver.join(data);
         
         editor.putString(inputGroupName, promptsAsString);
         editor.commit();
     }
+    
+    
     
     public boolean mayBeSaved() {
         for (EditText input : inputs) {
@@ -159,17 +175,15 @@ public class InputDataTableManager {
         return true;
     }
     
-    // Similar (too different I feel though
+    // Similar (too different I feel though)
     public boolean saveDataToFile() {
-        List<String> prompts = new ArrayList<String>();
+        List<String> data = new ArrayList<String>();
         
         for (EditText text : inputs)
         {
-            prompts.add(text.getText().toString());
+            data.add(text.getText().toString());
         }
         
-        return FileSaver.saveData(inputGroupName, prompts);
+        return FileSaver.saveData(inputGroupName, data);
     }
-
-    
 }

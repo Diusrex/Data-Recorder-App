@@ -53,10 +53,10 @@ public class FileAccessor {
         
         dataFile.delete();
         promptsFile.delete();
+        
+        flagFileChanges(dataFile.getAbsolutePath());
+        flagFileChanges(promptsFile.getAbsolutePath());
     }
-    
-    
-    
     
     
     static public File openDataFile(String fileName) throws IOException, NoAccessException

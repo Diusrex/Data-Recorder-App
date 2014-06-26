@@ -1,5 +1,7 @@
 package com.diusrex.sleepingdata;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
@@ -170,7 +172,8 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         if (changed || manager.wasChanged()) {
             if (manager.mayBeSaved()) {
                 boolean successfullySaved = manager.savePromptsToFile();
-                dataChangeHandler.applyDataChanges();
+                
+                applyChangesToAll();
                 
                 String output;
                 
@@ -188,6 +191,25 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
                 createErrorDialog(getString(R.string.enter_name_for_all_inputs));
             }
         }
+    }
+    
+    void applyChangesToAll()
+    {
+        // Apply to exisiting data
+        List<String[]> allData = FileLoader.loadAllData(inputGroupName);
+        
+        for (int i = 0; i < allData.size(); ++i) {
+            String[] newDataLine = dataChangeHandler.applyDataChanges(allData.get(i));
+            
+            allData.set(i, newDataLine);
+        }
+        
+        FileSaver.saveAllData(inputGroupName, allData);
+        
+        // Apply to temporary data
+        InputDataTableManager.applyDataChanges(inputGroupName, dataChangeHandler, (Context) this);
+        
+        dataChangeHandler.reset();
     }
     
     @Override

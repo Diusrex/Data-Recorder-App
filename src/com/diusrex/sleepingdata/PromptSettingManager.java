@@ -13,8 +13,6 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import com.google.common.base.Joiner;
-
 public class PromptSettingManager {
     static final String LOG_TAG = "PromptSettingManager";
     static final String PREFS_FILE = "PromptPreferences";
@@ -101,8 +99,7 @@ public class PromptSettingManager {
         editor.remove(inputGroupName);
         editor.commit();
         
-        String[] brokenUp = savedWords.split(", ");
-        
+        String[] brokenUp = TempSaver.split(savedWords);
         
         return Arrays.asList(brokenUp);
     }
@@ -111,14 +108,14 @@ public class PromptSettingManager {
     {
         SharedPreferences.Editor editor = settings.edit();
         
-        List<String> prompts = new ArrayList<String>();
+        String[] prompts = new String[inputs.size()];
         
-        for (EditText text : inputs)
+        for (int i = 0; i < inputs.size(); ++i)
         {
-            prompts.add(text.getText().toString());
+            prompts[i] = inputs.get(i).getText().toString();
         }
         
-        String promptsAsString = Joiner.on(", ").join(prompts);
+        String promptsAsString = TempSaver.join(prompts);
         
         editor.putString(inputGroupName, promptsAsString);
         editor.commit();
