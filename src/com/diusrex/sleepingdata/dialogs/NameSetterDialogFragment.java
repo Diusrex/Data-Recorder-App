@@ -7,7 +7,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -31,8 +30,6 @@ public class NameSetterDialogFragment extends DialogFragment {
         Bundle args = new Bundle();
         
         args.putString(NAME, name);
-        
-        Log.w(LOG_TAG, "The name is " + name);
         
         f.setArguments(args);
         f.listener = listener;
@@ -92,7 +89,7 @@ public class NameSetterDialogFragment extends DialogFragment {
     }
 
     private void createErrorDialog(String output) {
-        listener.createErrorDialog(output);
+        listener.createErrorDialog(output, this);
     }
     
     AlertDialog.Builder setUpView(Builder builder) {

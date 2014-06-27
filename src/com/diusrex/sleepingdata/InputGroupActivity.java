@@ -1,10 +1,8 @@
 package com.diusrex.sleepingdata;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +11,7 @@ import android.widget.TextView;
 
 import com.diusrex.sleepingdata.dialogs.ConfirmDialogFragment;
 import com.diusrex.sleepingdata.dialogs.ConfirmListener;
+import com.diusrex.sleepingdata.dialogs.ErrorDialogFragment;
 import com.diusrex.sleepingdata.dialogs.NameSetterDialogFragment;
 import com.diusrex.sleepingdata.dialogs.NameSetterListener;
 
@@ -176,19 +175,14 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
         finish();
     }
 
+    void createErrorDialog(String output) {
+        DialogFragment errorDialog = ErrorDialogFragment.newInstance(output);
+        errorDialog.show(getFragmentManager(), "dialog");
+    }
+    
     @Override
-    public void createErrorDialog(String output) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        
-        builder.setMessage(output);
-        builder.setPositiveButton(getString(android.R.string.ok), new AlertDialog.OnClickListener() {
-            
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        
-        builder.show();
+    public void createErrorDialog(String output, DialogFragment dialog) {
+        DialogFragment errorDialog = ErrorDialogFragment.newInstance(output, dialog, getFragmentManager());
+        errorDialog.show(getFragmentManager(), "dialog");
     }
 }

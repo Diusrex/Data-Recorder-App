@@ -136,7 +136,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         if (wasSaved) {
             Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
                 Toast.LENGTH_SHORT).show();
-            
         }
         
         finish();
