@@ -64,6 +64,8 @@ public class PromptSettingManager {
     
     public void loadAndDisplayPrompts()
     {
+        promptTable.removeAllViews();
+        
         inputs = new ArrayList<EditText>();
         
         List<String> existingInputs = loadTemporaryPrompts();
