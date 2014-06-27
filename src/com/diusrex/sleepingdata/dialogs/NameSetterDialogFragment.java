@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import com.diusrex.sleepingdata.GeneralTextChangeWatcher;
 import com.diusrex.sleepingdata.MainActivity;
 import com.diusrex.sleepingdata.R;
 
@@ -99,7 +100,7 @@ public class NameSetterDialogFragment extends DialogFragment {
         
         input = (EditText) inputInfo.findViewById(R.id.name);
         input.setText(previousName);
-        
+        input.addTextChangedListener(new GeneralTextChangeWatcher());
         builder.setView(inputInfo);
         
         return builder;
