@@ -76,11 +76,15 @@ public class PromptDataAddDialogFragment extends DialogFragment {
                     listener.dataChosen(position, textToAdd);
                     dialog.dismiss();
                 } else {
-                    listener.createErrorDialog(getString(R.string.enter_name));
+                    createErrorDialog(getString(R.string.enter_name));
                 }
             }
         });
         
         return builder;
+    }
+    
+    void createErrorDialog(String output) {
+        listener.createErrorDialog(output, this);
     }
 }

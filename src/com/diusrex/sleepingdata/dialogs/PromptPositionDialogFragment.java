@@ -84,7 +84,7 @@ public class PromptPositionDialogFragment extends DialogFragment {
             {
                 listener.positionChosen(wantedPosition);
             } else {
-                listener.createErrorDialog(getString(R.string.prompt_position_invalid));
+                createErrorDialog(getString(R.string.prompt_position_invalid));
             }
             
             dialog.dismiss();
@@ -107,5 +107,9 @@ public class PromptPositionDialogFragment extends DialogFragment {
         builder.setView(inputInfo);
         
         return builder;
+    }
+    
+    void createErrorDialog(String output) {
+        listener.createErrorDialog(output, this);
     }
 }

@@ -3,11 +3,8 @@ package com.diusrex.sleepingdata;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +16,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.diusrex.sleepingdata.dialogs.ErrorDialogFragment;
 import com.diusrex.sleepingdata.dialogs.PromptDataAddDialogFragment;
 import com.diusrex.sleepingdata.dialogs.PromptDataAddListener;
 import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
@@ -98,22 +96,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         // Need to add the prompt
         manager.addPromptToPosition("", position);
         dataChangeHandler.promptAdded(position, dataToAdd);
-    }
-    
-    @Override
-    public void createErrorDialog(String phrase) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        
-        builder.setMessage(phrase);
-        builder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {
-            
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        
-        builder.show();
     }
     
     public void deletePromptButtonClicked(View view) {
@@ -209,6 +191,17 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         InputDataTableManager.applyDataChanges(inputGroupName, dataChangeHandler, (Context) this);
         
         dataChangeHandler.reset();
+    }
+    
+    void createErrorDialog(String output) {
+        DialogFragment errorDialog = ErrorDialogFragment.newInstance(output);
+        errorDialog.show(getFragmentManager(), "dialog");
+    }
+    
+    @Override
+    public void createErrorDialog(String output, DialogFragment dialog) {
+        DialogFragment errorDialog = ErrorDialogFragment.newInstance(output, dialog, getFragmentManager());
+        errorDialog.show(getFragmentManager(), "dialog");
     }
     
     @Override
