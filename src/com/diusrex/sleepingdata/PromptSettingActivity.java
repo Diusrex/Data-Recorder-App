@@ -44,6 +44,8 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prompt_setting);
        
+        setUpKeyboardHandling();
+        
         Intent intent = getIntent();
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
         
@@ -59,6 +61,23 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         inputGroupNameTV.setText(String.format(inputGroupNameFormatting, inputGroupName));
         
         hasDataEntered = FileLoader.dataExists(inputGroupName);
+    }
+    
+    void setUpKeyboardHandling() {
+        ((KeyboardHandleRelativeLayout)findViewById(R.id.layout)).setOnSoftKeyboardListener(new KeyboardHandleRelativeLayout.OnSoftKeyboardListener() {
+            @Override
+            public void onShown() {
+                findViewById(R.id.addPromptButton).setVisibility(View.GONE);
+                findViewById(R.id.buttonRow).setVisibility(View.GONE);
+            }
+            
+            @Override
+            public void onHidden() {
+                findViewById(R.id.addPromptButton).setVisibility(View.VISIBLE);
+                findViewById(R.id.buttonRow).setVisibility(View.VISIBLE);
+            }
+            
+        });
     }
     
     @Override

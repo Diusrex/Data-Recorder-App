@@ -34,6 +34,8 @@ public class InputDataActivity  extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_data);
         
+        setUpKeyboardHandling();
+        
         Intent intent = getIntent();
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
         
@@ -56,6 +58,21 @@ public class InputDataActivity  extends Activity {
         // Do not want the keyboard to popup yet
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+    
+    void setUpKeyboardHandling() {
+        ((KeyboardHandleRelativeLayout)findViewById(R.id.layout)).setOnSoftKeyboardListener(new KeyboardHandleRelativeLayout.OnSoftKeyboardListener() {
+            @Override
+            public void onShown() {
+                findViewById(R.id.buttonRow).setVisibility(View.GONE);
+            }
+            
+            @Override
+            public void onHidden() {
+                findViewById(R.id.buttonRow).setVisibility(View.VISIBLE);
+            }
+            
+        });
     }
     
     public void choosePromptPosition(View view) {
