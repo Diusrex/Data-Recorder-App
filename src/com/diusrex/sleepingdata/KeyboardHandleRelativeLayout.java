@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
+// This was created from the answer at http://stackoverflow.com/questions/7300497/adjust-layout-when-soft-keyboard-is-on
+
 public class KeyboardHandleRelativeLayout extends RelativeLayout{
     public KeyboardHandleRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
