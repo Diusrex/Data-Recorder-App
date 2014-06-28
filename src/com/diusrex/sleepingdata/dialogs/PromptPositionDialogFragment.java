@@ -16,6 +16,7 @@ import com.diusrex.sleepingdata.R;
 public class PromptPositionDialogFragment extends DialogFragment {
     static final String MINIMUM_NUMBER = "MinimumNumer";
     static final String MAX_NUMBER = "MaxNumer";
+    static final String WANTED_NUMBER = "WantedNumber";
     
     int min, max;
     
@@ -104,12 +105,22 @@ public class PromptPositionDialogFragment extends DialogFragment {
         
         positionToAddET = (EditText) inputInfo.findViewById(R.id.positionChosen);
         
+        // Means had already entered a number
+        if (getArguments().containsKey(WANTED_NUMBER)) {
+            positionToAddET.setText("" + getArguments().getInt(WANTED_NUMBER));
+        }
+        
         builder.setView(inputInfo);
         
         return builder;
     }
     
     void createErrorDialog(String output) {
+        Bundle args = getArguments();
+        
+        String position = positionToAddET.getText().toString();
+        args.putInt(WANTED_NUMBER, Integer.parseInt(position));
+        
         listener.createErrorDialog(output, this);
     }
 }

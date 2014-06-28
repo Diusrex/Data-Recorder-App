@@ -16,8 +16,10 @@ import com.diusrex.sleepingdata.MainActivity;
 import com.diusrex.sleepingdata.R;
 
 public class NameSetterDialogFragment extends DialogFragment {
-    static final String NAME = "name";
-    static final String LOG_TAG = "NameSetterDialogFragment";
+    static final String PREVIOUS_NAME = "PreviousName";
+    static final String NEW_NAME = "NewName";
+    
+    static final String LOG_TAG = "NameSetterDialogFragmen;t";
     
     NameSetterListener listener;
     
@@ -30,7 +32,7 @@ public class NameSetterDialogFragment extends DialogFragment {
         
         Bundle args = new Bundle();
         
-        args.putString(NAME, name);
+        args.putString(PREVIOUS_NAME, name);
         
         f.setArguments(args);
         f.listener = listener;
@@ -39,13 +41,14 @@ public class NameSetterDialogFragment extends DialogFragment {
     }
     
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        previousName = getArguments().getString(NAME);
+        previousName = getArguments().getString(PREVIOUS_NAME);
+        String newName = getArguments().getString(NEW_NAME);
         
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         
         builder = setUpButtons(builder);
         
-        builder = setUpView(builder);
+        builder = setUpView(builder, newName);
         
         return builder.create();
     }
@@ -90,16 +93,24 @@ public class NameSetterDialogFragment extends DialogFragment {
     }
 
     private void createErrorDialog(String output) {
+        Bundle args = getArguments();
+        args.putString(NEW_NAME, input.getText().toString());
         listener.createErrorDialog(output, this);
     }
     
-    AlertDialog.Builder setUpView(Builder builder) {
+    AlertDialog.Builder setUpView(Builder builder, String newName) {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
 
         View inputInfo = layoutInflater.inflate(R.layout.dialog_name_setter, null);
         
         input = (EditText) inputInfo.findViewById(R.id.name);
-        input.setText(previousName);
+        
+        if (newName == null) {
+            input.setText(previousName);
+        } else {
+            input.setText(newName);
+        }
+        
         input.addTextChangedListener(new GeneralTextChangeWatcher());
         builder.setView(inputInfo);
         
