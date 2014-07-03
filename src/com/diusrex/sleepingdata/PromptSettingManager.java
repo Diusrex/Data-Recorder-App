@@ -20,7 +20,7 @@ public class PromptSettingManager extends TableManager{
         changeInputGroupName(oldInputGroupName, newInputGroupName, prefs);
     }
     
-    public static void deleteTemporaryPrompts(String inputGroupName, Context context) {
+    public static void deleteTemporaryData(String inputGroupName, Context context) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_FILE, 0);
         deleteTemporaryInputs(inputGroupName, settings);
     }
