@@ -5,8 +5,8 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -84,24 +84,24 @@ public class InputDataActivity  extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         
-        manager.saveTemporaryData();
+        manager.saveTemporaryInputs();
         
-        Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
-            Toast.LENGTH_SHORT).show();
+        if (manager.tempHasBeenChanged()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
+                Toast.LENGTH_SHORT).show();
+        }
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         
-        manager.saveTemporaryData();
-        
-        super.onPause();
+        manager.saveTemporaryInputs();
     }
     
     public void finishButtonClicked(View view) {
         if (manager.mayBeSaved()) {
-            boolean successfullySaved = manager.saveDataToFile();
+            boolean successfullySaved = manager.saveInputsToFile();
             
             String output;
             
@@ -113,8 +113,6 @@ public class InputDataActivity  extends Activity {
             
             Toast.makeText(getApplicationContext(), output, 
                     Toast.LENGTH_SHORT).show();
-            
-            clearButtonClicked(null);
         } else {
             createErrorDialog(getString(R.string.data_must_be_entered));
         }

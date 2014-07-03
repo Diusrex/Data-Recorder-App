@@ -37,8 +37,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     boolean hasDataEntered;
     
-    boolean changed;
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,8 +82,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     protected void onResume() {
         super.onResume();
         
-        manager.loadAndDisplayPrompts();
-        changed = manager.wasChanged();
+        manager.loadAndDisplay();
         
         // Do not want the keyboard to popup yet
         getWindow().setSoftInputMode(
@@ -100,8 +97,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     @Override
     public void positionChosen(int position) {
         if (!hasDataEntered) {
-            changed = true;
-            manager.addPromptToPosition("", position);
+            manager.createRow("", position);
         } else {
             DialogFragment fragment = PromptDataAddDialogFragment.newInstance(position, (PromptDataAddListener) this);
             fragment.show(getFragmentManager(), "dialog");
@@ -110,10 +106,8 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     @Override
     public void dataChosen(int position, String dataToAdd){
-        changed = true;
-        
         // Need to add the prompt
-        manager.addPromptToPosition("", position);
+        manager.createRow("", position);
         dataChangeHandler.promptAdded(position, dataToAdd);
     }
     
@@ -125,13 +119,10 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         if (hasDataEntered) {
             dataChangeHandler.promptRemoved(position);
         }
-        
-        changed = true;
     }
     
     @Override
     public void onBackPressed() {
-        
         boolean wasSaved = saveTempInformation();
         
         if (wasSaved) {
@@ -153,14 +144,11 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     
     
     boolean saveTempInformation() {
-        if (changed || manager.wasChanged()) {
-            manager.saveTemporaryPrompts();
-            dataChangeHandler.saveDataChanges();
-            changed = false;
-            return true;
-        }
+        // Should always save these
+        manager.saveTemporaryInputs();
+        dataChangeHandler.saveDataChanges();
         
-        return false;
+        return manager.tempHasBeenChanged();
     }
     
     public void resetButtonClicked(View view) {
@@ -169,9 +157,9 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     }
     
     public void saveButtonClicked(View view) {
-        if (changed || manager.wasChanged()) {
+        if (manager.mayBeSaved()) {
             if (manager.mayBeSaved()) {
-                boolean successfullySaved = manager.savePromptsToFile();
+                boolean successfullySaved = manager.saveInputsToFile();
                 
                 applyChangesToAll();
                 
@@ -181,8 +169,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
                     output = getString(R.string.save_failed);
                 } else {
                     output = getString(R.string.save_successful);
-                    
-                    changed = false;
                 }
                 
                 Toast.makeText(getApplicationContext(), output, 
