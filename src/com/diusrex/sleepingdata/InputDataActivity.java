@@ -114,6 +114,8 @@ public class InputDataActivity  extends Activity {
             
             Toast.makeText(getApplicationContext(), output, 
                     Toast.LENGTH_SHORT).show();
+
+            finish();
         } else {
             createErrorDialog(getString(R.string.data_must_be_entered));
         }
