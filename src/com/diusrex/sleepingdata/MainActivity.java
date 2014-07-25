@@ -31,9 +31,7 @@ public class MainActivity extends ActionBarActivity {
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-	    
 		super.onCreate(savedInstanceState);
-		FileAccessor.init(this);
 		
 		setContentView(R.layout.activity_main);
 		

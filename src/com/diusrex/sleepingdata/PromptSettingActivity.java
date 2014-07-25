@@ -81,6 +81,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     @Override
     protected void onResume() {
         super.onResume();
+        FileAccessor.init(this);
         
         manager.loadAndDisplay();
         
