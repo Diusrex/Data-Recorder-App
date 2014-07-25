@@ -57,6 +57,10 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
     public void onResume() {
         super.onResume();
         
+        if (inputGroupName == null) {
+            finish();
+        }
+        
         setUpInformation();
     }
     
