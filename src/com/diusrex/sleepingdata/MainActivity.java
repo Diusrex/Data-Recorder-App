@@ -28,43 +28,43 @@ public class MainActivity extends ActionBarActivity {
     private SharedPreferences availableInputGroupsPreference;
 
     String[] inputGroups;
-    
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		setContentView(R.layout.activity_main);
-		
-		inputGroupsTable = (TableLayout) findViewById(R.id.inputGroupsTable);
-		
-		availableInputGroupsPreference = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
-	}
-	
-	@Override
-	protected void onResume() {
-	    super.onResume();
-	    
-	    inputGroupsTable.removeAllViews();
-	    
-		inputGroups = availableInputGroupsPreference.getAll().keySet().toArray(new String[0]);
-		
-		// Sort the stocks in alphabetical order
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        inputGroupsTable = (TableLayout) findViewById(R.id.inputGroupsTable);
+
+        availableInputGroupsPreference = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        inputGroupsTable.removeAllViews();
+
+        inputGroups = availableInputGroupsPreference.getAll().keySet().toArray(new String[0]);
+
+        // Sort the inputGroups in alphabetical order
         Arrays.sort(inputGroups, String.CASE_INSENSITIVE_ORDER);
         
         for (int i = 0; i < inputGroups.length; ++i) {
             insertInputGroupInScrollView(inputGroups[i], i);
         }
-	}
-	
-	
-	public void createButtonClicked(View view)
-	{
-	    Intent intent = new Intent(this, InputGroupActivity.class);
+    }
+
+
+    public void createButtonClicked(View view)
+    {
+        Intent intent = new Intent(this, InputGroupActivity.class);
         intent.putExtra(InputGroupActivity.NEW_INPUT_GROUP, true);
 
         startActivity(intent);
-	}
-	
+    }
+
     void saveNewInputGroup(String newInputGroup) {
         SharedPreferences.Editor preferencesEditor = availableInputGroupsPreference.edit();
         preferencesEditor.putString(newInputGroup, newInputGroup);
@@ -73,12 +73,12 @@ public class MainActivity extends ActionBarActivity {
         updateInputGroupsList(newInputGroup);
     }
 
-	void updateInputGroupsList(String newInputGroup) {
+    void updateInputGroupsList(String newInputGroup) {
         insertInputGroupInScrollView(newInputGroup, Arrays.binarySearch(inputGroups, newInputGroup));
-	}
-	
-	void insertInputGroupInScrollView(String groupName, int position) {
-	    // Get the LayoutInflator service
+    }
+
+    void insertInputGroupInScrollView(String groupName, int position) {
+        // Get the LayoutInflator service
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
         // Use the inflater to inflate a stock row from stock_quote_row.xml
@@ -92,9 +92,9 @@ public class MainActivity extends ActionBarActivity {
         
         // Add the new components for the stock to the TableLayout
         inputGroupsTable.addView(newInputGroupRow, position);
-	}
-	
-	public void selectButtonClicked(View view) {
+    }
+
+    public void selectButtonClicked(View view) {
         TableRow tableRow = (TableRow) view.getParent();
         TextView nameTextView = (TextView) tableRow.findViewById(R.id.name);
         
@@ -105,25 +105,26 @@ public class MainActivity extends ActionBarActivity {
 
         startActivity(intent);
     };
-    
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-	public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
-	    SharedPreferences prefFile = context.getSharedPreferences(PREF_FILE, MODE_PRIVATE);
-        
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
+        SharedPreferences prefFile = context.getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+
         SharedPreferences.Editor editor = prefFile.edit();
         editor.remove(oldInputGroupName);
         editor.putString(newInputGroupName, newInputGroupName);
@@ -134,8 +135,8 @@ public class MainActivity extends ActionBarActivity {
         PromptSettingManager.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
         DataChangeHandler.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
         InputDataTableManager.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
-	}
-	
+    }
+
     public static void deleteInputGroup(String inputGroupName, Context context) {
         SharedPreferences prefFile = context.getSharedPreferences(PREF_FILE, MODE_PRIVATE);
         

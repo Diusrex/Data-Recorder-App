@@ -146,11 +146,11 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
     
     public void inputButtonClicked(View view) {
         if (FileLoader.loadPrompts(inputGroupName).size() != 0) {
-            
-        Intent intent = new Intent(this, InputDataActivity.class);
-        intent.putExtra(InputDataActivity.INPUT_GROUP_NAME, inputGroupName);
 
-        startActivity(intent);
+            Intent intent = new Intent(this, InputDataActivity.class);
+            intent.putExtra(InputDataActivity.INPUT_GROUP_NAME, inputGroupName);
+
+            startActivity(intent);
         } else {
             createErrorDialog(getString(R.string.no_prompts));
         }

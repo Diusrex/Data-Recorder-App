@@ -11,12 +11,12 @@ import android.util.Log;
 
 public class FileAccessor {
     static private String LOG_TAG = "FileAccessor";
-    
+
     static final String DATA_FOLDER = "";
     static final String PROMPTS_FOLDER = "Prompts";
-    
+
     static Context appContext;
-    
+
     static public class NoAccessException extends Exception {
         private static final long serialVersionUID = 4274163361971136233L;
         public NoAccessException() { super(); }
@@ -24,90 +24,90 @@ public class FileAccessor {
         public NoAccessException(String message, Throwable cause) { super(message, cause); }
         public NoAccessException(Throwable cause) { super(cause); }
     }
-	
+
     static public void init(Context currentAppContext) {
         appContext = currentAppContext;
     }
-    
+
     public static void changeInputGroupName(String oldInputGroupName,
             String newInputGroupName) {
         List<String[]> allData = FileLoader.loadAllData(oldInputGroupName);
         FileSaver.saveAllData(newInputGroupName, allData);
-        
+
         List<String> allPrompts = FileLoader.loadPrompts(oldInputGroupName);
         FileSaver.savePrompts(newInputGroupName, allPrompts);
-        
+
         deleteInputGroup(oldInputGroupName);
     }
-    
+
     public static void deleteInputGroup(String inputGroupName) {
         File dataFile;
         File promptsFile;
-        
+
         try {
             dataFile = openDataFile(inputGroupName);
             promptsFile = openPromptFile(inputGroupName);
         } catch (IOException | NoAccessException e) {
             return;
         }
-        
+
         dataFile.delete();
         promptsFile.delete();
-        
+
         flagFileChanges(dataFile.getAbsolutePath());
         flagFileChanges(promptsFile.getAbsolutePath());
     }
-    
-    
+
+
     static public File openDataFile(String fileName) throws IOException, NoAccessException
     {
         return openFile(DATA_FOLDER, fileName);
     }
-    
+
     static public File openPromptFile(String fileName) throws IOException, NoAccessException
     {
         return openFile(PROMPTS_FOLDER, fileName);
     }
-    
-	static File openFile(String folder, String fileName) throws IOException, NoAccessException
-	{
-	    if (!isExternalStorageAccessable()) {
-	        throw new NoAccessException();
-	    }
-	    
-		File file = new File(Environment.getExternalStoragePublicDirectory("Save Data/" + folder), fileName + ".txt");
-		
-		if (!file.exists())
-		{
-		    file.getParentFile().mkdirs();
-		    
-		    Log.w(LOG_TAG, "File is known to not exists");
-		    
-		    if (!file.createNewFile())
-		    {
-		        Log.e(LOG_TAG, "File was unable to be created");
-		    } else {
-		        flagFileChanges(file.getAbsolutePath());
-		    }
-		}
-		
-		return file;
-	}
-	
-	static public void flagFileChanges(String filePath)
-	{	    
-	    MediaScannerConnection.scanFile(appContext,
+
+    static File openFile(String folder, String fileName) throws IOException, NoAccessException
+    {
+        if (!isExternalStorageAccessable()) {
+            throw new NoAccessException();
+        }
+
+        File file = new File(Environment.getExternalStoragePublicDirectory("Save Data/" + folder), fileName + ".txt");
+
+        if (!file.exists())
+        {
+            file.getParentFile().mkdirs();
+
+            Log.w(LOG_TAG, "File is known to not exists");
+
+            if (!file.createNewFile())
+            {
+                Log.e(LOG_TAG, "File was unable to be created");
+            } else {
+                flagFileChanges(file.getAbsolutePath());
+            }
+        }
+
+        return file;
+    }
+
+    static public void flagFileChanges(String filePath)
+    {	    
+        MediaScannerConnection.scanFile(appContext,
                 new String[] { filePath }, null, null);
-	}
+    }
 
-	static private boolean isExternalStorageAccessable() {
-	    String state = Environment.getExternalStorageState();
-	    if (Environment.MEDIA_MOUNTED.equals(state)) {
-	        return true;
-	    }
-	    return false;
-	}
+    static private boolean isExternalStorageAccessable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
 
-    
+
 
 }

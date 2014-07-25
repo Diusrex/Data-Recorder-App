@@ -5,8 +5,8 @@ import com.google.common.base.Joiner;
 public class TempSaver {
     
     private final static String tempSaveSeparator = ", ";
-    
- // The purpose of this is to avoid having extra data be deleted
+
+    // The purpose of this is to avoid having extra data be deleted
     private final static String extraAddedToEnd = "~";
     
     public static String[] split(String data) {
