@@ -18,75 +18,75 @@ import com.diusrex.sleepingdata.dialogs.NameSetterListener;
 public class InputGroupActivity extends Activity implements ConfirmListener, NameSetterListener {
     static final public String INPUT_GROUP_NAME = "InputGroupName";
     static final public String NEW_INPUT_GROUP = "NewInputGroup";
-    
+
     static final String LOG_TAG = "InitialPromptInputActivity";
-    
+
     static final int DELETE_CODE = 5;
-    
+
     String inputGroupName;
-    
+
     boolean isNew;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_group);
-        
+
         Intent intent = getIntent();
-        
+
         isNew = intent.getBooleanExtra(NEW_INPUT_GROUP, false);
-        
+
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
-        
+
         if (isNew) {
             inputGroupName = "";
             changeInputGroupName();
         }
     }
-    
+
     @Override
     public void onPause() {
         super.onPause();
-        
+
         Bundle args = new Bundle();
         args.putString(INPUT_GROUP_NAME, inputGroupName);
         getIntent().putExtras(args);
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
-        
+
         if (inputGroupName == null) {
             finish();
         }
-        
+
         setUpInformation();
     }
-    
+
     // TODO: Split this up into smaller functions? (Put them at bottom)
     void setUpInformation()
     {
         setInputGroupNameTV();
-        
+
         int numberOfPrompts = FileLoader.numberOfPrompts(inputGroupName);
-        
+
         String numberOfPromptsOutput;
-        
+
         if (numberOfPrompts == 1) {
             numberOfPromptsOutput = getString(R.string.input_group_num_prompts_single);
         } else {
             numberOfPromptsOutput = getString(R.string.input_group_num_prompts_multiple);
             numberOfPromptsOutput = String.format(numberOfPromptsOutput, numberOfPrompts);
         }
-        
+
         TextView numberPromptsInfo = (TextView) findViewById(R.id.numberOfPrompts);
         numberPromptsInfo.setText(numberOfPromptsOutput);
-        
-        
+
+
         int numberOfDataRows = FileLoader.numberOfDataRows(inputGroupName);
         String numberOfDataRowsOutput;
-        
+
         if (numberOfDataRows == 1) {
             numberOfDataRowsOutput = getString(R.string.input_group_num_data_rows_single);
         } else {
@@ -97,7 +97,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
         TextView numberDataRowsInfo = (TextView) findViewById(R.id.numberOfDataRows);
         numberDataRowsInfo.setText(numberOfDataRowsOutput);
     }
-    
+
     void setInputGroupNameTV()
     {
         String groupNameInfo = getString(R.string.current_input_group);
@@ -105,26 +105,26 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
         inputGroupNameTV.setText(String.format(groupNameInfo, inputGroupName));
         inputGroupNameTV.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 changeInputGroupName();
             }
         });
     }
-    
+
     void changeInputGroupName() {
         DialogFragment fragment = NameSetterDialogFragment.newInstance(inputGroupName, (NameSetterListener) this); 
         fragment.show(getFragmentManager(), "dialog");
     }
-    
+
     @Override
     public void nameChanged(String newName) {
         if (!newName.equals(inputGroupName)) {
             MainActivity.changeInputGroupName(inputGroupName, newName, (Context) this);
             inputGroupName = newName;
             setInputGroupNameTV();
-            
+
             if (isNew) {
                 runPromptSetting();
             }
@@ -132,18 +132,18 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
             finish();
         }
     }
-    
+
     public void changeButtonClicked(View view) {
         runPromptSetting();
     }
-    
+
     void runPromptSetting() {
         Intent intent = new Intent(this, PromptSettingActivity.class);
         intent.putExtra(PromptSettingActivity.INPUT_GROUP_NAME, inputGroupName);
 
         startActivity(intent);
     }
-    
+
     public void inputButtonClicked(View view) {
         if (FileLoader.loadPrompts(inputGroupName).size() != 0) {
 
@@ -160,22 +160,22 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
         DialogFragment fragment = ConfirmDialogFragment.newInstance(getString(R.string.confirm_delete), DELETE_CODE, (ConfirmListener) this);
         fragment.show(getFragmentManager(), "dialog");
     }
-    
+
     @Override
     public void wasConfirmed(int code) {
         switch (code) {
         case DELETE_CODE:
             deleteInputGroup();
             break;
-            
+
         default:
             break;
         }
     }
-    
+
     void deleteInputGroup() {
         MainActivity.deleteInputGroup(inputGroupName, (Context) this);
-        
+
         finish();
     }
 
@@ -183,7 +183,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
         DialogFragment errorDialog = ErrorDialogFragment.newInstance(output);
         errorDialog.show(getFragmentManager(), "dialog");
     }
-    
+
     @Override
     public void createErrorDialog(String output, DialogFragment dialog) {
         DialogFragment errorDialog = ErrorDialogFragment.newInstance(output, dialog, getFragmentManager());

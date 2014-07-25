@@ -16,7 +16,7 @@ import android.util.Log;
 
 public class FileLoader {
     static private String LOG_TAG = "FileLoader";
-    
+
     static public class FailedToLoad extends Exception {
         private static final long serialVersionUID = 1L;
         public FailedToLoad() { super(); }
@@ -24,27 +24,27 @@ public class FileLoader {
         public FailedToLoad(String message, Throwable cause) { super(message, cause); }
         public FailedToLoad(Throwable cause) { super(cause); }
     }
-    
+
     public static int numberOfPrompts(String inputGroupName) {
         return loadPrompts(inputGroupName).size();
     }
-    
+
     static public List<String> loadPrompts(String promptsFile)
     {
         try
         {
             File loadFile = FileAccessor.openPromptFile(promptsFile);
-        
+
             BufferedReader reader = getReader(loadFile);
-        
-        
+
+
             String line = reader.readLine();
-            
+
             // Means that there were no prompts entered yet.
             if (line == null || line.equals("")) {
                 return new ArrayList<String>();
             }
-            
+
             return Arrays.asList(line.split(", "));
         } catch (FailedToLoad e1) {
             return new ArrayList<String>();
@@ -54,7 +54,7 @@ public class FileLoader {
             return new ArrayList<String>();
         }
     }
-    
+
     static public boolean dataExists(String dataFile)
     {
         return (numberOfDataRows(dataFile) > 0);
@@ -71,21 +71,21 @@ public class FileLoader {
 
             BufferedReader reader = getReader(loadFile);
 
-        
+
             ArrayList<String[]> allLines = new ArrayList<String[]>();
-            
+
             String line = reader.readLine();
-            
+
             while (line != null)
             {
                 allLines.add(line.split(", "));
                 line = reader.readLine();
             }
-            
+
             reader.close();
-        
+
             return allLines;
-            
+
         } catch (NoAccessException e) {
             return new ArrayList<String[]>();
         } catch (IOException e) {
@@ -94,7 +94,7 @@ public class FileLoader {
             return new ArrayList<String[]>();
         }
     }
-    
+
     static private BufferedReader getReader(File loadFile) throws FailedToLoad, IOException
     {
         FileInputStream fileIn = null;
@@ -104,9 +104,9 @@ public class FileLoader {
             Log.e(LOG_TAG, "The file didnt exist");
             throw new FailedToLoad();
         }
-            
+
         InputStreamReader reader = new InputStreamReader(fileIn);
-        
+
         return new BufferedReader(reader);
     }
 }

@@ -14,12 +14,12 @@ public class KeyboardHandleRelativeLayout extends RelativeLayout{
     public KeyboardHandleRelativeLayout(Context context) {
         super(context);
     }
-    
+
     public KeyboardHandleRelativeLayout(Context context, AttributeSet attrs, int defStyle)
     {
         super(context, attrs, defStyle);
     }
-    
+
     private OnSoftKeyboardListener onSoftKeyboardListener;
 
     @Override

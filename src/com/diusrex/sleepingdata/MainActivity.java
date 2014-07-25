@@ -20,11 +20,10 @@ import android.widget.TextView;
 public class MainActivity extends ActionBarActivity {
     static final String LOG_TAG = "MainActivity";
     static final String PREF_FILE = "availableInputGroups";
-    
+
     TableLayout inputGroupsTable;
-    
-    // Manages key valued pairs associated with stock symbols
-      // Will be stored using name of save type for both value and key
+
+    // Will store the input groups as both the key and value
     private SharedPreferences availableInputGroupsPreference;
 
     String[] inputGroups;
@@ -50,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
 
         // Sort the inputGroups in alphabetical order
         Arrays.sort(inputGroups, String.CASE_INSENSITIVE_ORDER);
-        
+
         for (int i = 0; i < inputGroups.length; ++i) {
             insertInputGroupInScrollView(inputGroups[i], i);
         }
@@ -69,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
         SharedPreferences.Editor preferencesEditor = availableInputGroupsPreference.edit();
         preferencesEditor.putString(newInputGroup, newInputGroup);
         preferencesEditor.apply();
-        
+
         updateInputGroupsList(newInputGroup);
     }
 
@@ -80,16 +79,16 @@ public class MainActivity extends ActionBarActivity {
     void insertInputGroupInScrollView(String groupName, int position) {
         // Get the LayoutInflator service
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        
+
         // Use the inflater to inflate a stock row from stock_quote_row.xml
         View newInputGroupRow = inflater.inflate(R.layout.input_group_row, null);
-        
+
         // Create the TextView for the ScrollView Row
         TextView nameTextView = (TextView) newInputGroupRow.findViewById(R.id.name);
-        
+
         // Add the stock symbol to the TextView
         nameTextView.setText(groupName);
-        
+
         // Add the new components for the stock to the TableLayout
         inputGroupsTable.addView(newInputGroupRow, position);
     }
@@ -97,9 +96,9 @@ public class MainActivity extends ActionBarActivity {
     public void selectButtonClicked(View view) {
         TableRow tableRow = (TableRow) view.getParent();
         TextView nameTextView = (TextView) tableRow.findViewById(R.id.name);
-        
+
         String inputGroupName = nameTextView.getText().toString();
-        
+
         Intent intent = new Intent(this, InputGroupActivity.class);
         intent.putExtra(InputGroupActivity.INPUT_GROUP_NAME, inputGroupName);
 
@@ -129,9 +128,9 @@ public class MainActivity extends ActionBarActivity {
         editor.remove(oldInputGroupName);
         editor.putString(newInputGroupName, newInputGroupName);
         editor.commit();
-        
+
         FileAccessor.changeInputGroupName(oldInputGroupName, newInputGroupName);
-        
+
         PromptSettingManager.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
         DataChangeHandler.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
         InputDataTableManager.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
@@ -139,13 +138,13 @@ public class MainActivity extends ActionBarActivity {
 
     public static void deleteInputGroup(String inputGroupName, Context context) {
         SharedPreferences prefFile = context.getSharedPreferences(PREF_FILE, MODE_PRIVATE);
-        
+
         SharedPreferences.Editor editor = prefFile.edit();
         editor.remove(inputGroupName);
         editor.commit();
-        
+
         FileAccessor.deleteInputGroup(inputGroupName);
-        
+
         PromptSettingManager.deleteTemporaryData(inputGroupName, context);
         DataChangeHandler.deleteTemporaryData(inputGroupName, context);
         InputDataTableManager.deleteTemporaryData(inputGroupName, context);
@@ -153,9 +152,9 @@ public class MainActivity extends ActionBarActivity {
 
     public static boolean isInputNameUsed(String inputGroupName, Activity activity) {
         SharedPreferences availableInputGroupsPreference = activity.getSharedPreferences(PREF_FILE, MODE_PRIVATE);
-        
+
         return availableInputGroupsPreference.contains(inputGroupName);
     }
 
-    
+
 }
