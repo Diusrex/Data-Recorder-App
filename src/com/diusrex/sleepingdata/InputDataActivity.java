@@ -85,9 +85,8 @@ public class InputDataActivity  extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        manager.saveTemporaryInputs();
-
         if (manager.tempHasBeenChanged()) {
+            manager.saveTemporaryInputs();
             Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
                     Toast.LENGTH_SHORT).show();
         }

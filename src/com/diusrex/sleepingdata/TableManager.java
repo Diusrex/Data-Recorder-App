@@ -81,6 +81,8 @@ public abstract class TableManager {
 
     final public boolean saveInputsToFile()
     {
+        deleteTemporaryInputs(inputGroupName, settings);
+        
         List<String> prompts = new ArrayList<String>();
 
         for (EditText text : inputs)
@@ -127,11 +129,6 @@ public abstract class TableManager {
 
         changedForTemp = false;
         wasChanged = true;
-
-        SharedPreferences.Editor editor = settings.edit();
-
-        editor.remove(inputGroupName);
-        editor.commit();
 
         String[] brokenUp = TempSaver.split(savedWords);
 
