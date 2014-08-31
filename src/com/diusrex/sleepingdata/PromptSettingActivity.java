@@ -54,9 +54,8 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         dataChangeHandler = new DataChangeHandler(inputGroupName, (Context) this);
 
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
-        String inputGroupNameFormatting = getString(R.string.current_input_group);
 
-        inputGroupNameTV.setText(String.format(inputGroupNameFormatting, inputGroupName));
+        inputGroupNameTV.setText(inputGroupName);
 
         hasDataEntered = FileLoader.dataExists(inputGroupName);
     }

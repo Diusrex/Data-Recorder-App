@@ -44,9 +44,8 @@ public class InputDataActivity  extends Activity {
         manager = new InputDataTableManager(dataTable, inputGroupName, (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
 
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
-        String inputGroupNameFormatting = getString(R.string.current_input_group);
 
-        inputGroupNameTV.setText(String.format(inputGroupNameFormatting, inputGroupName));
+        inputGroupNameTV.setText(inputGroupName);
     }
 
     @Override

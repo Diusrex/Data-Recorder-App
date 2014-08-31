@@ -100,10 +100,8 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
 
     void setInputGroupNameTV()
     {
-        String groupNameInfo = getString(R.string.current_input_group);
-
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
-        inputGroupNameTV.setText(String.format(groupNameInfo, inputGroupName));
+        inputGroupNameTV.setText(inputGroupName);
         inputGroupNameTV.setOnClickListener(new OnClickListener() {
 
             @Override
