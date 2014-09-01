@@ -119,8 +119,14 @@ public class PromptPositionDialogFragment extends DialogFragment {
         Bundle args = getArguments();
 
         String position = positionToAddET.getText().toString();
-        args.putInt(WANTED_NUMBER, Integer.parseInt(position));
-
+        
+        if (!position.equals("")) {
+        	args.putInt(WANTED_NUMBER, Integer.parseInt(position));
+        } else {
+        	// Should make sure that no old value will be displayed
+        	args.remove(WANTED_NUMBER);
+        }
+        
         listener.createErrorDialog(output, this);
     }
 }
