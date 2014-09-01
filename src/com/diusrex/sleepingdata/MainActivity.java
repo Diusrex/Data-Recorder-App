@@ -16,7 +16,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements InputGroupCreatorHandler {
     static final String LOG_TAG = "MainActivity";
     static final String PREF_FILE = "availableInputGroups";
 
@@ -54,15 +54,18 @@ public class MainActivity extends Activity {
         }
     }
 
-
     public void createButtonClicked(View view)
     {
-        Intent intent = new Intent(this, InputGroupActivity.class);
-        intent.putExtra(InputGroupActivity.NEW_INPUT_GROUP, true);
-
-        startActivity(intent);
+    	InputGroupCreator creator = new InputGroupCreator();
+    	creator.Run(getFragmentManager(), (InputGroupCreatorHandler) this);
     }
 
+    @Override
+    public void inputGroupCreated(String inputGroupName) {
+    	saveNewInputGroup(inputGroupName);
+    	startInputGroupActivity(inputGroupName);
+    }
+    
     void saveNewInputGroup(String newInputGroup) {
         SharedPreferences.Editor preferencesEditor = availableInputGroupsPreference.edit();
         preferencesEditor.putString(newInputGroup, newInputGroup);
@@ -97,12 +100,16 @@ public class MainActivity extends Activity {
         TextView nameTextView = (TextView) tableRow.findViewById(R.id.name);
 
         String inputGroupName = nameTextView.getText().toString();
-
+        
+        startInputGroupActivity(inputGroupName);
+    }
+    
+    public void startInputGroupActivity(String inputGroupName) {
         Intent intent = new Intent(this, InputGroupActivity.class);
         intent.putExtra(InputGroupActivity.INPUT_GROUP_NAME, inputGroupName);
 
         startActivity(intent);
-    };
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,7 +129,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    
     public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
         SharedPreferences prefFile = context.getSharedPreferences(PREF_FILE, MODE_PRIVATE);
 
