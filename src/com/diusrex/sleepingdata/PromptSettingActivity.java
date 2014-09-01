@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TableLayout;
@@ -207,20 +205,5 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     public void createErrorDialog(String output, DialogFragment dialog) {
         DialogFragment errorDialog = ErrorDialogFragment.newInstance(output, dialog, getFragmentManager());
         errorDialog.show(getFragmentManager(), "dialog");
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
