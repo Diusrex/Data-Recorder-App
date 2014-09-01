@@ -12,10 +12,11 @@ import android.widget.TextView;
 import com.diusrex.sleepingdata.dialogs.ConfirmDialogFragment;
 import com.diusrex.sleepingdata.dialogs.ConfirmListener;
 import com.diusrex.sleepingdata.dialogs.ErrorDialogFragment;
-import com.diusrex.sleepingdata.dialogs.NameSetterDialogFragment;
-import com.diusrex.sleepingdata.dialogs.NameSetterListener;
+import com.diusrex.sleepingdata.dialogs.InputNameDialogFragment;
+import com.diusrex.sleepingdata.dialogs.InputNameListener;
+import com.diusrex.sleepingdata.inputcheckers.InputGroupValidNameChecker;
 
-public class InputGroupActivity extends Activity implements ConfirmListener, NameSetterListener {
+public class InputGroupActivity extends Activity implements ConfirmListener, InputNameListener {
     static final public String INPUT_GROUP_NAME = "InputGroupName";
     static final public String NEW_INPUT_GROUP = "NewInputGroup";
 
@@ -112,7 +113,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Nam
     }
 
     void changeInputGroupName() {
-        DialogFragment fragment = NameSetterDialogFragment.newInstance(inputGroupName, (NameSetterListener) this); 
+        DialogFragment fragment = InputNameDialogFragment.newInstance(inputGroupName, (InputNameListener) this, new InputGroupValidNameChecker()); 
         fragment.show(getFragmentManager(), "dialog");
     }
 
