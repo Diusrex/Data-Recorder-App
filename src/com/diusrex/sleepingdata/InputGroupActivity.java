@@ -26,8 +26,6 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
 
     String inputGroupName;
 
-    boolean isNew;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +33,12 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
 
         Intent intent = getIntent();
 
-        isNew = intent.getBooleanExtra(NEW_INPUT_GROUP, false);
-
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
 
+        boolean isNew = intent.getBooleanExtra(NEW_INPUT_GROUP, false);
+        
         if (isNew) {
-            inputGroupName = "";
-            changeInputGroupName();
+            runPromptSetting();
         }
     }
 
@@ -51,6 +48,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
 
         Bundle args = new Bundle();
         args.putString(INPUT_GROUP_NAME, inputGroupName);
+        args.remove(NEW_INPUT_GROUP);
         getIntent().putExtras(args);
     }
 
@@ -125,12 +123,6 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
             MainActivity.changeInputGroupName(inputGroupName, newName, (Context) this);
             inputGroupName = newName;
             setInputGroupNameTV();
-
-            if (isNew) {
-                runPromptSetting();
-            }
-        } else if (isNew) {
-            finish();
         }
     }
 

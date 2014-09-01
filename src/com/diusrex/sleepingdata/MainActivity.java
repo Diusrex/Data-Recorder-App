@@ -63,7 +63,12 @@ public class MainActivity extends Activity implements InputGroupCreatorHandler {
     @Override
     public void inputGroupCreated(String inputGroupName) {
     	saveNewInputGroup(inputGroupName);
-    	startInputGroupActivity(inputGroupName);
+    	
+    	Intent intent = new Intent(this, InputGroupActivity.class);
+    	intent.putExtra(InputGroupActivity.INPUT_GROUP_NAME, inputGroupName);
+    	intent.putExtra(InputGroupActivity.NEW_INPUT_GROUP, true);
+
+    	startActivity(intent);
     }
     
     void saveNewInputGroup(String newInputGroup) {
