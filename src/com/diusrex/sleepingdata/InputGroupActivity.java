@@ -61,6 +61,8 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
         if (inputGroupName == null) {
             finish();
         }
+        
+        FileAccessor.init(this);
 
         setUpInformation();
     }
