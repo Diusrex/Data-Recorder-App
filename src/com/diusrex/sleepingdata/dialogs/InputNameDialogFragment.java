@@ -12,23 +12,28 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.diusrex.sleepingdata.GeneralTextChangeWatcher;
-import com.diusrex.sleepingdata.MainActivity;
 import com.diusrex.sleepingdata.R;
+import com.diusrex.sleepingdata.inputcheckers.ValidNameChecker;
 
-public class NameSetterDialogFragment extends DialogFragment {
+public class InputNameDialogFragment extends DialogFragment {
     static final String PREVIOUS_NAME = "PreviousName";
     static final String NEW_NAME = "NewName";
 
-    static final String LOG_TAG = "NameSetterDialogFragmen;t";
+    static final String LOG_TAG = "NameSetterDialogFragment";
 
-    NameSetterListener listener;
+    InputNameListener listener;
 
     EditText input;
 
     String previousName;
 
-    public static NameSetterDialogFragment newInstance(String name, NameSetterListener listener) {
-        NameSetterDialogFragment f = new NameSetterDialogFragment();
+    ValidNameChecker checker;
+
+    public static InputNameDialogFragment newInstance(String name,
+            InputNameListener listener, ValidNameChecker checker) {
+        InputNameDialogFragment f = new InputNameDialogFragment();
+
+        checker.Init(f.getActivity());
 
         Bundle args = new Bundle();
 
@@ -36,6 +41,7 @@ public class NameSetterDialogFragment extends DialogFragment {
 
         f.setArguments(args);
         f.listener = listener;
+        f.checker = checker;
 
         return f;
     }
@@ -53,41 +59,39 @@ public class NameSetterDialogFragment extends DialogFragment {
         return builder.create();
     }
 
+    AlertDialog.Builder setUpButtons(AlertDialog.Builder builder) {
+        builder.setNegativeButton(getString(android.R.string.cancel),
+                new OnClickListener() {
 
-    AlertDialog.Builder setUpButtons(AlertDialog.Builder builder)
-    {
-        builder.setNegativeButton(getString(android.R.string.cancel), new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton(getString(android.R.string.cancel),
+                new OnClickListener() {
 
-        builder.setNegativeButton(getString(android.R.string.cancel), new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listener.nameChanged(previousName);
+                    }
+                });
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                listener.nameChanged(previousName);
-            }
-        });
+        builder.setPositiveButton(getString(android.R.string.ok),
+                new OnClickListener() {
 
-        builder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {        
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String newName = input.getText().toString();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newName = input.getText().toString();
 
-                if (newName.equals("")) {
-                    createErrorDialog(getString(R.string.enter_name));
-
-                } else if (MainActivity.isInputNameUsed(newName, getActivity())) {
-                    createErrorDialog(getString(R.string.name_already_used));
-
-                } else {
-                    listener.nameChanged(newName);
-                }
-            }
-        });
+                        if (!checker.isValidName(newName)) {
+                            createErrorDialog(checker.reasonIsInvalid(newName));
+                        } else {
+                            listener.nameChanged(newName);
+                        }
+                    }
+                });
 
         return builder;
     }
@@ -101,7 +105,8 @@ public class NameSetterDialogFragment extends DialogFragment {
     AlertDialog.Builder setUpView(Builder builder, String newName) {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
 
-        View inputInfo = layoutInflater.inflate(R.layout.dialog_name_setter, null);
+        View inputInfo = layoutInflater.inflate(R.layout.dialog_name_setter,
+                null);
 
         input = (EditText) inputInfo.findViewById(R.id.name);
 
