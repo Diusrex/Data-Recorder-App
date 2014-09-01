@@ -33,8 +33,6 @@ public class InputNameDialogFragment extends DialogFragment {
             InputNameListener listener, ValidNameChecker checker) {
         InputNameDialogFragment f = new InputNameDialogFragment();
 
-        checker.Init(f.getActivity());
-
         Bundle args = new Bundle();
 
         args.putString(PREVIOUS_NAME, name);
@@ -55,6 +53,8 @@ public class InputNameDialogFragment extends DialogFragment {
         builder = setUpButtons(builder);
 
         builder = setUpView(builder, newName);
+
+        checker.Init(getActivity());
 
         return builder.create();
     }
