@@ -2,7 +2,7 @@ package com.diusrex.sleepingdata.inputcheckers;
 
 import android.app.Activity;
 
-import com.diusrex.sleepingdata.MainActivity;
+import com.diusrex.sleepingdata.InputGroupManager;
 import com.diusrex.sleepingdata.R;
 
 public class InputGroupValidNameChecker implements ValidNameChecker {
@@ -22,7 +22,7 @@ public class InputGroupValidNameChecker implements ValidNameChecker {
     public String reasonIsInvalid(String name) {
         if (name.equals("")) {
             return activity.getString(R.string.enter_name);
-        } else if (MainActivity.isInputNameUsed(name, activity)) {
+        } else if (InputGroupManager.isInputNameUsed(name, activity)) {
             return activity.getString(R.string.name_already_used);
         } else {
             return null;

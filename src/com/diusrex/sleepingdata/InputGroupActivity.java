@@ -98,7 +98,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
     @Override
     public void nameChanged(String newName) {
         if (!newName.equals(inputGroupName)) {
-            MainActivity.changeInputGroupName(inputGroupName, newName, (Context) this);
+            InputGroupManager.changeInputGroupName(inputGroupName, newName, (Context) this);
             inputGroupName = newName;
             setInputGroupNameTV();
         }
@@ -145,7 +145,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
     }
 
     void deleteInputGroup() {
-        MainActivity.deleteInputGroup(inputGroupName, (Context) this);
+        InputGroupManager.deleteInputGroup(inputGroupName, (Context) this);
         finish();
     }
 
