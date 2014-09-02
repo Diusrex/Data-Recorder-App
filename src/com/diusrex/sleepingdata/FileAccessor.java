@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
@@ -15,8 +16,6 @@ public class FileAccessor {
     static final String DATA_FOLDER = "";
     static final String PROMPTS_FOLDER = "Prompts";
 
-    static Context appContext;
-
     static public class NoAccessException extends Exception {
         private static final long serialVersionUID = 4274163361971136233L;
         public NoAccessException() { super(); }
@@ -25,28 +24,24 @@ public class FileAccessor {
         public NoAccessException(Throwable cause) { super(cause); }
     }
 
-    static public void init(Context currentAppContext) {
-        appContext = currentAppContext;
-    }
-
     public static void changeInputGroupName(String oldInputGroupName,
-            String newInputGroupName) {
-        List<String[]> allData = FileLoader.loadAllData(oldInputGroupName);
-        FileSaver.saveAllData(newInputGroupName, allData);
+            String newInputGroupName, Context appContext) {
+        List<String[]> allData = FileLoader.loadAllData(oldInputGroupName, appContext);
+        FileSaver.saveAllData(newInputGroupName, allData, appContext);
 
-        List<String> allPrompts = FileLoader.loadPrompts(oldInputGroupName);
-        FileSaver.savePrompts(newInputGroupName, allPrompts);
+        List<String> allPrompts = FileLoader.loadPrompts(oldInputGroupName, appContext);
+        FileSaver.savePrompts(newInputGroupName, allPrompts, appContext);
 
-        deleteInputGroup(oldInputGroupName);
+        deleteInputGroup(oldInputGroupName, appContext);
     }
 
-    public static void deleteInputGroup(String inputGroupName) {
+    public static void deleteInputGroup(String inputGroupName, Context appContext) {
         File dataFile;
         File promptsFile;
 
         try {
-            dataFile = openDataFile(inputGroupName);
-            promptsFile = openPromptFile(inputGroupName);
+            dataFile = openDataFile(inputGroupName, appContext);
+            promptsFile = openPromptFile(inputGroupName, appContext);
         } catch (IOException | NoAccessException e) {
             return;
         }
@@ -54,22 +49,22 @@ public class FileAccessor {
         dataFile.delete();
         promptsFile.delete();
 
-        flagFileChanges(dataFile.getAbsolutePath());
-        flagFileChanges(promptsFile.getAbsolutePath());
+        flagFileChanges(dataFile.getAbsolutePath(), appContext);
+        flagFileChanges(promptsFile.getAbsolutePath(), appContext);
     }
 
 
-    static public File openDataFile(String fileName) throws IOException, NoAccessException
+    static public File openDataFile(String fileName, Context appContext) throws IOException, NoAccessException
     {
-        return openFile(DATA_FOLDER, fileName);
+        return openFile(DATA_FOLDER, fileName, appContext);
     }
 
-    static public File openPromptFile(String fileName) throws IOException, NoAccessException
+    static public File openPromptFile(String fileName, Context appContext) throws IOException, NoAccessException
     {
-        return openFile(PROMPTS_FOLDER, fileName);
+        return openFile(PROMPTS_FOLDER, fileName, appContext);
     }
 
-    static File openFile(String folder, String fileName) throws IOException, NoAccessException
+    static File openFile(String folder, String fileName, Context appContext) throws IOException, NoAccessException
     {
         if (!isExternalStorageAccessable()) {
             throw new NoAccessException();
@@ -87,14 +82,14 @@ public class FileAccessor {
             {
                 Log.e(LOG_TAG, "File was unable to be created");
             } else {
-                flagFileChanges(file.getAbsolutePath());
+                flagFileChanges(file.getAbsolutePath(), appContext);
             }
         }
 
         return file;
     }
 
-    static public void flagFileChanges(String filePath)
+    static public void flagFileChanges(String filePath, Context appContext)
     {	    
         MediaScannerConnection.scanFile(appContext,
                 new String[] { filePath }, null, null);
