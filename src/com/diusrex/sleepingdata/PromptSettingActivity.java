@@ -55,7 +55,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
 
         inputGroupNameTV.setText(inputGroupName);
 
-        hasDataEntered = FileLoader.dataExists(inputGroupName);
+        hasDataEntered = FileLoader.dataExists(inputGroupName, (Context) this);
     }
 
     void setUpKeyboardHandling() {
@@ -78,7 +78,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     @Override
     protected void onResume() {
         super.onResume();
-        FileAccessor.init(this);
 
         manager.loadAndDisplay();
 
@@ -180,7 +179,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     void applyChangesToAll()
     {
         // Apply to exisiting data
-        List<String[]> allData = FileLoader.loadAllData(inputGroupName);
+        List<String[]> allData = FileLoader.loadAllData(inputGroupName, (Context) this);
 
         for (int i = 0; i < allData.size(); ++i) {
             String[] newDataLine = dataChangeHandler.applyDataChanges(allData.get(i));
@@ -188,7 +187,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
             allData.set(i, newDataLine);
         }
 
-        FileSaver.saveAllData(inputGroupName, allData);
+        FileSaver.saveAllData(inputGroupName, allData, (Context) this);
 
         // Apply to temporary data
         InputDataTableManager.applyDataChanges(inputGroupName, dataChangeHandler, (Context) this);

@@ -11,10 +11,13 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+
 public class PromptSettingManager extends TableManager{
     static final String LOG_TAG = "PromptSettingManager";
     static final String PREFS_FILE = "PromptPreferences";
 
+    Context appContext;
+    
     public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
         changeInputGroupName(oldInputGroupName, newInputGroupName, prefs);
@@ -28,6 +31,7 @@ public class PromptSettingManager extends TableManager{
     public PromptSettingManager(TableLayout promptTable, String inputGroupName, LayoutInflater layoutInflater, Context appContext)
     {
         super(promptTable, inputGroupName, layoutInflater, appContext, appContext.getSharedPreferences(PREFS_FILE, 0));
+        this.appContext = appContext;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class PromptSettingManager extends TableManager{
 
         if (existingInputs.size() == 0) {
             wasChanged = false;
-            existingInputs = FileLoader.loadPrompts(inputGroupName);
+            existingInputs = FileLoader.loadPrompts(inputGroupName, appContext);
         } else {
             wasChanged = true;
 
@@ -59,7 +63,7 @@ public class PromptSettingManager extends TableManager{
     @Override
     protected boolean saveInputsToFile(List<String> prompts)
     {
-        return FileSaver.savePrompts(inputGroupName, prompts);
+        return FileSaver.savePrompts(inputGroupName, prompts, appContext);
     }
 
     private void addPromptToEnd(String enteredText)

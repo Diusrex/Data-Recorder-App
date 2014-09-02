@@ -5,18 +5,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import android.content.Context;
+
 import com.diusrex.sleepingdata.FileAccessor.NoAccessException;
+
 
 public class FileSaver {
     static String LOG_TAG = "FileSaver";
 
 
-    static public boolean savePrompts(String inputGroup, List<String> prompts)
+    static public boolean savePrompts(String inputGroup, List<String> prompts, Context appContext)
     {
         File saveFile = null;
 
         try {
-            saveFile = FileAccessor.openPromptFile(inputGroup);
+            saveFile = FileAccessor.openPromptFile(inputGroup, appContext);
         } catch(Exception e) {
             return false;
         }
@@ -32,7 +35,7 @@ public class FileSaver {
 
             writer.close();
 
-            FileAccessor.flagFileChanges(saveFile.getAbsolutePath());
+            FileAccessor.flagFileChanges(saveFile.getAbsolutePath(), appContext);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,12 +45,12 @@ public class FileSaver {
         return true;
     }
 
-    static public boolean saveAllData(String inputGroup, List<String[]> allData) 
+    static public boolean saveAllData(String inputGroup, List<String[]> allData, Context appContext) 
     {
         File saveFile = null;
 
         try {
-            saveFile = FileAccessor.openDataFile(inputGroup);
+            saveFile = FileAccessor.openDataFile(inputGroup, appContext);
         } catch(NoAccessException e) {
             return false;
         } catch (IOException e) {
@@ -69,7 +72,7 @@ public class FileSaver {
 
             writer.close();
 
-            FileAccessor.flagFileChanges(saveFile.getAbsolutePath());
+            FileAccessor.flagFileChanges(saveFile.getAbsolutePath(), appContext);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,10 +82,10 @@ public class FileSaver {
         return true;
     }
 
-    static public boolean saveData(String inputGroup, List<String> data)
+    static public boolean saveData(String inputGroup, List<String> data, Context appContext)
     {
         try {
-            File saveFile = FileAccessor.openDataFile(inputGroup);
+            File saveFile = FileAccessor.openDataFile(inputGroup, appContext);
 
             FileWriter writer = new FileWriter(saveFile, true);
 
@@ -94,7 +97,7 @@ public class FileSaver {
 
             writer.close();
 
-            FileAccessor.flagFileChanges(saveFile.getAbsolutePath());
+            FileAccessor.flagFileChanges(saveFile.getAbsolutePath(), appContext);
 
         } catch (IOException e) {
             e.printStackTrace();

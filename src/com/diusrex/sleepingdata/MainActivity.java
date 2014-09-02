@@ -16,6 +16,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 
+
 public class MainActivity extends Activity implements InputGroupCreatorHandler {
     static final String LOG_TAG = "MainActivity";
     static final String PREF_FILE = "availableInputGroups";
@@ -143,7 +144,7 @@ public class MainActivity extends Activity implements InputGroupCreatorHandler {
         editor.putString(newInputGroupName, newInputGroupName);
         editor.commit();
 
-        FileAccessor.changeInputGroupName(oldInputGroupName, newInputGroupName);
+        FileAccessor.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
 
         PromptSettingManager.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
         DataChangeHandler.changeInputGroupName(oldInputGroupName, newInputGroupName, context);
@@ -157,7 +158,7 @@ public class MainActivity extends Activity implements InputGroupCreatorHandler {
         editor.remove(inputGroupName);
         editor.commit();
 
-        FileAccessor.deleteInputGroup(inputGroupName);
+        FileAccessor.deleteInputGroup(inputGroupName, context);
 
         PromptSettingManager.deleteTemporaryData(inputGroupName, context);
         DataChangeHandler.deleteTemporaryData(inputGroupName, context);

@@ -43,34 +43,17 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        Bundle args = new Bundle();
-        args.putString(INPUT_GROUP_NAME, inputGroupName);
-        args.remove(NEW_INPUT_GROUP);
-        getIntent().putExtras(args);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-
-        if (inputGroupName == null) {
-            finish();
-        }
-        
-        FileAccessor.init(this);
 
         setUpInformation();
     }
 
-    // TODO: Split this up into smaller functions? (Put them at bottom)
     void setUpInformation()
     {
         setInputGroupNameTV();
 
-        int numberOfPrompts = FileLoader.numberOfPrompts(inputGroupName);
+        int numberOfPrompts = FileLoader.numberOfPrompts(inputGroupName, this);
 
         String numberOfPromptsOutput;
 
@@ -85,7 +68,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
         numberPromptsInfo.setText(numberOfPromptsOutput);
 
 
-        int numberOfDataRows = FileLoader.numberOfDataRows(inputGroupName);
+        int numberOfDataRows = FileLoader.numberOfDataRows(inputGroupName, (Context) this);
         String numberOfDataRowsOutput;
 
         if (numberOfDataRows == 1) {
@@ -138,7 +121,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
     }
 
     public void inputButtonClicked(View view) {
-        if (FileLoader.loadPrompts(inputGroupName).size() != 0) {
+        if (FileLoader.loadPrompts(inputGroupName, (Context) this).size() != 0) {
 
             Intent intent = new Intent(this, InputDataActivity.class);
             intent.putExtra(InputDataActivity.INPUT_GROUP_NAME, inputGroupName);

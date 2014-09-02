@@ -49,7 +49,6 @@ public class InputDataActivity  extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        FileAccessor.init(this);
 
         manager.loadAndDisplay();
 

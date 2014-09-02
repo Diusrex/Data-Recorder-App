@@ -12,10 +12,13 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+
 public class InputDataTableManager extends TableManager{
     static final String LOG_TAG = "InputDataTableManager";
     static final String PREFS_FILE = "DataPreferences";    
 
+    Context appContext;
+    
     public static void applyDataChanges(String inputGroupName, DataChangeHandler dataChangeHandler, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
         String temporaryData = prefs.getString(inputGroupName, null);
@@ -51,6 +54,7 @@ public class InputDataTableManager extends TableManager{
 
     public InputDataTableManager(TableLayout dataTable, String inputGroupName, LayoutInflater layoutInflater, Context appContext) {
         super(dataTable, inputGroupName, layoutInflater, appContext, appContext.getSharedPreferences(PREFS_FILE, 0));
+        this.appContext = appContext;
     }
 
     @Override
@@ -61,7 +65,7 @@ public class InputDataTableManager extends TableManager{
 
         List<String> existingInputs = loadTemporaryInputs();
 
-        List<String> prompts = FileLoader.loadPrompts(inputGroupName);
+        List<String> prompts = FileLoader.loadPrompts(inputGroupName, appContext);
 
         if (existingInputs.size() == 0) {
             Log.d(LOG_TAG, "Is new");
@@ -98,7 +102,7 @@ public class InputDataTableManager extends TableManager{
     @Override
     protected boolean saveInputsToFile(List<String> data)
     {
-        boolean successful = FileSaver.saveData(inputGroupName, data);
+        boolean successful = FileSaver.saveData(inputGroupName, data, appContext);
 
         if (successful)
             reset();

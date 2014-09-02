@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.diusrex.sleepingdata.FileAccessor.NoAccessException;
-
+import android.content.Context;
 import android.util.Log;
+
+import com.diusrex.sleepingdata.FileAccessor.NoAccessException;
 
 public class FileLoader {
     static private String LOG_TAG = "FileLoader";
@@ -25,15 +26,15 @@ public class FileLoader {
         public FailedToLoad(Throwable cause) { super(cause); }
     }
 
-    public static int numberOfPrompts(String inputGroupName) {
-        return loadPrompts(inputGroupName).size();
+    public static int numberOfPrompts(String inputGroupName, Context appContext) {
+        return loadPrompts(inputGroupName, appContext).size();
     }
 
-    static public List<String> loadPrompts(String promptsFile)
+    static public List<String> loadPrompts(String promptsFile, Context appContext)
     {
         try
         {
-            File loadFile = FileAccessor.openPromptFile(promptsFile);
+            File loadFile = FileAccessor.openPromptFile(promptsFile, appContext);
 
             BufferedReader reader = getReader(loadFile);
 
@@ -55,22 +56,21 @@ public class FileLoader {
         }
     }
 
-    static public boolean dataExists(String dataFile)
+    static public boolean dataExists(String dataFile, Context appContext)
     {
-        return (numberOfDataRows(dataFile) > 0);
+        return (numberOfDataRows(dataFile, appContext) > 0);
     }
 
-    public static int numberOfDataRows(String inputGroupName) {
-        return loadAllData(inputGroupName).size();
+    public static int numberOfDataRows(String inputGroupName, Context appContext) {
+        return loadAllData(inputGroupName, appContext).size();
     }
 
-    public static List<String[]> loadAllData(String inputGroup) {
+    public static List<String[]> loadAllData(String inputGroup, Context appContext) {
         try
         {
-            File loadFile = FileAccessor.openDataFile(inputGroup);
+            File loadFile = FileAccessor.openDataFile(inputGroup, appContext);
 
             BufferedReader reader = getReader(loadFile);
-
 
             ArrayList<String[]> allLines = new ArrayList<String[]>();
 
