@@ -25,8 +25,9 @@ public abstract class TableManager {
 
     protected List<EditText> inputs;
 
-    TableManager(TableLayout table, String inputGroupName, LayoutInflater layoutInflater, Context appContext, SharedPreferences settings)
-    {
+    protected TableManager(TableLayout table, String inputGroupName,
+            LayoutInflater layoutInflater, Context appContext,
+            SharedPreferences settings) {
         this.table = table;
         this.inputGroupName = inputGroupName;
         this.layoutInflater = layoutInflater;
@@ -43,8 +44,7 @@ public abstract class TableManager {
 
     public abstract void loadAndDisplay();
 
-    final public void reset()
-    {
+    final public void reset() {
         deleteTemporaryInputs(inputGroupName, settings);
         loadAndDisplay();
     }
@@ -58,8 +58,7 @@ public abstract class TableManager {
 
         String[] data = new String[inputs.size()];
 
-        for (int i = 0; i < data.length; ++i)
-        {
+        for (int i = 0; i < data.length; ++i) {
             data[i] = inputs.get(i).getText().toString();
         }
 
@@ -79,14 +78,12 @@ public abstract class TableManager {
         return wasChanged;
     }
 
-    final public boolean saveInputsToFile()
-    {
+    final public boolean saveInputsToFile() {
         deleteTemporaryInputs(inputGroupName, settings);
-        
+
         List<String> prompts = new ArrayList<String>();
 
-        for (EditText text : inputs)
-        {
+        for (EditText text : inputs) {
             prompts.add(text.getText().toString());
         }
 
@@ -98,8 +95,7 @@ public abstract class TableManager {
 
     abstract protected boolean saveInputsToFile(List<String> inputs);
 
-    final protected EditText createEditText(View newInputRow, String text)
-    {
+    final protected EditText createEditText(View newInputRow, String text) {
         // Set up the EditText
         EditText newET = (EditText) newInputRow.findViewById(R.id.input);
         newET.setText(text);
@@ -119,11 +115,10 @@ public abstract class TableManager {
         }
     }
 
-    final protected List<String> loadTemporaryInputs()
-    {
+    final protected List<String> loadTemporaryInputs() {
         String savedWords = settings.getString(inputGroupName, null);
 
-        if (savedWords == null){
+        if (savedWords == null) {
             return new ArrayList<String>();
         }
 
@@ -135,8 +130,8 @@ public abstract class TableManager {
         return Arrays.asList(brokenUp);
     }
 
-    protected static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, SharedPreferences settings)
-    {
+    protected static void changeInputGroupName(String oldInputGroupName,
+            String newInputGroupName, SharedPreferences settings) {
         String previousTemp = settings.getString(oldInputGroupName, null);
 
         if (previousTemp != null) {
@@ -149,8 +144,8 @@ public abstract class TableManager {
         }
     }
 
-    protected static void deleteTemporaryInputs(String inputGroupName, SharedPreferences settings)
-    {
+    protected static void deleteTemporaryInputs(String inputGroupName,
+            SharedPreferences settings) {
         SharedPreferences.Editor editor = settings.edit();
 
         editor.remove(inputGroupName);
