@@ -1,4 +1,4 @@
-package com.diusrex.sleepingdata;
+package com.diusrex.sleepingdata.files;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -7,7 +7,7 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.diusrex.sleepingdata.FileAccessor.NoAccessException;
+import com.diusrex.sleepingdata.files.FileAccessor.NoAccessException;
 
 
 public class FileSaver {

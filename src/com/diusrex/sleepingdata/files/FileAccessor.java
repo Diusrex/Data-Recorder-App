@@ -1,9 +1,8 @@
-package com.diusrex.sleepingdata;
+package com.diusrex.sleepingdata.files;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 
 import android.content.Context;
 import android.media.MediaScannerConnection;

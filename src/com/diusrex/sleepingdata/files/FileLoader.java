@@ -1,4 +1,4 @@
-package com.diusrex.sleepingdata;
+package com.diusrex.sleepingdata.files;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.List;
 import android.content.Context;
 import android.util.Log;
 
-import com.diusrex.sleepingdata.FileAccessor.NoAccessException;
+import com.diusrex.sleepingdata.files.FileAccessor.NoAccessException;
 
 public class FileLoader {
     static private String LOG_TAG = "FileLoader";
