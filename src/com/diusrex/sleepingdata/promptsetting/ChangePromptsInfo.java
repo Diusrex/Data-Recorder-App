@@ -1,4 +1,4 @@
-package com.diusrex.sleepingdata;
+package com.diusrex.sleepingdata.promptsetting;
 
 
 interface ChangePromptsInfo

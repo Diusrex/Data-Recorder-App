@@ -1,4 +1,4 @@
-package com.diusrex.sleepingdata;
+package com.diusrex.sleepingdata.promptsetting;
 
 import java.util.List;
 
@@ -14,6 +14,9 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.diusrex.sleepingdata.InputDataTableManager;
+import com.diusrex.sleepingdata.KeyboardHandleRelativeLayout;
+import com.diusrex.sleepingdata.R;
 import com.diusrex.sleepingdata.dialogs.ErrorDialogFragment;
 import com.diusrex.sleepingdata.dialogs.PromptDataAddDialogFragment;
 import com.diusrex.sleepingdata.dialogs.PromptDataAddListener;
@@ -22,7 +25,8 @@ import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
 import com.diusrex.sleepingdata.files.FileLoader;
 import com.diusrex.sleepingdata.files.FileSaver;
 
-public class PromptSettingActivity extends Activity implements PromptPositionListener, PromptDataAddListener {
+public class PromptSettingActivity extends Activity implements
+        PromptPositionListener, PromptDataAddListener {
 
     static public String INPUT_GROUP_NAME = "InputGroupName";
 
@@ -49,9 +53,12 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
 
         TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
 
-        manager = new PromptSettingManager(promptSettingTable, inputGroupName, (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
+        manager = new PromptSettingManager(promptSettingTable, inputGroupName,
+                (LayoutInflater) getBaseContext().getSystemService(
+                        LAYOUT_INFLATER_SERVICE), (Context) this);
 
-        dataChangeHandler = new DataChangeHandler(inputGroupName, (Context) this);
+        dataChangeHandler = new DataChangeHandler(inputGroupName,
+                (Context) this);
 
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
 
@@ -61,20 +68,24 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     }
 
     void setUpKeyboardHandling() {
-        ((KeyboardHandleRelativeLayout)findViewById(R.id.layout)).setOnSoftKeyboardListener(new KeyboardHandleRelativeLayout.OnSoftKeyboardListener() {
-            @Override
-            public void onShown() {
-                findViewById(R.id.addPromptButton).setVisibility(View.GONE);
-                findViewById(R.id.buttonRow).setVisibility(View.GONE);
-            }
+        ((KeyboardHandleRelativeLayout) findViewById(R.id.layout))
+                .setOnSoftKeyboardListener(new KeyboardHandleRelativeLayout.OnSoftKeyboardListener() {
+                    @Override
+                    public void onShown() {
+                        findViewById(R.id.addPromptButton).setVisibility(
+                                View.GONE);
+                        findViewById(R.id.buttonRow).setVisibility(View.GONE);
+                    }
 
-            @Override
-            public void onHidden() {
-                findViewById(R.id.addPromptButton).setVisibility(View.VISIBLE);
-                findViewById(R.id.buttonRow).setVisibility(View.VISIBLE);
-            }
+                    @Override
+                    public void onHidden() {
+                        findViewById(R.id.addPromptButton).setVisibility(
+                                View.VISIBLE);
+                        findViewById(R.id.buttonRow)
+                                .setVisibility(View.VISIBLE);
+                    }
 
-        });
+                });
     }
 
     @Override
@@ -89,22 +100,24 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
     }
 
     public void choosePromptPosition(View view) {
-        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0, manager.getNumberPrompts(), (PromptPositionListener) this); 
+        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0,
+                manager.getNumberPrompts(), (PromptPositionListener) this);
         fragment.show(getFragmentManager(), "dialog");
     }
 
     @Override
     public void positionChosen(int position) {
-        if (!hasDataEntered) {
-            manager.createRow("", position);
-        } else {
-            DialogFragment fragment = PromptDataAddDialogFragment.newInstance(position, (PromptDataAddListener) this);
+        if (hasDataEntered) {
+            DialogFragment fragment = PromptDataAddDialogFragment.newInstance(
+                    position, (PromptDataAddListener) this);
             fragment.show(getFragmentManager(), "dialog");
+        } else {
+            manager.createRow("", position);
         }
     }
 
     @Override
-    public void dataChosen(int position, String dataToAdd){
+    public void dataChosen(int position, String dataToAdd) {
         // Need to add the prompt
         manager.createRow("", position);
         dataChangeHandler.promptAdded(position, dataToAdd);
@@ -125,8 +138,9 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         boolean wasSaved = saveTempInformation();
 
         if (wasSaved) {
-            Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.prompt_temp_save), Toast.LENGTH_SHORT)
+                    .show();
         }
 
         finish();
@@ -140,7 +154,6 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
 
         super.onPause();
     }
-
 
     boolean saveTempInformation() {
         // Should always save these
@@ -170,7 +183,7 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
                     output = getString(R.string.save_successful);
                 }
 
-                Toast.makeText(getApplicationContext(), output, 
+                Toast.makeText(getApplicationContext(), output,
                         Toast.LENGTH_SHORT).show();
             } else {
                 createErrorDialog(getString(R.string.enter_name_for_all_inputs));
@@ -178,13 +191,14 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         }
     }
 
-    void applyChangesToAll()
-    {
+    void applyChangesToAll() {
         // Apply to exisiting data
-        List<String[]> allData = FileLoader.loadAllData(inputGroupName, (Context) this);
+        List<String[]> allData = FileLoader.loadAllData(inputGroupName,
+                (Context) this);
 
         for (int i = 0; i < allData.size(); ++i) {
-            String[] newDataLine = dataChangeHandler.applyDataChanges(allData.get(i));
+            String[] newDataLine = dataChangeHandler.applyDataChanges(allData
+                    .get(i));
 
             allData.set(i, newDataLine);
         }
@@ -192,7 +206,8 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
         FileSaver.saveAllData(inputGroupName, allData, (Context) this);
 
         // Apply to temporary data
-        InputDataTableManager.applyDataChanges(inputGroupName, dataChangeHandler, (Context) this);
+        InputDataTableManager.applyDataChanges(inputGroupName,
+                dataChangeHandler, (Context) this);
 
         dataChangeHandler.reset();
     }
@@ -204,7 +219,8 @@ public class PromptSettingActivity extends Activity implements PromptPositionLis
 
     @Override
     public void createErrorDialog(String output, DialogFragment dialog) {
-        DialogFragment errorDialog = ErrorDialogFragment.newInstance(output, dialog, getFragmentManager());
+        DialogFragment errorDialog = ErrorDialogFragment.newInstance(output,
+                dialog, getFragmentManager());
         errorDialog.show(getFragmentManager(), "dialog");
     }
 }

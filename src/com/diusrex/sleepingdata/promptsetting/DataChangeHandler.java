@@ -1,4 +1,4 @@
-package com.diusrex.sleepingdata;
+package com.diusrex.sleepingdata.promptsetting;
 
 import java.util.ArrayList;
 import java.util.List;
