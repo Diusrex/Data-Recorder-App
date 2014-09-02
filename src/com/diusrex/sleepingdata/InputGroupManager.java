@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.diusrex.sleepingdata.files.FileAccessor;
+import com.diusrex.sleepingdata.promptsetting.DataChangeHandler;
+import com.diusrex.sleepingdata.promptsetting.PromptSettingManager;
 
 public class InputGroupManager {
     static final String PREF_FILE = "availableInputGroups";

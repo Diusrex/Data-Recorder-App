@@ -16,6 +16,7 @@ import com.diusrex.sleepingdata.dialogs.InputNameDialogFragment;
 import com.diusrex.sleepingdata.dialogs.InputNameListener;
 import com.diusrex.sleepingdata.files.FileLoader;
 import com.diusrex.sleepingdata.inputcheckers.InputGroupValidNameChecker;
+import com.diusrex.sleepingdata.promptsetting.PromptSettingActivity;
 
 public class InputGroupActivity extends Activity implements ConfirmListener, InputNameListener {
     static final public String INPUT_GROUP_NAME = "InputGroupName";
