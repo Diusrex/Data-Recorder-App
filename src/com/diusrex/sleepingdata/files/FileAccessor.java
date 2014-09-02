@@ -52,8 +52,8 @@ public class FileAccessor {
         dataFile.delete();
         promptsFile.delete();
 
-        flagFileChanges(dataFile.getAbsolutePath(), appContext);
-        flagFileChanges(promptsFile.getAbsolutePath(), appContext);
+        flagFileChanges(dataFile, appContext);
+        flagFileChanges(promptsFile, appContext);
     }
 
 
@@ -85,17 +85,17 @@ public class FileAccessor {
             {
                 Log.e(LOG_TAG, "File was unable to be created");
             } else {
-                flagFileChanges(file.getAbsolutePath(), appContext);
+                flagFileChanges(file, appContext);
             }
         }
 
         return file;
     }
 
-    static public void flagFileChanges(String filePath, Context appContext)
+    static public void flagFileChanges(File fileChanged, Context appContext)
     {	    
         MediaScannerConnection.scanFile(appContext,
-                new String[] { filePath }, null, null);
+                new String[] { fileChanged.getAbsolutePath() }, null, null);
     }
 
     static private boolean isExternalStorageAccessable() {

@@ -38,7 +38,7 @@ public class FileSaver {
 
             writer.close();
 
-            FileAccessor.flagFileChanges(saveFile.getAbsolutePath(), appContext);
+            FileAccessor.flagFileChanges(saveFile, appContext);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +75,7 @@ public class FileSaver {
 
             writer.close();
 
-            FileAccessor.flagFileChanges(saveFile.getAbsolutePath(), appContext);
+            FileAccessor.flagFileChanges(saveFile, appContext);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class FileSaver {
 
             writer.close();
 
-            FileAccessor.flagFileChanges(saveFile.getAbsolutePath(), appContext);
+            FileAccessor.flagFileChanges(saveFile, appContext);
 
         } catch (IOException e) {
             e.printStackTrace();
