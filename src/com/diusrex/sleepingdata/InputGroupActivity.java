@@ -50,40 +50,16 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
         setUpInformation();
     }
 
-    void setUpInformation()
+    private void setUpInformation()
     {
         setInputGroupNameTV();
 
-        int numberOfPrompts = FileLoader.numberOfPrompts(inputGroupName, this);
+        setPromptOutputInfo();
 
-        String numberOfPromptsOutput;
-
-        if (numberOfPrompts == 1) {
-            numberOfPromptsOutput = getString(R.string.input_group_num_prompts_single);
-        } else {
-            numberOfPromptsOutput = getString(R.string.input_group_num_prompts_multiple);
-            numberOfPromptsOutput = String.format(numberOfPromptsOutput, numberOfPrompts);
-        }
-
-        TextView numberPromptsInfo = (TextView) findViewById(R.id.numberOfPrompts);
-        numberPromptsInfo.setText(numberOfPromptsOutput);
-
-
-        int numberOfDataRows = FileLoader.numberOfDataRows(inputGroupName, (Context) this);
-        String numberOfDataRowsOutput;
-
-        if (numberOfDataRows == 1) {
-            numberOfDataRowsOutput = getString(R.string.input_group_num_data_rows_single);
-        } else {
-            numberOfDataRowsOutput = getString(R.string.input_group_num_data_rows_multiple);
-            numberOfDataRowsOutput = String.format(numberOfDataRowsOutput, numberOfDataRows);
-        }
-
-        TextView numberDataRowsInfo = (TextView) findViewById(R.id.numberOfDataRows);
-        numberDataRowsInfo.setText(numberOfDataRowsOutput);
+        setDataRowsOutputInfo();
     }
 
-    void setInputGroupNameTV()
+    private void setInputGroupNameTV()
     {
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
         inputGroupNameTV.setText(inputGroupName);
@@ -95,10 +71,28 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
             }
         });
     }
-
-    void changeInputGroupName() {
+    
+    private void changeInputGroupName() {
         DialogFragment fragment = InputNameDialogFragment.newInstance(inputGroupName, (InputNameListener) this, new InputGroupValidNameChecker()); 
         fragment.show(getFragmentManager(), "dialog");
+    }
+    
+    private void setPromptOutputInfo() {
+        int numberOfPrompts = FileLoader.numberOfPrompts(inputGroupName, (Context) this);
+
+        String numberOfPromptsOutput = getResources().getQuantityString(R.plurals.input_group_num_prompts, numberOfPrompts, numberOfPrompts);
+
+        TextView numberPromptsInfo = (TextView) findViewById(R.id.numberOfPrompts);
+        numberPromptsInfo.setText(numberOfPromptsOutput);
+    }
+
+    private void setDataRowsOutputInfo() {
+        int numberOfDataRows = FileLoader.numberOfDataRows(inputGroupName, (Context) this);
+        
+        String numberOfDataRowsOutput = getResources().getQuantityString(R.plurals.input_group_num_data_rows, numberOfDataRows, numberOfDataRows);
+
+        TextView numberDataRowsInfo = (TextView) findViewById(R.id.numberOfDataRows);
+        numberDataRowsInfo.setText(numberOfDataRowsOutput);
     }
 
     @Override
@@ -122,7 +116,7 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
     }
 
     public void inputButtonClicked(View view) {
-        if (FileLoader.loadPrompts(inputGroupName, (Context) this).size() != 0) {
+        if (FileLoader.numberOfPrompts(inputGroupName, (Context) this) != 0) {
 
             Intent intent = new Intent(this, InputDataActivity.class);
             intent.putExtra(InputDataActivity.INPUT_GROUP_NAME, inputGroupName);
@@ -152,7 +146,6 @@ public class InputGroupActivity extends Activity implements ConfirmListener, Inp
 
     void deleteInputGroup() {
         MainActivity.deleteInputGroup(inputGroupName, (Context) this);
-
         finish();
     }
 
