@@ -18,6 +18,10 @@ import com.diusrex.sleepingdata.files.FileAccessor.NoAccessException;
 public class FileLoader {
     static private String LOG_TAG = "FileLoader";
 
+    private FileLoader() {
+        
+    }
+    
     static public class FailedToLoad extends Exception {
         private static final long serialVersionUID = 1L;
         public FailedToLoad() { super(); }

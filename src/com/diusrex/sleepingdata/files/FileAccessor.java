@@ -15,6 +15,10 @@ public class FileAccessor {
     static final String DATA_FOLDER = "";
     static final String PROMPTS_FOLDER = "Prompts";
 
+    private FileAccessor() {
+        
+    }
+    
     static public class NoAccessException extends Exception {
         private static final long serialVersionUID = 4274163361971136233L;
         public NoAccessException() { super(); }

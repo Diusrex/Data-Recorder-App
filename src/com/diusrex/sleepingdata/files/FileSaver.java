@@ -13,7 +13,10 @@ import com.diusrex.sleepingdata.files.FileAccessor.NoAccessException;
 public class FileSaver {
     static String LOG_TAG = "FileSaver";
 
-
+    private FileSaver() {
+        
+    }
+    
     static public boolean savePrompts(String inputGroup, List<String> prompts, Context appContext)
     {
         File saveFile = null;
