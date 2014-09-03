@@ -185,6 +185,8 @@ public class PromptSettingActivity extends Activity implements
 
                 Toast.makeText(getApplicationContext(), output,
                         Toast.LENGTH_SHORT).show();
+                
+                finish();
             } else {
                 createErrorDialog(getString(R.string.enter_name_for_all_inputs));
             }
