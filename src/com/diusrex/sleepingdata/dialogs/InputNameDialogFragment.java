@@ -69,15 +69,6 @@ public class InputNameDialogFragment extends DialogFragment {
                     }
                 });
 
-        builder.setNegativeButton(getString(android.R.string.cancel),
-                new OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        listener.nameChanged(previousName);
-                    }
-                });
-
         builder.setPositiveButton(getString(android.R.string.ok),
                 new OnClickListener() {
 
