@@ -76,7 +76,13 @@ public class PromptSettingManager extends TableManager {
         createRow(enteredText, inputs.size());
     }
 
-    public void createRow(String enteredText, int position) {
+    public void addNewRow(int position) {
+        createRow("", position);
+        changedForTemp = true;
+        wasChanged = true;
+    }
+    
+    private void createRow(String enteredText, int position) {
         // Create a new row
         View newInputRow = layoutInflater.inflate(R.layout.prompt_enter_row,
                 null);

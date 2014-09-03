@@ -112,14 +112,14 @@ public class PromptSettingActivity extends Activity implements
                     position, (PromptDataAddListener) this);
             fragment.show(getFragmentManager(), "dialog");
         } else {
-            manager.createRow("", position);
+            manager.addNewRow(position);
         }
     }
 
     @Override
     public void dataChosen(int position, String dataToAdd) {
         // Need to add the prompt
-        manager.createRow("", position);
+        manager.addNewRow(position);
         dataChangeHandler.promptAdded(position, dataToAdd);
     }
 
@@ -169,7 +169,7 @@ public class PromptSettingActivity extends Activity implements
     }
 
     public void saveButtonClicked(View view) {
-        if (manager.mayBeSaved()) {
+        if (manager.hasBeenChanged()) {
             if (manager.mayBeSaved()) {
                 boolean successfullySaved = manager.saveInputsToFile();
 
@@ -188,7 +188,7 @@ public class PromptSettingActivity extends Activity implements
                 
                 finish();
             } else {
-                createErrorDialog(getString(R.string.enter_name_for_all_inputs));
+                createErrorDialog(getString(R.string.enter_name_for_all_questions));
             }
         }
     }

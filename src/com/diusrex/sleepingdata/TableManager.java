@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -68,6 +69,10 @@ public abstract class TableManager {
         editor.commit();
     }
 
+    final public boolean hasBeenChanged() {
+        return wasChanged;
+    }
+    
     final public boolean mayBeSaved() {
         for (EditText input : inputs) {
             if (input.getText().toString().equals("")) {
@@ -75,7 +80,7 @@ public abstract class TableManager {
             }
         }
 
-        return wasChanged;
+        return true;
     }
 
     final public boolean saveInputsToFile() {
