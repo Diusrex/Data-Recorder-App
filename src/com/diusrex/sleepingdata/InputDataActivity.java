@@ -15,13 +15,17 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.diusrex.sleepingdata.dialogs.ConfirmDialogFragment;
+import com.diusrex.sleepingdata.dialogs.ConfirmListener;
 import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
 import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
 
-public class InputDataActivity  extends Activity {
+public class InputDataActivity extends Activity implements ConfirmListener {
     static public String INPUT_GROUP_NAME = "InputGroupName";
 
     static String LOG_TAG = "InputDataActivity";
+
+    static final int CLEAR_CODE = 1;
 
     String inputGroupName;
 
@@ -39,7 +43,9 @@ public class InputDataActivity  extends Activity {
 
         TableLayout dataTable = (TableLayout) findViewById(R.id.dataTable);
 
-        manager = new InputDataTableManager(dataTable, inputGroupName, (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
+        manager = new InputDataTableManager(dataTable, inputGroupName,
+                (LayoutInflater) getBaseContext().getSystemService(
+                        LAYOUT_INFLATER_SERVICE), (Context) this);
 
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
 
@@ -58,22 +64,25 @@ public class InputDataActivity  extends Activity {
     }
 
     void setUpKeyboardHandling() {
-        ((KeyboardHandleRelativeLayout)findViewById(R.id.layout)).setOnSoftKeyboardListener(new KeyboardHandleRelativeLayout.OnSoftKeyboardListener() {
-            @Override
-            public void onShown() {
-                findViewById(R.id.buttonRow).setVisibility(View.GONE);
-            }
+        ((KeyboardHandleRelativeLayout) findViewById(R.id.layout))
+                .setOnSoftKeyboardListener(new KeyboardHandleRelativeLayout.OnSoftKeyboardListener() {
+                    @Override
+                    public void onShown() {
+                        findViewById(R.id.buttonRow).setVisibility(View.GONE);
+                    }
 
-            @Override
-            public void onHidden() {
-                findViewById(R.id.buttonRow).setVisibility(View.VISIBLE);
-            }
+                    @Override
+                    public void onHidden() {
+                        findViewById(R.id.buttonRow)
+                                .setVisibility(View.VISIBLE);
+                    }
 
-        });
+                });
     }
 
     public void choosePromptPosition(View view) {
-        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0, manager.getNumberPrompts(), (PromptPositionListener) this); 
+        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0,
+                manager.getNumberPrompts(), (PromptPositionListener) this);
         fragment.show(getFragmentManager(), "dialog");
     }
 
@@ -83,8 +92,9 @@ public class InputDataActivity  extends Activity {
 
         if (manager.tempHasBeenChanged()) {
             manager.saveTemporaryInputs();
-            Toast.makeText(getApplicationContext(), getString(R.string.prompt_temp_save), 
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.prompt_temp_save), Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -107,8 +117,8 @@ public class InputDataActivity  extends Activity {
                 output = getString(R.string.save_successful);
             }
 
-            Toast.makeText(getApplicationContext(), output, 
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), output, Toast.LENGTH_SHORT)
+                    .show();
 
             finish();
         } else {
@@ -117,6 +127,29 @@ public class InputDataActivity  extends Activity {
     }
 
     public void clearButtonClicked(View view) {
+        if (manager.inputsExists()) {
+            DialogFragment fragment = ConfirmDialogFragment.newInstance(
+                    getString(R.string.confirm_clear), CLEAR_CODE,
+                    (ConfirmListener) this);
+            fragment.show(getFragmentManager(), "dialog");
+        }
+    }
+
+    @Override
+    public void wasConfirmed(int code) {
+        switch (code) {
+        case CLEAR_CODE:
+            clearData();
+            break;
+
+        default:
+            break;
+
+        }
+
+    }
+
+    private void clearData() {
         manager.clearInputs();
     }
 
@@ -124,13 +157,14 @@ public class InputDataActivity  extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(phrase);
-        builder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {
+        builder.setPositiveButton(getString(android.R.string.ok),
+                new OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
         builder.show();
     }

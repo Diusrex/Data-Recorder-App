@@ -16,14 +16,14 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-
-public class InputDataTableManager extends TableManager{
+public class InputDataTableManager extends TableManager {
     static final String LOG_TAG = "InputDataTableManager";
-    static final String PREFS_FILE = "DataPreferences";    
+    static final String PREFS_FILE = "DataPreferences";
 
     Context appContext;
-    
-    public static void applyDataChanges(String inputGroupName, DataChangeHandler dataChangeHandler, Context context) {
+
+    public static void applyDataChanges(String inputGroupName,
+            DataChangeHandler dataChangeHandler, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
         String temporaryData = prefs.getString(inputGroupName, null);
 
@@ -40,14 +40,26 @@ public class InputDataTableManager extends TableManager{
         }
     }
 
-    public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
+    public static void changeInputGroupName(String oldInputGroupName,
+            String newInputGroupName, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
         changeInputGroupName(oldInputGroupName, newInputGroupName, prefs);
     }
 
-    public static void deleteTemporaryData(String inputGroupName, Context context) {
-        SharedPreferences settings = context.getSharedPreferences(PREFS_FILE, 0);
+    public static void deleteTemporaryData(String inputGroupName,
+            Context context) {
+        SharedPreferences settings = context
+                .getSharedPreferences(PREFS_FILE, 0);
         deleteTemporaryInputs(inputGroupName, settings);
+    }
+
+    public boolean inputsExists() {
+        for (EditText text : inputs) {
+            if (!text.getText().toString().equals("")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void clearInputs() {
@@ -56,8 +68,10 @@ public class InputDataTableManager extends TableManager{
         }
     }
 
-    public InputDataTableManager(TableLayout dataTable, String inputGroupName, LayoutInflater layoutInflater, Context appContext) {
-        super(dataTable, inputGroupName, layoutInflater, appContext, appContext.getSharedPreferences(PREFS_FILE, 0));
+    public InputDataTableManager(TableLayout dataTable, String inputGroupName,
+            LayoutInflater layoutInflater, Context appContext) {
+        super(dataTable, inputGroupName, layoutInflater, appContext, appContext
+                .getSharedPreferences(PREFS_FILE, 0));
         this.appContext = appContext;
     }
 
@@ -69,7 +83,8 @@ public class InputDataTableManager extends TableManager{
 
         List<String> existingInputs = loadTemporaryInputs();
 
-        List<String> prompts = FileLoader.loadPrompts(inputGroupName, appContext);
+        List<String> prompts = FileLoader.loadPrompts(inputGroupName,
+                appContext);
 
         if (existingInputs.size() == 0) {
             Log.d(LOG_TAG, "Is new");
@@ -83,7 +98,6 @@ public class InputDataTableManager extends TableManager{
         createDataTable(existingInputs, prompts);
     }
 
-
     void createDataTable(List<String> existingInputs, List<String> prompts) {
         for (int i = 0; i < prompts.size(); ++i) {
             createRow(existingInputs.get(i), prompts.get(i));
@@ -92,7 +106,8 @@ public class InputDataTableManager extends TableManager{
 
     void createRow(String dataText, String prompText) {
         // Create a new row
-        View newInputRow = layoutInflater.inflate(R.layout.row_input_data, null);
+        View newInputRow = layoutInflater
+                .inflate(R.layout.row_input_data, null);
 
         TextView promptName = (TextView) newInputRow.findViewById(R.id.prompt);
         promptName.setText(prompText);
@@ -104,9 +119,9 @@ public class InputDataTableManager extends TableManager{
     }
 
     @Override
-    protected boolean saveInputsToFile(List<String> data)
-    {
-        boolean successful = FileSaver.saveData(inputGroupName, data, appContext);
+    protected boolean saveInputsToFile(List<String> data) {
+        boolean successful = FileSaver.saveData(inputGroupName, data,
+                appContext);
 
         if (successful)
             reset();
