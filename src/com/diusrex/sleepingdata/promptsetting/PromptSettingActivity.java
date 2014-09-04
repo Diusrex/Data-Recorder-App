@@ -72,17 +72,16 @@ public class PromptSettingActivity extends Activity implements
                 .setOnSoftKeyboardListener(new KeyboardHandleRelativeLayout.OnSoftKeyboardListener() {
                     @Override
                     public void onShown() {
-                        findViewById(R.id.addPromptButton).setVisibility(
-                                View.GONE);
-                        findViewById(R.id.buttonRow).setVisibility(View.GONE);
+                        findViewById(R.id.buttonRow1).setVisibility(View.GONE);
+                        findViewById(R.id.buttonRow2).setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onHidden() {
-                        findViewById(R.id.addPromptButton).setVisibility(
+                        findViewById(R.id.buttonRow1).setVisibility(
                                 View.VISIBLE);
-                        findViewById(R.id.buttonRow)
-                                .setVisibility(View.VISIBLE);
+                        findViewById(R.id.buttonRow2).setVisibility(
+                                View.VISIBLE);
                     }
 
                 });
@@ -105,6 +104,10 @@ public class PromptSettingActivity extends Activity implements
         fragment.show(getFragmentManager(), "dialog");
     }
 
+    public void appendPrompt(View view) {
+        positionChosen(manager.getNumberPrompts());
+    }
+    
     @Override
     public void positionChosen(int position) {
         if (hasDataEntered) {
@@ -185,7 +188,7 @@ public class PromptSettingActivity extends Activity implements
 
                 Toast.makeText(getApplicationContext(), output,
                         Toast.LENGTH_SHORT).show();
-                
+
                 finish();
             } else {
                 createErrorDialog(getString(R.string.enter_name_for_all_questions));

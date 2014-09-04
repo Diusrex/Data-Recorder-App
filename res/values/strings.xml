@@ -18,9 +18,9 @@
     <string name="finish">Finish</string>
     
     <string name="enter_name">Please enter a valid name</string>
-    <string name="enter_name_for_all_inputs">Please enter a name for all inputs</string>
+    <string name="enter_name_for_all_questions">Please enter a name for all questions</string>
     <string name="confirm_delete">Do you want to delete this?</string>
-    <string name="new_input_group_name">Name of new input group?</string>
+    <string name="new_category_name">Name of new category?</string>
     
     <string name="enter_new_name">Enter the name</string>
     <string name="change_name">Change the name</string>
@@ -35,7 +35,8 @@
     <string name="input_group_remove">Remove</string>
     
     <string name="prompt_name">Prompt name</string>
-    <string name="prompt_create_new">Add new prompt</string>
+    <string name="prompt_create_new">Insert prompt</string>
+    <string name="prompt_create_new_append">Append prompt</string>
     <string name="prompt_delete">Delete</string>
     <string name="prompt_position">Position to place Prompt</string>
     <string name="prompt_position_short">Position</string>
@@ -58,9 +59,9 @@
     <string name="help_how_to_use_4">To create a new </string>
     
     <string name="help_how_to_import_into_excel">How to import data into excel</string>
-    <string name="help_how_to_import_into_excel_1">1) Copy the text file containing the __input group__</string>
-    <string name="help_how_to_import_into_excel_1a">1a) The file is stored in your device in the directory \'Save Data\', and will be the name of the __input group__.</string>
-    <string name="help_how_to_import_into_excel_1b">1b) You can access this file by plugging your device into a computer and copying the file, uploading the file using Dropbox, or other means</string>
+    <string name="help_how_to_import_into_excel_1">1) Copy the text file containing the category:</string>
+    <string name="help_how_to_import_into_excel_1a">1a) The file is stored on your device in the directory \'Save Data\', and will be the name of the category.</string>
+    <string name="help_how_to_import_into_excel_1b">1b) You can access this file by plugging your device into a computer and copying the file, uploading the file using Dropbox, or other means.</string>
     <string name="help_how_to_import_into_excel_2">2) Once the text file is on your computer (or, if you have excel on your device), you can then import the data into excel.</string>
 	<string name="help_how_to_import_into_excel_3">3) On the top of excel, select the \'Data\' tab, and then click on the button near the called \'From Text\'.</string>
 	<string name="help_how_to_import_into_excel_4">4) Locate the text file in your computer, select it, and then press \'import\'.</string>

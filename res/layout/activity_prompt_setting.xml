@@ -1,5 +1,6 @@
 <com.diusrex.sleepingdata.KeyboardHandleRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -7,26 +8,23 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:id="@+id/layout"
-     >
-        
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
     <TextView
         android:id="@+id/inputGroupName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentTop="true" 
-        android:layout_centerHorizontal="true" />
-
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:layout_above="@+id/buttonRow1"
         android:layout_below="@id/inputGroupName"
-        android:layout_above="@+id/addPromptButton" >
-        
+        android:padding="5dp" >
+
         <TableLayout
             android:id="@+id/promptSettingTable"
             android:layout_width="fill_parent"
@@ -35,41 +33,53 @@
         </TableLayout>
     </ScrollView>
 
+    <LinearLayout
+        android:id="@+id/buttonRow1"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonRow2" >
 
-     <Button
-         android:id="@+id/addPromptButton"
-         style="?android:attr/buttonBarButtonStyle"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_above="@+id/buttonRow"
-         android:layout_centerHorizontal="true"
-         android:onClick="choosePromptPosition"
-         android:text="@string/prompt_create_new" />
-     
-     
-     <LinearLayout
-         android:id="@+id/buttonRow"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         style="?android:attr/buttonBarStyle"
-         android:layout_alignParentBottom="true" >
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:onClick="choosePromptPosition"
+            android:text="@string/prompt_create_new" />
+        
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:onClick="appendPrompt"
+            android:text="@string/prompt_create_new_append" />
+        
+    </LinearLayout>
 
-         <Button
-             android:id="@+id/resetButton"
-             android:layout_width="0dp"
-             android:layout_height="wrap_content"
-             android:layout_weight="1"
-             android:text="@string/reset"
-             android:onClick="resetButtonClicked"
-             style="?android:attr/buttonBarButtonStyle" />
-         
-         <Button
-             android:id="@+id/saveButton"
-             android:layout_width="0dp"
-             android:layout_height="wrap_content"
-             android:layout_weight="1"
-             android:text="@string/save"
-             android:onClick="saveButtonClicked"
-             style="?android:attr/buttonBarButtonStyle" />
-     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/buttonRow2"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="resetButtonClicked"
+            android:text="@string/reset" />
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="saveButtonClicked"
+            android:text="@string/save" />
+    </LinearLayout>
+
 </com.diusrex.sleepingdata.KeyboardHandleRelativeLayout>
