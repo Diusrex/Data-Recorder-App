@@ -41,15 +41,19 @@ public class InputDataActivity extends Activity implements ConfirmListener {
         Intent intent = getIntent();
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
 
+        setUpManager();
+
+        TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
+
+        inputGroupNameTV.setText(inputGroupName);
+    }
+
+    private void setUpManager() {
         TableLayout dataTable = (TableLayout) findViewById(R.id.dataTable);
 
         manager = new InputDataTableManager(dataTable, inputGroupName,
                 (LayoutInflater) getBaseContext().getSystemService(
                         LAYOUT_INFLATER_SERVICE), (Context) this);
-
-        TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
-
-        inputGroupNameTV.setText(inputGroupName);
     }
 
     @Override

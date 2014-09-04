@@ -109,6 +109,10 @@ public class PromptSettingManager extends TableManager {
         }
     }
 
+    public boolean mustSetData() {
+        return FileLoader.promptsExist(inputGroupName, appContext);
+    }
+    
     public static int getPositionOfRow(View button) {
         View parentView = (View) button.getParent();
         TextView actualNumber = (TextView) parentView.findViewById(R.id.number);

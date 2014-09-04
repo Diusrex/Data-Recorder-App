@@ -39,8 +39,6 @@ public class PromptSettingActivity extends Activity implements
 
     String inputGroupName;
 
-    boolean hasDataEntered;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +49,7 @@ public class PromptSettingActivity extends Activity implements
         Intent intent = getIntent();
         inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
 
-        TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
-
-        manager = new PromptSettingManager(promptSettingTable, inputGroupName,
-                (LayoutInflater) getBaseContext().getSystemService(
-                        LAYOUT_INFLATER_SERVICE), (Context) this);
+        setUpManager();
 
         dataChangeHandler = new DataChangeHandler(inputGroupName,
                 (Context) this);
@@ -63,8 +57,14 @@ public class PromptSettingActivity extends Activity implements
         TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
 
         inputGroupNameTV.setText(inputGroupName);
+    }
 
-        hasDataEntered = FileLoader.dataExists(inputGroupName, (Context) this);
+    private void setUpManager() {
+        TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
+
+        manager = new PromptSettingManager(promptSettingTable, inputGroupName,
+                (LayoutInflater) getBaseContext().getSystemService(
+                        LAYOUT_INFLATER_SERVICE), (Context) this);
     }
 
     void setUpKeyboardHandling() {
@@ -107,14 +107,14 @@ public class PromptSettingActivity extends Activity implements
     public void appendPrompt(View view) {
         promptPositionChosen(manager.getNumberPrompts());
     }
-    
+
     @Override
     public void positionChosen(int position) {
         promptPositionChosen(position - 1);
     }
 
     private void promptPositionChosen(int position) {
-        if (hasDataEntered) {
+        if (manager.mustSetData()) {
             DialogFragment fragment = PromptDataAddDialogFragment.newInstance(
                     position, (PromptDataAddListener) this);
             fragment.show(getFragmentManager(), "dialog");
@@ -135,7 +135,7 @@ public class PromptSettingActivity extends Activity implements
 
         manager.removePrompt(position);
 
-        if (hasDataEntered) {
+        if (manager.mustSetData()) {
             dataChangeHandler.promptRemoved(position);
         }
     }

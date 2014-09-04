@@ -64,6 +64,10 @@ public class FileLoader {
     {
         return (numberOfDataRows(dataFile, appContext) > 0);
     }
+    
+    static public boolean promptsExist(String dataFile, Context appContext) {
+        return (numberOfPrompts(dataFile, appContext) > 0);
+    }
 
     public static int numberOfDataRows(String inputGroupName, Context appContext) {
         return loadAllData(inputGroupName, appContext).size();
