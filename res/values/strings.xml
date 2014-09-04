@@ -40,7 +40,7 @@
     <string name="prompt_delete">Delete</string>
     <string name="prompt_position">Position to place Prompt</string>
     <string name="prompt_position_short">Position</string>
-    <string name="prompt_range_available" formatted="true">(%1$d - %2$d)</string>
+    <string name="prompt_range_info" formatted="true">Place new at position (%1$d - %2$d)</string>
     <string name="prompt_position_invalid">That position is invalid</string>
     <string name="prompt_add_data">Add data to earlier inputs</string>
     <string name="prompt_temp_save">Temporarily Saved</string>

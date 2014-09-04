@@ -100,8 +100,8 @@ public class PromptPositionDialogFragment extends DialogFragment {
 
         TextView rangeAvailableTV = (TextView) inputInfo.findViewById(R.id.rangeAvailable);
 
-        String rangeAvailableString = getString(R.string.prompt_range_available);
-        rangeAvailableTV.setText(String.format(rangeAvailableString, min, max));
+        String rangeAvailableString = getString(R.string.prompt_range_info, min, max);
+        rangeAvailableTV.setText(rangeAvailableString);
 
         positionToAddET = (EditText) inputInfo.findViewById(R.id.positionChosen);
 

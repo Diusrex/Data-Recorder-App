@@ -99,17 +99,21 @@ public class PromptSettingActivity extends Activity implements
     }
 
     public void choosePromptPosition(View view) {
-        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0,
+        DialogFragment fragment = PromptPositionDialogFragment.newInstance(1,
                 manager.getNumberPrompts(), (PromptPositionListener) this);
         fragment.show(getFragmentManager(), "dialog");
     }
 
     public void appendPrompt(View view) {
-        positionChosen(manager.getNumberPrompts());
+        promptPositionChosen(manager.getNumberPrompts());
     }
     
     @Override
     public void positionChosen(int position) {
+        promptPositionChosen(position - 1);
+    }
+
+    private void promptPositionChosen(int position) {
         if (hasDataEntered) {
             DialogFragment fragment = PromptDataAddDialogFragment.newInstance(
                     position, (PromptDataAddListener) this);
