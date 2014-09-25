@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin" >
 
     <TextView
-        android:id="@+id/inputGroupName"
+        android:id="@+id/categoryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -22,7 +22,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttonRow1"
-        android:layout_below="@id/inputGroupName"
+        android:layout_below="@id/categoryName"
         android:padding="5dp" >
 
         <TableLayout

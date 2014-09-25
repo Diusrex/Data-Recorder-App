@@ -22,22 +22,22 @@ public class PromptSettingManager extends TableManager {
 
     Context appContext;
 
-    public static void changeInputGroupName(String oldInputGroupName,
-            String newInputGroupName, Context context) {
+    public static void categoryNameChanged(String oldCategoryName,
+            String newCategoryName, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
-        changeInputGroupName(oldInputGroupName, newInputGroupName, prefs);
+        categoryNameChanged(oldCategoryName, newCategoryName, prefs);
     }
 
-    public static void deleteTemporaryData(String inputGroupName,
+    public static void deleteTemporaryData(String categoryName,
             Context context) {
         SharedPreferences settings = context
                 .getSharedPreferences(PREFS_FILE, 0);
-        deleteTemporaryInputs(inputGroupName, settings);
+        deleteTemporaryInputs(categoryName, settings);
     }
 
-    public PromptSettingManager(TableLayout promptTable, String inputGroupName,
+    public PromptSettingManager(TableLayout promptTable, String categoryName,
             LayoutInflater layoutInflater, Context appContext) {
-        super(promptTable, inputGroupName, layoutInflater, appContext,
+        super(promptTable, categoryName, layoutInflater, appContext,
                 appContext.getSharedPreferences(PREFS_FILE, 0));
         this.appContext = appContext;
     }
@@ -52,7 +52,7 @@ public class PromptSettingManager extends TableManager {
 
         if (existingInputs.size() == 0) {
             wasChanged = false;
-            existingInputs = FileLoader.loadPrompts(inputGroupName, appContext);
+            existingInputs = FileLoader.loadPrompts(categoryName, appContext);
         } else {
             wasChanged = true;
 
@@ -69,7 +69,7 @@ public class PromptSettingManager extends TableManager {
 
     @Override
     protected boolean saveInputsToFile(List<String> prompts) {
-        return FileSaver.savePrompts(inputGroupName, prompts, appContext);
+        return FileSaver.savePrompts(categoryName, prompts, appContext);
     }
 
     private void addPromptToEnd(String enteredText) {
@@ -110,7 +110,7 @@ public class PromptSettingManager extends TableManager {
     }
 
     public boolean mustSetData() {
-        return FileLoader.promptsExist(inputGroupName, appContext);
+        return FileLoader.promptsExist(categoryName, appContext);
     }
     
     public static int getPositionOfRow(View button) {

@@ -26,7 +26,7 @@
         </activity>
         
         <activity
-            android:name="com.diusrex.sleepingdata.InputGroupActivity"
+            android:name="com.diusrex.sleepingdata.CategoryActivity"
             android:label="@string/app_name"
             android:parentActivityName="com.diusrex.sleepingdata.MainActivity" >
         </activity>
@@ -40,13 +40,13 @@
         <activity
             android:name="com.diusrex.sleepingdata.promptsetting.PromptSettingActivity"
             android:label="@string/app_name"
-            android:parentActivityName="com.diusrex.sleepingdata.InputGroupActivity" >
+            android:parentActivityName="com.diusrex.sleepingdata.CategoryActivity" >
         </activity>
         
         <activity
             android:name="com.diusrex.sleepingdata.InputDataActivity"
             android:label="@string/app_name"
-            android:parentActivityName="com.diusrex.sleepingdata.InputGroupActivity" >
+            android:parentActivityName="com.diusrex.sleepingdata.CategoryActivity" >
         </activity>
         
     </application>

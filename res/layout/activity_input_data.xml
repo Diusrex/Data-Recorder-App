@@ -12,7 +12,7 @@
      >
         
     <TextView
-        android:id="@+id/inputGroupName"
+        android:id="@+id/categoryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -24,7 +24,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:layout_below="@id/inputGroupName"
+        android:layout_below="@id/categoryName"
         android:layout_above="@+id/buttonRow" >
         
         <TableLayout

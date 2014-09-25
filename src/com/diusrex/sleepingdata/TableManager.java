@@ -16,7 +16,7 @@ public abstract class TableManager {
     static final String BASE_LOG_TAG = "TableManager";
 
     protected final TableLayout table;
-    protected final String inputGroupName;
+    protected final String categoryName;
     protected final LayoutInflater layoutInflater;
     protected final SharedPreferences settings;
 
@@ -25,11 +25,11 @@ public abstract class TableManager {
 
     protected List<EditText> inputs;
 
-    protected TableManager(TableLayout table, String inputGroupName,
+    protected TableManager(TableLayout table, String categoryName,
             LayoutInflater layoutInflater, Context appContext,
             SharedPreferences settings) {
         this.table = table;
-        this.inputGroupName = inputGroupName;
+        this.categoryName = categoryName;
         this.layoutInflater = layoutInflater;
 
         this.settings = settings;
@@ -45,7 +45,7 @@ public abstract class TableManager {
     public abstract void loadAndDisplay();
 
     final public void reset() {
-        deleteTemporaryInputs(inputGroupName, settings);
+        deleteTemporaryInputs(categoryName, settings);
         loadAndDisplay();
     }
 
@@ -64,7 +64,7 @@ public abstract class TableManager {
 
         String promptsAsString = TempSaver.join(data);
 
-        editor.putString(inputGroupName, promptsAsString);
+        editor.putString(categoryName, promptsAsString);
         editor.commit();
     }
 
@@ -83,7 +83,7 @@ public abstract class TableManager {
     }
 
     final public boolean saveInputsToFile() {
-        deleteTemporaryInputs(inputGroupName, settings);
+        deleteTemporaryInputs(categoryName, settings);
 
         List<String> prompts = new ArrayList<String>();
 
@@ -120,7 +120,7 @@ public abstract class TableManager {
     }
 
     final protected List<String> loadTemporaryInputs() {
-        String savedWords = settings.getString(inputGroupName, null);
+        String savedWords = settings.getString(categoryName, null);
 
         if (savedWords == null) {
             return new ArrayList<String>();
@@ -134,25 +134,25 @@ public abstract class TableManager {
         return Arrays.asList(brokenUp);
     }
 
-    protected static void changeInputGroupName(String oldInputGroupName,
-            String newInputGroupName, SharedPreferences settings) {
-        String previousTemp = settings.getString(oldInputGroupName, null);
+    protected static void categoryNameChanged(String oldCategoryName,
+            String newCategoryName, SharedPreferences settings) {
+        String previousTemp = settings.getString(oldCategoryName, null);
 
         if (previousTemp != null) {
             SharedPreferences.Editor editor = settings.edit();
 
-            editor.putString(newInputGroupName, previousTemp);
+            editor.putString(newCategoryName, previousTemp);
 
-            editor.remove(oldInputGroupName);
+            editor.remove(oldCategoryName);
             editor.commit();
         }
     }
 
-    protected static void deleteTemporaryInputs(String inputGroupName,
+    protected static void deleteTemporaryInputs(String categoryName,
             SharedPreferences settings) {
         SharedPreferences.Editor editor = settings.edit();
 
-        editor.remove(inputGroupName);
+        editor.remove(categoryName);
         editor.commit();
     }
 }

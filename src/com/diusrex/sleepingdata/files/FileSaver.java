@@ -17,12 +17,12 @@ public class FileSaver {
         
     }
     
-    static public boolean savePrompts(String inputGroup, List<String> prompts, Context appContext)
+    static public boolean savePrompts(String categoryName, List<String> prompts, Context appContext)
     {
         File saveFile = null;
 
         try {
-            saveFile = FileAccessor.openPromptFile(inputGroup, appContext);
+            saveFile = FileAccessor.openPromptFile(categoryName, appContext);
         } catch(Exception e) {
             return false;
         }
@@ -48,12 +48,12 @@ public class FileSaver {
         return true;
     }
 
-    static public boolean saveAllData(String inputGroup, List<String[]> allData, Context appContext) 
+    static public boolean saveAllData(String categoryName, List<String[]> allData, Context appContext) 
     {
         File saveFile = null;
 
         try {
-            saveFile = FileAccessor.openDataFile(inputGroup, appContext);
+            saveFile = FileAccessor.openDataFile(categoryName, appContext);
         } catch(NoAccessException e) {
             return false;
         } catch (IOException e) {
@@ -85,10 +85,10 @@ public class FileSaver {
         return true;
     }
 
-    static public boolean saveData(String inputGroup, List<String> data, Context appContext)
+    static public boolean saveData(String categoryName, List<String> data, Context appContext)
     {
         try {
-            File saveFile = FileAccessor.openDataFile(inputGroup, appContext);
+            File saveFile = FileAccessor.openDataFile(categoryName, appContext);
 
             FileWriter writer = new FileWriter(saveFile, true);
 

@@ -28,7 +28,7 @@ import com.diusrex.sleepingdata.files.FileSaver;
 public class PromptSettingActivity extends Activity implements
         PromptPositionListener, PromptDataAddListener {
 
-    static public String INPUT_GROUP_NAME = "InputGroupName";
+    static public String CATEGORY_NAME = "CategoryName";
 
     static String LOG_TAG = "InitialPromptInputActivity";
 
@@ -37,7 +37,7 @@ public class PromptSettingActivity extends Activity implements
     // The prompt setting table will contain the inputs
     PromptSettingManager manager;
 
-    String inputGroupName;
+    String categoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,22 +47,22 @@ public class PromptSettingActivity extends Activity implements
         setUpKeyboardHandling();
 
         Intent intent = getIntent();
-        inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
+        categoryName = intent.getStringExtra(CATEGORY_NAME);
 
         setUpManager();
 
-        dataChangeHandler = new DataChangeHandler(inputGroupName,
+        dataChangeHandler = new DataChangeHandler(categoryName,
                 (Context) this);
 
-        TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
+        TextView categoryNameTV = (TextView) findViewById(R.id.categoryName);
 
-        inputGroupNameTV.setText(inputGroupName);
+        categoryNameTV.setText(categoryName);
     }
 
     private void setUpManager() {
         TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
 
-        manager = new PromptSettingManager(promptSettingTable, inputGroupName,
+        manager = new PromptSettingManager(promptSettingTable, categoryName,
                 (LayoutInflater) getBaseContext().getSystemService(
                         LAYOUT_INFLATER_SERVICE), (Context) this);
     }
@@ -202,7 +202,7 @@ public class PromptSettingActivity extends Activity implements
 
     void applyChangesToAll() {
         // Apply to exisiting data
-        List<String[]> allData = FileLoader.loadAllData(inputGroupName,
+        List<String[]> allData = FileLoader.loadAllData(categoryName,
                 (Context) this);
 
         for (int i = 0; i < allData.size(); ++i) {
@@ -212,10 +212,10 @@ public class PromptSettingActivity extends Activity implements
             allData.set(i, newDataLine);
         }
 
-        FileSaver.saveAllData(inputGroupName, allData, (Context) this);
+        FileSaver.saveAllData(categoryName, allData, (Context) this);
 
         // Apply to temporary data
-        InputDataTableManager.applyDataChanges(inputGroupName,
+        InputDataTableManager.applyDataChanges(categoryName,
                 dataChangeHandler, (Context) this);
 
         dataChangeHandler.reset();

@@ -14,37 +14,37 @@ public class DataChangeHandler {
     static final String CHANGES_FILE = "DataChangePreferences";
 
     final SharedPreferences settings;
-    String inputGroupName;
+    String categoryName;
 
     List<ChangePromptsInfo> allChanges;
 
     List<EditText> inputs;
 
-    public static void changeInputGroupName(String oldInputGroupName, String newInputGroupName, Context context) {
+    public static void categoryNameChanged(String oldCategoryName, String newCategoryName, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(CHANGES_FILE, 0);
-        String previousTemp = prefs.getString(oldInputGroupName, null);
+        String previousTemp = prefs.getString(oldCategoryName, null);
 
         if (previousTemp != null) {
             SharedPreferences.Editor editor = prefs.edit();
 
-            editor.putString(newInputGroupName, previousTemp);
+            editor.putString(newCategoryName, previousTemp);
 
-            editor.remove(oldInputGroupName);
+            editor.remove(oldCategoryName);
             editor.commit();
         }
     }
 
-    public static void deleteTemporaryData(String inputGroupName, Context appContext) {
+    public static void deleteTemporaryData(String categoryName, Context appContext) {
         SharedPreferences prefs = appContext.getSharedPreferences(CHANGES_FILE, 0);
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.remove(inputGroupName);
+        editor.remove(categoryName);
         editor.commit();
     }
 
-    DataChangeHandler(String inputGroupName, Context appContext)
+    DataChangeHandler(String categoryName, Context appContext)
     {
-        this.inputGroupName = inputGroupName;
+        this.categoryName = categoryName;
 
         settings = appContext.getSharedPreferences(CHANGES_FILE, 0);
 
@@ -56,7 +56,7 @@ public class DataChangeHandler {
     {
         allChanges = new ArrayList<ChangePromptsInfo>();
 
-        String line = settings.getString(inputGroupName, null);
+        String line = settings.getString(categoryName, null);
 
         if (line != null) {
             String[] allWords = line.split(" ");
@@ -81,7 +81,7 @@ public class DataChangeHandler {
 
             SharedPreferences.Editor editor = settings.edit();
 
-            editor.remove(inputGroupName);
+            editor.remove(categoryName);
             editor.commit();
         }
     }
@@ -115,7 +115,7 @@ public class DataChangeHandler {
 
         SharedPreferences.Editor editor = settings.edit();
 
-        editor.putString(inputGroupName, line);
+        editor.putString(categoryName, line);
         editor.commit();
     }
 

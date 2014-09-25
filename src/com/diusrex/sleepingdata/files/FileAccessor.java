@@ -27,24 +27,24 @@ public class FileAccessor {
         public NoAccessException(Throwable cause) { super(cause); }
     }
 
-    public static void changeInputGroupName(String oldInputGroupName,
-            String newInputGroupName, Context appContext) {
-        List<String[]> allData = FileLoader.loadAllData(oldInputGroupName, appContext);
-        FileSaver.saveAllData(newInputGroupName, allData, appContext);
+    public static void changeCategoryName(String oldCategoryName,
+            String newCategoryName, Context appContext) {
+        List<String[]> allData = FileLoader.loadAllData(oldCategoryName, appContext);
+        FileSaver.saveAllData(newCategoryName, allData, appContext);
 
-        List<String> allPrompts = FileLoader.loadPrompts(oldInputGroupName, appContext);
-        FileSaver.savePrompts(newInputGroupName, allPrompts, appContext);
+        List<String> allPrompts = FileLoader.loadPrompts(oldCategoryName, appContext);
+        FileSaver.savePrompts(newCategoryName, allPrompts, appContext);
 
-        deleteInputGroup(oldInputGroupName, appContext);
+        deleteCategory(oldCategoryName, appContext);
     }
 
-    public static void deleteInputGroup(String inputGroupName, Context appContext) {
+    public static void deleteCategory(String categoryName, Context appContext) {
         File dataFile;
         File promptsFile;
 
         try {
-            dataFile = openDataFile(inputGroupName, appContext);
-            promptsFile = openPromptFile(inputGroupName, appContext);
+            dataFile = openDataFile(categoryName, appContext);
+            promptsFile = openPromptFile(categoryName, appContext);
         } catch (IOException | NoAccessException e) {
             return;
         }

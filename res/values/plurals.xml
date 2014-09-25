@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <plurals name="input_group_num_prompts">
+    <plurals name="category_num_prompts">
         <item
-            quantity="one">There is %1$d prompt in this input group</item>
+            quantity="one">There is %1$d prompt in this category</item>
         <item
-            quantity="other">There are %1$d prompts in this input group</item>
+            quantity="other">There are %1$d prompts in this category</item>
     </plurals>
     
-    <plurals name="input_group_num_data_rows">
+    <plurals name="category_num_data_rows">
         <item
-            quantity="one">There is %1$d row of data in this input group</item>
+            quantity="one">There is %1$d row of data in this category</item>
         <item
-            quantity="other">There are %1$d rows of data in this input group</item>
+            quantity="other">There are %1$d rows of data in this category</item>
     </plurals>
     
 </resources>

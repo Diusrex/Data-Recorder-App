@@ -2,10 +2,10 @@ package com.diusrex.sleepingdata.inputcheckers;
 
 import android.app.Activity;
 
-import com.diusrex.sleepingdata.InputGroupManager;
+import com.diusrex.sleepingdata.CategoryManager;
 import com.diusrex.sleepingdata.R;
 
-public class InputGroupValidNameChecker implements ValidNameChecker {
+public class CategoryValidNameChecker implements ValidNameChecker {
     Activity activity;
 
     @Override
@@ -22,7 +22,7 @@ public class InputGroupValidNameChecker implements ValidNameChecker {
     public String reasonIsInvalid(String name) {
         if (name.equals("")) {
             return activity.getString(R.string.enter_name);
-        } else if (InputGroupManager.isInputNameUsed(name, activity)) {
+        } else if (CategoryManager.isInputNameUsed(name, activity)) {
             return activity.getString(R.string.name_already_used);
         } else {
             return null;

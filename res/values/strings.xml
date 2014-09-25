@@ -8,6 +8,8 @@
     
     <string name="dismiss">Dismiss</string>
     
+    <string name="enter">Enter</string>
+    <string name="remove">Remove</string>
     <string name="delete">Delete</string>
     <string name="change">Change</string>
     <string name="input">Input</string>
@@ -16,6 +18,7 @@
     <string name="save">Save</string>
     <string name="select">Select</string>
     <string name="finish">Finish</string>
+    
     
     <string name="enter_name">Please enter a valid name</string>
     <string name="enter_name_for_all_questions">Please enter a name for all questions</string>
@@ -30,10 +33,6 @@
     <string name="name_invalid_characters">The name cannot contain the character \'/\'</string>
     <string name="name_already_used">Cannot use the name, has already been used</string>
     <string name="name_cannot_start_space">The name cannot start with a space</string>
-    
-    <string name="input_group_enter">Enter</string>
-    <string name="input_group_change">Change</string>
-    <string name="input_group_remove">Remove</string>
     
     <string name="prompt_name">Prompt name</string>
     <string name="prompt_create_new">Insert prompt</string>

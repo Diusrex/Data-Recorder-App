@@ -21,13 +21,13 @@ import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
 import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
 
 public class InputDataActivity extends Activity implements ConfirmListener {
-    static public String INPUT_GROUP_NAME = "InputGroupName";
+    static public String CATEGORY_NAME = "CategoryName";
 
     static String LOG_TAG = "InputDataActivity";
 
     static final int CLEAR_CODE = 1;
 
-    String inputGroupName;
+    String categoryName;
 
     InputDataTableManager manager;
 
@@ -39,19 +39,19 @@ public class InputDataActivity extends Activity implements ConfirmListener {
         setUpKeyboardHandling();
 
         Intent intent = getIntent();
-        inputGroupName = intent.getStringExtra(INPUT_GROUP_NAME);
+        categoryName = intent.getStringExtra(CATEGORY_NAME);
 
         setUpManager();
 
-        TextView inputGroupNameTV = (TextView) findViewById(R.id.inputGroupName);
+        TextView categoryNameTV = (TextView) findViewById(R.id.categoryName);
 
-        inputGroupNameTV.setText(inputGroupName);
+        categoryNameTV.setText(categoryName);
     }
 
     private void setUpManager() {
         TableLayout dataTable = (TableLayout) findViewById(R.id.dataTable);
 
-        manager = new InputDataTableManager(dataTable, inputGroupName,
+        manager = new InputDataTableManager(dataTable, categoryName,
                 (LayoutInflater) getBaseContext().getSystemService(
                         LAYOUT_INFLATER_SERVICE), (Context) this);
     }

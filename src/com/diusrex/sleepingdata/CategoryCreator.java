@@ -6,23 +6,24 @@ import android.app.FragmentManager;
 import com.diusrex.sleepingdata.dialogs.ErrorDialogFragment;
 import com.diusrex.sleepingdata.dialogs.InputNameDialogFragment;
 import com.diusrex.sleepingdata.dialogs.InputNameListener;
-import com.diusrex.sleepingdata.inputcheckers.InputGroupValidNameChecker;
+import com.diusrex.sleepingdata.inputcheckers.CategoryValidNameChecker;
 
-public class InputGroupCreator implements InputNameListener {
+// TODO: I believe that the name for this is misleading
+public class CategoryCreator implements InputNameListener {
 	FragmentManager fragmentManager;
-	InputGroupCreatorHandler handler;
+	CategoryCreatorHandler handler;
 	
-	public void Run(FragmentManager fragmentManager, InputGroupCreatorHandler handler) {
+	public void Run(FragmentManager fragmentManager, CategoryCreatorHandler handler) {
 		this.fragmentManager = fragmentManager;
 		this.handler = handler;
 		
-		DialogFragment fragment = InputNameDialogFragment.newInstance("", (InputNameListener) this, new InputGroupValidNameChecker()); 
+		DialogFragment fragment = InputNameDialogFragment.newInstance("", (InputNameListener) this, new CategoryValidNameChecker()); 
         fragment.show(fragmentManager, "dialog");
 	}
 	
 	@Override
     public void nameChanged(String newName) {
-		handler.inputGroupCreated(newName);
+		handler.categoryCreated(newName);
     }
     
     @Override

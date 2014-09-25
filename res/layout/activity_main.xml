@@ -16,7 +16,7 @@
         android:layout_above="@+id/createButton" >
         
         <TableLayout
-            android:id="@+id/inputGroupsTable"
+            android:id="@+id/categoriesTable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp" >

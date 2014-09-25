@@ -3,10 +3,6 @@ package com.diusrex.sleepingdata;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.diusrex.sleepingdata.files.FileLoader;
-import com.diusrex.sleepingdata.files.FileSaver;
-import com.diusrex.sleepingdata.promptsetting.DataChangeHandler;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -16,16 +12,20 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.diusrex.sleepingdata.files.FileLoader;
+import com.diusrex.sleepingdata.files.FileSaver;
+import com.diusrex.sleepingdata.promptsetting.DataChangeHandler;
+
 public class InputDataTableManager extends TableManager {
     static final String LOG_TAG = "InputDataTableManager";
     static final String PREFS_FILE = "DataPreferences";
 
     Context appContext;
 
-    public static void applyDataChanges(String inputGroupName,
+    public static void applyDataChanges(String categoryName,
             DataChangeHandler dataChangeHandler, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
-        String temporaryData = prefs.getString(inputGroupName, null);
+        String temporaryData = prefs.getString(categoryName, null);
 
         if (temporaryData != null) {
             String[] newTemp = TempSaver.split(temporaryData);
@@ -35,22 +35,22 @@ public class InputDataTableManager extends TableManager {
 
             String newTempString = TempSaver.join(newTemp);
 
-            editor.putString(inputGroupName, newTempString);
+            editor.putString(categoryName, newTempString);
             editor.commit();
         }
     }
 
-    public static void changeInputGroupName(String oldInputGroupName,
-            String newInputGroupName, Context context) {
+    public static void categoryNameChanged(String oldCategoryName,
+            String newCategoryName, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, 0);
-        changeInputGroupName(oldInputGroupName, newInputGroupName, prefs);
+        categoryNameChanged(oldCategoryName, newCategoryName, prefs);
     }
 
-    public static void deleteTemporaryData(String inputGroupName,
+    public static void deleteTemporaryData(String categoryName,
             Context context) {
         SharedPreferences settings = context
                 .getSharedPreferences(PREFS_FILE, 0);
-        deleteTemporaryInputs(inputGroupName, settings);
+        deleteTemporaryInputs(categoryName, settings);
     }
 
     public boolean inputsExists() {
@@ -68,9 +68,9 @@ public class InputDataTableManager extends TableManager {
         }
     }
 
-    public InputDataTableManager(TableLayout dataTable, String inputGroupName,
+    public InputDataTableManager(TableLayout dataTable, String categoryName,
             LayoutInflater layoutInflater, Context appContext) {
-        super(dataTable, inputGroupName, layoutInflater, appContext, appContext
+        super(dataTable, categoryName, layoutInflater, appContext, appContext
                 .getSharedPreferences(PREFS_FILE, 0));
         this.appContext = appContext;
     }
@@ -83,7 +83,7 @@ public class InputDataTableManager extends TableManager {
 
         List<String> existingInputs = loadTemporaryInputs();
 
-        List<String> prompts = FileLoader.loadPrompts(inputGroupName,
+        List<String> prompts = FileLoader.loadPrompts(categoryName,
                 appContext);
 
         if (existingInputs.size() == 0) {
@@ -120,7 +120,7 @@ public class InputDataTableManager extends TableManager {
 
     @Override
     protected boolean saveInputsToFile(List<String> data) {
-        boolean successful = FileSaver.saveData(inputGroupName, data,
+        boolean successful = FileSaver.saveData(categoryName, data,
                 appContext);
 
         if (successful)

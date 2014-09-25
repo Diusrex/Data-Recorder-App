@@ -15,15 +15,15 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements InputGroupCreatorHandler {
+public class MainActivity extends Activity implements CategoryCreatorHandler {
     static final String LOG_TAG = "MainActivity";
 
-    TableLayout inputGroupsTable;
+    TableLayout categoriesTable;
 
     // Will store the input groups as both the key and value
-    private SharedPreferences availableInputGroupsPreference;
+    private SharedPreferences availableCategoriesPreference;
 
-    String[] inputGroups;
+    String[] categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,32 +31,32 @@ public class MainActivity extends Activity implements InputGroupCreatorHandler {
 
         setContentView(R.layout.activity_main);
 
-        inputGroupsTable = (TableLayout) findViewById(R.id.inputGroupsTable);
+        categoriesTable = (TableLayout) findViewById(R.id.categoriesTable);
 
-        availableInputGroupsPreference = InputGroupManager
-                .getAvailableInputGroups((Context) this);
+        availableCategoriesPreference = CategoryManager
+                .getAvailableCategories((Context) this);
     }
 
     @Override
-    public void inputGroupCreated(String inputGroupName) {
-        saveNewInputGroup(inputGroupName);
+    public void categoryCreated(String categoryName) {
+        saveNewCategory(categoryName);
 
-        startNewInputGroup(inputGroupName);
+        startNewCategory(categoryName);
     }
 
-    private void saveNewInputGroup(String newInputGroup) {
-        SharedPreferences.Editor preferencesEditor = availableInputGroupsPreference
+    private void saveNewCategory(String newCategory) {
+        SharedPreferences.Editor preferencesEditor = availableCategoriesPreference
                 .edit();
-        preferencesEditor.putString(newInputGroup, newInputGroup);
+        preferencesEditor.putString(newCategory, newCategory);
         preferencesEditor.apply();
 
-        updateInputGroupsList(newInputGroup);
+        updateCategoriesList(newCategory);
     }
 
-    private void startNewInputGroup(String inputGroupName) {
-        Intent intent = new Intent(this, InputGroupActivity.class);
-        intent.putExtra(InputGroupActivity.INPUT_GROUP_NAME, inputGroupName);
-        intent.putExtra(InputGroupActivity.NEW_INPUT_GROUP, true);
+    private void startNewCategory(String categoryName) {
+        Intent intent = new Intent(this, CategoryActivity.class);
+        intent.putExtra(CategoryActivity.CATEGORY_NAME, categoryName);
+        intent.putExtra(CategoryActivity.NEW_CATEGORY, true);
 
         startActivity(intent);
     }
@@ -65,57 +65,57 @@ public class MainActivity extends Activity implements InputGroupCreatorHandler {
     protected void onResume() {
         super.onResume();
 
-        inputGroupsTable.removeAllViews();
+        categoriesTable.removeAllViews();
 
-        inputGroups = getAllInputGroups();
-        Arrays.sort(inputGroups, String.CASE_INSENSITIVE_ORDER);
+        categories = getAllCategories();
+        Arrays.sort(categories, String.CASE_INSENSITIVE_ORDER);
 
-        for (int i = 0; i < inputGroups.length; ++i) {
-            insertInputGroupInScrollView(inputGroups[i], i);
+        for (int i = 0; i < categories.length; ++i) {
+            insertCategoryInScrollView(categories[i], i);
         }
     }
 
-    private String[] getAllInputGroups() {
-        return availableInputGroupsPreference.getAll().keySet()
+    private String[] getAllCategories() {
+        return availableCategoriesPreference.getAll().keySet()
                 .toArray(new String[0]);
     }
 
-    void updateInputGroupsList(String newInputGroup) {
-        insertInputGroupInScrollView(newInputGroup,
-                Arrays.binarySearch(inputGroups, newInputGroup));
+    void updateCategoriesList(String newCategory) {
+        insertCategoryInScrollView(newCategory,
+                Arrays.binarySearch(categories, newCategory));
     }
 
-    void insertInputGroupInScrollView(String groupName, int position) {
+    void insertCategoryInScrollView(String groupName, int position) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View newInputGroupRow = inflater
-                .inflate(R.layout.input_group_row, null);
+        View newCategoryRow = inflater
+                .inflate(R.layout.category_row, null);
 
-        TextView nameTextView = (TextView) newInputGroupRow
+        TextView nameTextView = (TextView) newCategoryRow
                 .findViewById(R.id.name);
 
         nameTextView.setText(groupName);
 
-        inputGroupsTable.addView(newInputGroupRow, position);
+        categoriesTable.addView(newCategoryRow, position);
     }
 
     public void createButtonClicked(View view) {
-        InputGroupCreator creator = new InputGroupCreator();
-        creator.Run(getFragmentManager(), (InputGroupCreatorHandler) this);
+        CategoryCreator creator = new CategoryCreator();
+        creator.Run(getFragmentManager(), (CategoryCreatorHandler) this);
     }
 
     public void selectButtonClicked(View view) {
         TableRow tableRow = (TableRow) view.getParent();
         TextView nameTextView = (TextView) tableRow.findViewById(R.id.name);
 
-        String inputGroupName = nameTextView.getText().toString();
+        String categoryName = nameTextView.getText().toString();
 
-        startInputGroupActivity(inputGroupName);
+        startCategoryActivity(categoryName);
     }
 
-    public void startInputGroupActivity(String inputGroupName) {
-        Intent intent = new Intent(this, InputGroupActivity.class);
-        intent.putExtra(InputGroupActivity.INPUT_GROUP_NAME, inputGroupName);
+    public void startCategoryActivity(String categoryName) {
+        Intent intent = new Intent(this, CategoryActivity.class);
+        intent.putExtra(CategoryActivity.CATEGORY_NAME, categoryName);
 
         startActivity(intent);
     }

@@ -30,8 +30,8 @@ public class FileLoader {
         public FailedToLoad(Throwable cause) { super(cause); }
     }
 
-    public static int numberOfPrompts(String inputGroupName, Context appContext) {
-        return loadPrompts(inputGroupName, appContext).size();
+    public static int numberOfPrompts(String categoryName, Context appContext) {
+        return loadPrompts(categoryName, appContext).size();
     }
 
     static public List<String> loadPrompts(String promptsFile, Context appContext)
@@ -69,14 +69,14 @@ public class FileLoader {
         return (numberOfPrompts(dataFile, appContext) > 0);
     }
 
-    public static int numberOfDataRows(String inputGroupName, Context appContext) {
-        return loadAllData(inputGroupName, appContext).size();
+    public static int numberOfDataRows(String categoryName, Context appContext) {
+        return loadAllData(categoryName, appContext).size();
     }
 
-    public static List<String[]> loadAllData(String inputGroup, Context appContext) {
+    public static List<String[]> loadAllData(String categoryName, Context appContext) {
         try
         {
-            File loadFile = FileAccessor.openDataFile(inputGroup, appContext);
+            File loadFile = FileAccessor.openDataFile(categoryName, appContext);
 
             BufferedReader reader = getReader(loadFile);
 
