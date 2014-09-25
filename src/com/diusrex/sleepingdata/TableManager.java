@@ -7,7 +7,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;

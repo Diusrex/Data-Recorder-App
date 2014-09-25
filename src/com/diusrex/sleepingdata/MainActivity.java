@@ -2,8 +2,6 @@ package com.diusrex.sleepingdata;
 
 import java.util.Arrays;
 
-import com.diusrex.sleepingdata.files.FileAccessor;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
