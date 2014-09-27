@@ -17,8 +17,8 @@ import android.widget.Toast;
 
 import com.diusrex.sleepingdata.dialogs.ConfirmDialogFragment;
 import com.diusrex.sleepingdata.dialogs.ConfirmListener;
-import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
-import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
+import com.diusrex.sleepingdata.dialogs.QuestionPositionDialogFragment;
+import com.diusrex.sleepingdata.dialogs.QuestionPositionListener;
 
 public class InputDataActivity extends Activity implements ConfirmListener {
     static public String CATEGORY_NAME = "CategoryName";
@@ -84,9 +84,9 @@ public class InputDataActivity extends Activity implements ConfirmListener {
                 });
     }
 
-    public void choosePromptPosition(View view) {
-        DialogFragment fragment = PromptPositionDialogFragment.newInstance(0,
-                manager.getNumberPrompts(), (PromptPositionListener) this);
+    public void chooseQuestionPosition(View view) {
+        DialogFragment fragment = QuestionPositionDialogFragment.newInstance(0,
+                manager.getNumberQuestions(), (QuestionPositionListener) this);
         fragment.show(getFragmentManager(), "dialog");
     }
 
@@ -97,7 +97,7 @@ public class InputDataActivity extends Activity implements ConfirmListener {
         if (manager.tempHasBeenChanged()) {
             manager.saveTemporaryInputs();
             Toast.makeText(getApplicationContext(),
-                    getString(R.string.prompt_temp_save), Toast.LENGTH_SHORT)
+                    getString(R.string.question_temp_save), Toast.LENGTH_SHORT)
                     .show();
         }
     }

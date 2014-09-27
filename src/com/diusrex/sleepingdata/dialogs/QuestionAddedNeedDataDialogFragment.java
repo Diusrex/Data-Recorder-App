@@ -13,18 +13,18 @@ import android.widget.EditText;
 import com.diusrex.sleepingdata.GeneralTextChangeWatcher;
 import com.diusrex.sleepingdata.R;
 
-public class PromptDataAddDialogFragment extends DialogFragment {
+public class QuestionAddedNeedDataDialogFragment extends DialogFragment {
     static final String POSITION = "Position";
 
     int position;
 
     EditText dataToAdd;
 
-    PromptDataAddListener listener;
+    QuestionAddedNeedDataListener listener;
 
 
-    public static PromptDataAddDialogFragment newInstance(int position, PromptDataAddListener listener) {
-        PromptDataAddDialogFragment f = new PromptDataAddDialogFragment();
+    public static QuestionAddedNeedDataDialogFragment newInstance(int position, QuestionAddedNeedDataListener listener) {
+        QuestionAddedNeedDataDialogFragment f = new QuestionAddedNeedDataDialogFragment();
 
         Bundle args = new Bundle();
 
@@ -41,7 +41,7 @@ public class PromptDataAddDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle(getString(R.string.prompt_add_data));
+        builder.setTitle(getString(R.string.question_add_data));
 
         builder = setUpButtons(builder);
 

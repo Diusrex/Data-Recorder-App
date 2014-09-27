@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <plurals name="category_num_prompts">
+    <plurals name="category_num_questions">
         <item
-            quantity="one">There is %1$d prompt in this category</item>
+            quantity="one">There is %1$d question in this category</item>
         <item
-            quantity="other">There are %1$d prompts in this category</item>
+            quantity="other">There are %1$d questions in this category</item>
     </plurals>
     
     <plurals name="category_num_data_rows">

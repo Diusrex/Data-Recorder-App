@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/enterPromptRow"
+    android:id="@+id/enterQuestionRow"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:padding="@dimen/prompt_enter_row_padding" >
+    android:padding="@dimen/question_enter_row_padding" >
     
     <TextView
         android:id="@+id/number"
@@ -23,15 +23,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:inputType="text"
-        android:hint="@string/prompt_name" >
+        android:hint="@string/question_name" >
             <requestFocus />
         </EditText>
 
     <Button
-        android:id="@+id/deletePrompt"
+        android:id="@+id/deleteQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/prompt_delete"
-        android:onClick="deletePromptButtonClicked"
+        android:text="@string/question_delete"
+        android:onClick="deleteQuestionButtonClicked"
         style="?android:attr/buttonBarButtonStyle" />
 </TableRow>

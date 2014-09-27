@@ -30,22 +30,22 @@ public class FileLoader {
         public FailedToLoad(Throwable cause) { super(cause); }
     }
 
-    public static int numberOfPrompts(String categoryName, Context appContext) {
-        return loadPrompts(categoryName, appContext).size();
+    public static int numberOfQuestions(String categoryName, Context appContext) {
+        return loadQuestions(categoryName, appContext).size();
     }
 
-    static public List<String> loadPrompts(String promptsFile, Context appContext)
+    static public List<String> loadQuestions(String categoryName, Context appContext)
     {
         try
         {
-            File loadFile = FileAccessor.openPromptFile(promptsFile, appContext);
+            File loadFile = FileAccessor.openQuestionsFile(categoryName, appContext);
 
             BufferedReader reader = getReader(loadFile);
 
 
             String line = reader.readLine();
 
-            // Means that there were no prompts entered yet.
+            // Means that there were no questions entered yet.
             if (line == null || line.equals("")) {
                 return new ArrayList<String>();
             }
@@ -59,14 +59,9 @@ public class FileLoader {
             return new ArrayList<String>();
         }
     }
-
-    static public boolean dataExists(String dataFile, Context appContext)
-    {
-        return (numberOfDataRows(dataFile, appContext) > 0);
-    }
     
-    static public boolean promptsExist(String dataFile, Context appContext) {
-        return (numberOfPrompts(dataFile, appContext) > 0);
+    static public boolean questionsExist(String categoryName, Context appContext) {
+        return (numberOfQuestions(categoryName, appContext) > 0);
     }
 
     public static int numberOfDataRows(String categoryName, Context appContext) {

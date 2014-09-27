@@ -20,7 +20,7 @@
         android:layout_gravity="center"
         android:ems="10"
         android:inputType="number"
-        android:hint="@string/prompt_position_short" >
+        android:hint="@string/question_position_short" >
 
         <requestFocus />
      </EditText>

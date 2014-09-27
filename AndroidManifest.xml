@@ -38,7 +38,7 @@
         </activity>
         
         <activity
-            android:name="com.diusrex.sleepingdata.promptsetting.PromptSettingActivity"
+            android:name="com.diusrex.sleepingdata.questionsetting.QuestionSettingActivity"
             android:label="@string/app_name"
             android:parentActivityName="com.diusrex.sleepingdata.CategoryActivity" >
         </activity>

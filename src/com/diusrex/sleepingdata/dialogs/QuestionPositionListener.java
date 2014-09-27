@@ -2,8 +2,8 @@ package com.diusrex.sleepingdata.dialogs;
 
 import android.app.DialogFragment;
 
-public interface PromptDataAddListener {
-    void dataChosen(int position, String dataToAdd);
+public interface QuestionPositionListener {
+    void positionChosen(int position);
 
     void createErrorDialog(String message, DialogFragment dialog);
 }

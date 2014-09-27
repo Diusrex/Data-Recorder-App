@@ -1,4 +1,4 @@
-package com.diusrex.sleepingdata.promptsetting;
+package com.diusrex.sleepingdata.questionsetting;
 
 import java.util.List;
 
@@ -18,31 +18,31 @@ import com.diusrex.sleepingdata.InputDataTableManager;
 import com.diusrex.sleepingdata.KeyboardHandleRelativeLayout;
 import com.diusrex.sleepingdata.R;
 import com.diusrex.sleepingdata.dialogs.ErrorDialogFragment;
-import com.diusrex.sleepingdata.dialogs.PromptDataAddDialogFragment;
-import com.diusrex.sleepingdata.dialogs.PromptDataAddListener;
-import com.diusrex.sleepingdata.dialogs.PromptPositionDialogFragment;
-import com.diusrex.sleepingdata.dialogs.PromptPositionListener;
+import com.diusrex.sleepingdata.dialogs.QuestionAddedNeedDataDialogFragment;
+import com.diusrex.sleepingdata.dialogs.QuestionAddedNeedDataListener;
+import com.diusrex.sleepingdata.dialogs.QuestionPositionDialogFragment;
+import com.diusrex.sleepingdata.dialogs.QuestionPositionListener;
 import com.diusrex.sleepingdata.files.FileLoader;
 import com.diusrex.sleepingdata.files.FileSaver;
 
-public class PromptSettingActivity extends Activity implements
-        PromptPositionListener, PromptDataAddListener {
+public class QuestionSettingActivity extends Activity implements
+        QuestionPositionListener, QuestionAddedNeedDataListener {
 
     static public String CATEGORY_NAME = "CategoryName";
 
-    static String LOG_TAG = "InitialPromptInputActivity";
+    static String LOG_TAG = "InitialQuestionInputActivity";
 
     DataChangeHandler dataChangeHandler;
 
-    // The prompt setting table will contain the inputs
-    PromptSettingManager manager;
+    // The question setting table will contain the inputs
+    QuestionSettingManager manager;
 
     String categoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prompt_setting);
+        setContentView(R.layout.activity_question_setting);
 
         setUpKeyboardHandling();
 
@@ -51,8 +51,7 @@ public class PromptSettingActivity extends Activity implements
 
         setUpManager();
 
-        dataChangeHandler = new DataChangeHandler(categoryName,
-                (Context) this);
+        dataChangeHandler = new DataChangeHandler(categoryName, (Context) this);
 
         TextView categoryNameTV = (TextView) findViewById(R.id.categoryName);
 
@@ -60,9 +59,9 @@ public class PromptSettingActivity extends Activity implements
     }
 
     private void setUpManager() {
-        TableLayout promptSettingTable = (TableLayout) findViewById(R.id.promptSettingTable);
+        TableLayout questionSettingTable = (TableLayout) findViewById(R.id.questionSettingTable);
 
-        manager = new PromptSettingManager(promptSettingTable, categoryName,
+        manager = new QuestionSettingManager(questionSettingTable, categoryName,
                 (LayoutInflater) getBaseContext().getSystemService(
                         LAYOUT_INFLATER_SERVICE), (Context) this);
     }
@@ -98,25 +97,25 @@ public class PromptSettingActivity extends Activity implements
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    public void choosePromptPosition(View view) {
-        DialogFragment fragment = PromptPositionDialogFragment.newInstance(1,
-                manager.getNumberPrompts(), (PromptPositionListener) this);
+    public void chooseQuestionPosition(View view) {
+        DialogFragment fragment = QuestionPositionDialogFragment.newInstance(1,
+                manager.getNumberQuestions(), (QuestionPositionListener) this);
         fragment.show(getFragmentManager(), "dialog");
     }
 
-    public void appendPrompt(View view) {
-        promptPositionChosen(manager.getNumberPrompts());
+    public void appendQuestion(View view) {
+        questionPositionChosen(manager.getNumberQuestions());
     }
 
     @Override
     public void positionChosen(int position) {
-        promptPositionChosen(position - 1);
+        questionPositionChosen(position - 1);
     }
 
-    private void promptPositionChosen(int position) {
+    private void questionPositionChosen(int position) {
         if (manager.mustSetData()) {
-            DialogFragment fragment = PromptDataAddDialogFragment.newInstance(
-                    position, (PromptDataAddListener) this);
+            DialogFragment fragment = QuestionAddedNeedDataDialogFragment.newInstance(
+                    position, (QuestionAddedNeedDataListener) this);
             fragment.show(getFragmentManager(), "dialog");
         } else {
             manager.addNewRow(position);
@@ -125,18 +124,18 @@ public class PromptSettingActivity extends Activity implements
 
     @Override
     public void dataChosen(int position, String dataToAdd) {
-        // Need to add the prompt
+        // Need to add the question
         manager.addNewRow(position);
-        dataChangeHandler.promptAdded(position, dataToAdd);
+        dataChangeHandler.questionAdded(position, dataToAdd);
     }
 
-    public void deletePromptButtonClicked(View view) {
-        final int position = PromptSettingManager.getPositionOfRow(view);
+    public void deleteQuestionButtonClicked(View view) {
+        final int position = QuestionSettingManager.getPositionOfRow(view);
 
-        manager.removePrompt(position);
+        manager.removeQuestion(position);
 
         if (manager.mustSetData()) {
-            dataChangeHandler.promptRemoved(position);
+            dataChangeHandler.questionRemoved(position);
         }
     }
 
@@ -146,7 +145,7 @@ public class PromptSettingActivity extends Activity implements
 
         if (wasSaved) {
             Toast.makeText(getApplicationContext(),
-                    getString(R.string.prompt_temp_save), Toast.LENGTH_SHORT)
+                    getString(R.string.question_temp_save), Toast.LENGTH_SHORT)
                     .show();
         }
 
@@ -215,8 +214,8 @@ public class PromptSettingActivity extends Activity implements
         FileSaver.saveAllData(categoryName, allData, (Context) this);
 
         // Apply to temporary data
-        InputDataTableManager.applyDataChanges(categoryName,
-                dataChangeHandler, (Context) this);
+        InputDataTableManager.applyDataChanges(categoryName, dataChangeHandler,
+                (Context) this);
 
         dataChangeHandler.reset();
     }

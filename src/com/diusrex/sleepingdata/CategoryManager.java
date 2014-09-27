@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.diusrex.sleepingdata.files.FileAccessor;
-import com.diusrex.sleepingdata.promptsetting.DataChangeHandler;
-import com.diusrex.sleepingdata.promptsetting.PromptSettingManager;
+import com.diusrex.sleepingdata.questionsetting.DataChangeHandler;
+import com.diusrex.sleepingdata.questionsetting.QuestionSettingManager;
 
 public class CategoryManager {
     static final String PREF_FILE = "availableCategories";
@@ -30,7 +30,7 @@ public class CategoryManager {
 
         FileAccessor.changeCategoryName(oldCategoryName, newCategoryName, context);
 
-        PromptSettingManager.categoryNameChanged(oldCategoryName, newCategoryName, context);
+        QuestionSettingManager.categoryNameChanged(oldCategoryName, newCategoryName, context);
         DataChangeHandler.categoryNameChanged(oldCategoryName, newCategoryName, context);
         InputDataTableManager.categoryNameChanged(oldCategoryName, newCategoryName, context);
     }
@@ -44,7 +44,7 @@ public class CategoryManager {
 
         FileAccessor.deleteCategory(categoryName, context);
 
-        PromptSettingManager.deleteTemporaryData(categoryName, context);
+        QuestionSettingManager.deleteTemporaryData(categoryName, context);
         DataChangeHandler.deleteTemporaryData(categoryName, context);
         InputDataTableManager.deleteTemporaryData(categoryName, context);
     }

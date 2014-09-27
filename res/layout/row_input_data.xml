@@ -6,7 +6,7 @@
     android:padding="@dimen/activity_horizontal_margin" >
     
     <TextView
-        android:id="@+id/prompt"
+        android:id="@+id/question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     

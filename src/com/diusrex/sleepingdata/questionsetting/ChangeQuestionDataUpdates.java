@@ -1,13 +1,13 @@
-package com.diusrex.sleepingdata.promptsetting;
+package com.diusrex.sleepingdata.questionsetting;
 
 
-interface ChangePromptsInfo
+interface ChangeQuestionDataUpdates
 {
     public int loadFromArray(String[] words, int position);
     public String[] applyToData(String[] data);
 }
 
-class AddData implements ChangePromptsInfo
+class AddData implements ChangeQuestionDataUpdates
 {
     public static final String IDENTIFIER = "ADD";
 
@@ -57,7 +57,7 @@ class AddData implements ChangePromptsInfo
     }
 }
 
-class DeleteData implements ChangePromptsInfo
+class DeleteData implements ChangeQuestionDataUpdates
 {
     public static final String IDENTIFIER = "DELETE";
 

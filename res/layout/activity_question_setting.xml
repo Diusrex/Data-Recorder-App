@@ -26,7 +26,7 @@
         android:padding="5dp" >
 
         <TableLayout
-            android:id="@+id/promptSettingTable"
+            android:id="@+id/questionSettingTable"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:padding="5dp" >
@@ -45,16 +45,16 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:onClick="choosePromptPosition"
-            android:text="@string/prompt_create_new" />
+            android:onClick="chooseQuestionPosition"
+            android:text="@string/question_create_new" />
         
         <Button
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:onClick="appendPrompt"
-            android:text="@string/prompt_create_new_append" />
+            android:onClick="appendQuestion"
+            android:text="@string/question_create_new_append" />
         
     </LinearLayout>
 

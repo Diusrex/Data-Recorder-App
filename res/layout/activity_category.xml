@@ -20,7 +20,7 @@
      
 
      <TextView
-         android:id="@+id/numberOfPrompts"
+         android:id="@+id/numberOfQuestions"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_below="@+id/categoryName"
@@ -31,7 +31,7 @@
          android:id="@+id/numberOfDataRows"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_below="@+id/numberOfPrompts"
+         android:layout_below="@+id/numberOfQuestions"
          android:layout_marginTop="20dp"
          android:textAppearance="?android:attr/textAppearanceMedium" />
 

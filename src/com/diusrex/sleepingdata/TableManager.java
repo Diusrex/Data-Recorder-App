@@ -38,7 +38,7 @@ public abstract class TableManager {
         changedForTemp = false;
     }
 
-    final public int getNumberPrompts() {
+    final public int getNumberQuestions() {
         return inputs.size();
     }
 
@@ -62,9 +62,9 @@ public abstract class TableManager {
             data[i] = inputs.get(i).getText().toString();
         }
 
-        String promptsAsString = TempSaver.join(data);
+        String questionsAsString = TempSaver.join(data);
 
-        editor.putString(categoryName, promptsAsString);
+        editor.putString(categoryName, questionsAsString);
         editor.commit();
     }
 
@@ -85,16 +85,16 @@ public abstract class TableManager {
     final public boolean saveInputsToFile() {
         deleteTemporaryInputs(categoryName, settings);
 
-        List<String> prompts = new ArrayList<String>();
+        List<String> questions = new ArrayList<String>();
 
         for (EditText text : inputs) {
-            prompts.add(text.getText().toString());
+            questions.add(text.getText().toString());
         }
 
         changedForTemp = false;
         wasChanged = false;
 
-        return saveInputsToFile(prompts);
+        return saveInputsToFile(questions);
     }
 
     abstract protected boolean saveInputsToFile(List<String> inputs);
@@ -103,13 +103,13 @@ public abstract class TableManager {
         // Set up the EditText
         EditText newET = (EditText) newInputRow.findViewById(R.id.input);
         newET.setText(text);
-        newET.addTextChangedListener(new PromptNameListener());
+        newET.addTextChangedListener(new QuestionNameListener());
         newET.clearFocus();
 
         return newET;
     }
 
-    final private class PromptNameListener extends GeneralTextChangeWatcher {
+    final private class QuestionNameListener extends GeneralTextChangeWatcher {
         @Override
         public void afterTextChanged(Editable s) {
             super.afterTextChanged(s);

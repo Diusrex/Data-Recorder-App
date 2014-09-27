@@ -13,7 +13,7 @@ public class FileAccessor {
     static private String LOG_TAG = "FileAccessor";
 
     static final String DATA_FOLDER = "";
-    static final String PROMPTS_FOLDER = "Prompts";
+    static final String QUESTIONS_FOLDER = "Questions";
 
     private FileAccessor() {
         
@@ -32,28 +32,28 @@ public class FileAccessor {
         List<String[]> allData = FileLoader.loadAllData(oldCategoryName, appContext);
         FileSaver.saveAllData(newCategoryName, allData, appContext);
 
-        List<String> allPrompts = FileLoader.loadPrompts(oldCategoryName, appContext);
-        FileSaver.savePrompts(newCategoryName, allPrompts, appContext);
+        List<String> allQuestions = FileLoader.loadQuestions(oldCategoryName, appContext);
+        FileSaver.saveQuestions(newCategoryName, allQuestions, appContext);
 
         deleteCategory(oldCategoryName, appContext);
     }
 
     public static void deleteCategory(String categoryName, Context appContext) {
         File dataFile;
-        File promptsFile;
+        File questionsFile;
 
         try {
             dataFile = openDataFile(categoryName, appContext);
-            promptsFile = openPromptFile(categoryName, appContext);
+            questionsFile = openQuestionsFile(categoryName, appContext);
         } catch (IOException | NoAccessException e) {
             return;
         }
 
         dataFile.delete();
-        promptsFile.delete();
+        questionsFile.delete();
 
         flagFileChanges(dataFile, appContext);
-        flagFileChanges(promptsFile, appContext);
+        flagFileChanges(questionsFile, appContext);
     }
 
 
@@ -62,9 +62,9 @@ public class FileAccessor {
         return openFile(DATA_FOLDER, fileName, appContext);
     }
 
-    static public File openPromptFile(String fileName, Context appContext) throws IOException, NoAccessException
+    static public File openQuestionsFile(String fileName, Context appContext) throws IOException, NoAccessException
     {
-        return openFile(PROMPTS_FOLDER, fileName, appContext);
+        return openFile(QUESTIONS_FOLDER, fileName, appContext);
     }
 
     static File openFile(String folder, String fileName, Context appContext) throws IOException, NoAccessException

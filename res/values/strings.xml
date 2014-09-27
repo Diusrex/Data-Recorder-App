@@ -34,19 +34,19 @@
     <string name="name_already_used">Cannot use the name, has already been used</string>
     <string name="name_cannot_start_space">The name cannot start with a space</string>
     
-    <string name="prompt_name">Prompt name</string>
-    <string name="prompt_create_new">Insert prompt</string>
-    <string name="prompt_create_new_append">Append prompt</string>
-    <string name="prompt_delete">Delete</string>
-    <string name="prompt_position">Position to place Prompt</string>
-    <string name="prompt_position_short">Position</string>
-    <string name="prompt_range_info" formatted="true">Place new at position (%1$d - %2$d)</string>
-    <string name="prompt_position_invalid">That position is invalid</string>
-    <string name="prompt_add_data">Add data to earlier inputs</string>
-    <string name="prompt_temp_save">Temporarily Saved</string>
+    <string name="question_name">Question name</string>
+    <string name="question_create_new">Insert question</string>
+    <string name="question_create_new_append">Append question</string>
+    <string name="question_delete">Delete</string>
+    <string name="question_position">Position to place the new question</string>
+    <string name="question_position_short">Position</string>
+    <string name="question_range_info" formatted="true">Place new at position (%1$d - %2$d)</string>
+    <string name="question_position_invalid">That position is invalid</string>
+    <string name="question_add_data">Add data to earlier inputs</string>
+    <string name="question_temp_save">Temporarily Saved</string>
     <string name="cannot_contain_comma">Cannot contain commas</string>
     
-    <string name="no_prompts">There must be at least 1 prompt</string>
+    <string name="no_questions">There must be at least 1 question</string>
     <string name="data_enter">Enter data</string>
     <string name="data_must_be_entered">All data must have some value entered</string>
     <string name="save_successful">Saved</string>

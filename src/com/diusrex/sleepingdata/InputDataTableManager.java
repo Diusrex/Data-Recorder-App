@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.diusrex.sleepingdata.files.FileLoader;
 import com.diusrex.sleepingdata.files.FileSaver;
-import com.diusrex.sleepingdata.promptsetting.DataChangeHandler;
+import com.diusrex.sleepingdata.questionsetting.DataChangeHandler;
 
 public class InputDataTableManager extends TableManager {
     static final String LOG_TAG = "InputDataTableManager";
@@ -83,34 +83,34 @@ public class InputDataTableManager extends TableManager {
 
         List<String> existingInputs = loadTemporaryInputs();
 
-        List<String> prompts = FileLoader.loadPrompts(categoryName,
+        List<String> questions = FileLoader.loadQuestions(categoryName,
                 appContext);
 
         if (existingInputs.size() == 0) {
             Log.d(LOG_TAG, "Is new");
             // Has not been entered yet
             existingInputs = new ArrayList<String>();
-            for (int i = 0; i < prompts.size(); ++i) {
+            for (int i = 0; i < questions.size(); ++i) {
                 existingInputs.add("");
             }
         }
 
-        createDataTable(existingInputs, prompts);
+        createDataTable(existingInputs, questions);
     }
 
-    void createDataTable(List<String> existingInputs, List<String> prompts) {
-        for (int i = 0; i < prompts.size(); ++i) {
-            createRow(existingInputs.get(i), prompts.get(i));
+    void createDataTable(List<String> existingInputs, List<String> questions) {
+        for (int i = 0; i < questions.size(); ++i) {
+            createRow(existingInputs.get(i), questions.get(i));
         }
     }
 
-    void createRow(String dataText, String prompText) {
+    void createRow(String dataText, String questionText) {
         // Create a new row
         View newInputRow = layoutInflater
                 .inflate(R.layout.row_input_data, null);
 
-        TextView promptName = (TextView) newInputRow.findViewById(R.id.prompt);
-        promptName.setText(prompText);
+        TextView questionName = (TextView) newInputRow.findViewById(R.id.question);
+        questionName.setText(questionText);
 
         EditText input = createEditText(newInputRow, dataText);
 

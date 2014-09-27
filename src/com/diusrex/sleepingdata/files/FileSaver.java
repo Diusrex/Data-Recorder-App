@@ -17,12 +17,12 @@ public class FileSaver {
         
     }
     
-    static public boolean savePrompts(String categoryName, List<String> prompts, Context appContext)
+    static public boolean saveQuestions(String categoryName, List<String> questions, Context appContext)
     {
         File saveFile = null;
 
         try {
-            saveFile = FileAccessor.openPromptFile(categoryName, appContext);
+            saveFile = FileAccessor.openQuestionsFile(categoryName, appContext);
         } catch(Exception e) {
             return false;
         }
@@ -30,7 +30,7 @@ public class FileSaver {
         try {
             FileWriter writer = new FileWriter(saveFile, false);
 
-            for (String outputItem : prompts) {
+            for (String outputItem : questions) {
                 writer.write(outputItem + ", ");
             }
 

@@ -1,4 +1,4 @@
-package com.diusrex.sleepingdata.promptsetting;
+package com.diusrex.sleepingdata.questionsetting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class DataChangeHandler {
     final SharedPreferences settings;
     String categoryName;
 
-    List<ChangePromptsInfo> allChanges;
+    List<ChangeQuestionDataUpdates> allChanges;
 
     List<EditText> inputs;
 
@@ -42,8 +42,7 @@ public class DataChangeHandler {
         editor.commit();
     }
 
-    DataChangeHandler(String categoryName, Context appContext)
-    {
+    DataChangeHandler(String categoryName, Context appContext) {
         this.categoryName = categoryName;
 
         settings = appContext.getSharedPreferences(CHANGES_FILE, 0);
@@ -52,9 +51,8 @@ public class DataChangeHandler {
         loadExistingDataChanges();
     }
 
-    void loadExistingDataChanges()
-    {
-        allChanges = new ArrayList<ChangePromptsInfo>();
+    void loadExistingDataChanges() {
+        allChanges = new ArrayList<ChangeQuestionDataUpdates>();
 
         String line = settings.getString(categoryName, null);
 
@@ -86,29 +84,26 @@ public class DataChangeHandler {
         }
     }
 
-    public void promptAdded(int position, String dataToAdd)
-    {
+    public void questionAdded(int position, String dataToAdd) {
         allChanges.add(new AddData(dataToAdd, position));
     }
 
-    public void promptRemoved(int position) {
+    public void questionRemoved(int position) {
         allChanges.add(new DeleteData(position));
     }
 
-    public void reset()
-    {
-        allChanges = new ArrayList<ChangePromptsInfo>();
+    public void reset() {
+        allChanges = new ArrayList<ChangeQuestionDataUpdates>();
     }
 
-    public void saveDataChanges()
-    {
+    public void saveDataChanges() {
         if (allChanges.size() == 0) {
             return;
         }
 
         String line = "", separator = "";
 
-        for (ChangePromptsInfo current : allChanges) {
+        for (ChangeQuestionDataUpdates current : allChanges) {
             line += separator + current.toString();
             separator = " ";
         }
@@ -119,14 +114,11 @@ public class DataChangeHandler {
         editor.commit();
     }
 
-    public String[] applyDataChanges(String[] dataLine)
-    {
-        for (ChangePromptsInfo current : allChanges) {
+    public String[] applyDataChanges(String[] dataLine) {
+        for (ChangeQuestionDataUpdates current : allChanges) {
             dataLine = current.applyToData(dataLine);
         }
 
         return dataLine;
     }
-
-
 }

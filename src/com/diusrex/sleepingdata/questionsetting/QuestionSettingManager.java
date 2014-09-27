@@ -1,4 +1,4 @@
-package com.diusrex.sleepingdata.promptsetting;
+package com.diusrex.sleepingdata.questionsetting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,9 @@ import com.diusrex.sleepingdata.TableManager;
 import com.diusrex.sleepingdata.files.FileLoader;
 import com.diusrex.sleepingdata.files.FileSaver;
 
-public class PromptSettingManager extends TableManager {
-    static final String LOG_TAG = "PromptSettingManager";
-    static final String PREFS_FILE = "PromptPreferences";
+public class QuestionSettingManager extends TableManager {
+    static final String LOG_TAG = "QuestionSettingManager";
+    static final String PREFS_FILE = "QuestionPreferencesFile";
 
     Context appContext;
 
@@ -35,9 +35,9 @@ public class PromptSettingManager extends TableManager {
         deleteTemporaryInputs(categoryName, settings);
     }
 
-    public PromptSettingManager(TableLayout promptTable, String categoryName,
+    public QuestionSettingManager(TableLayout questionTable, String categoryName,
             LayoutInflater layoutInflater, Context appContext) {
-        super(promptTable, categoryName, layoutInflater, appContext,
+        super(questionTable, categoryName, layoutInflater, appContext,
                 appContext.getSharedPreferences(PREFS_FILE, 0));
         this.appContext = appContext;
     }
@@ -52,7 +52,7 @@ public class PromptSettingManager extends TableManager {
 
         if (existingInputs.size() == 0) {
             wasChanged = false;
-            existingInputs = FileLoader.loadPrompts(categoryName, appContext);
+            existingInputs = FileLoader.loadQuestions(categoryName, appContext);
         } else {
             wasChanged = true;
 
@@ -60,19 +60,19 @@ public class PromptSettingManager extends TableManager {
 
         if (existingInputs.size() > 0) {
             for (String item : existingInputs) {
-                addPromptToEnd(item);
+                addQuestionToEnd(item);
             }
         } else {
-            addPromptToEnd("");
+            addQuestionToEnd("");
         }
     }
 
     @Override
-    protected boolean saveInputsToFile(List<String> prompts) {
-        return FileSaver.savePrompts(categoryName, prompts, appContext);
+    protected boolean saveInputsToFile(List<String> questions) {
+        return FileSaver.saveQuestions(categoryName, questions, appContext);
     }
 
-    private void addPromptToEnd(String enteredText) {
+    private void addQuestionToEnd(String enteredText) {
         createRow(enteredText, inputs.size());
     }
 
@@ -84,7 +84,7 @@ public class PromptSettingManager extends TableManager {
     
     private void createRow(String enteredText, int position) {
         // Create a new row
-        View newInputRow = layoutInflater.inflate(R.layout.prompt_enter_row,
+        View newInputRow = layoutInflater.inflate(R.layout.question_enter_row,
                 null);
 
         EditText newET = createEditText(newInputRow, enteredText);
@@ -97,20 +97,20 @@ public class PromptSettingManager extends TableManager {
 
     protected void updatePositionNumbersIncludingAndAfter(int positionChanged) {
         for (int i = positionChanged; i < inputs.size(); ++i) {
-            View currentPromptRow = table.getChildAt(i);
+            View currentQuestionRow = table.getChildAt(i);
 
-            TextView hiddenNumber = (TextView) currentPromptRow
+            TextView hiddenNumber = (TextView) currentQuestionRow
                     .findViewById(R.id.number);
             hiddenNumber.setText("" + i);
 
-            TextView number = (TextView) currentPromptRow
+            TextView number = (TextView) currentQuestionRow
                     .findViewById(R.id.displayNumber);
             number.setText("" + (i + 1) + ": ");
         }
     }
 
     public boolean mustSetData() {
-        return FileLoader.promptsExist(categoryName, appContext);
+        return FileLoader.questionsExist(categoryName, appContext);
     }
     
     public static int getPositionOfRow(View button) {
@@ -120,7 +120,7 @@ public class PromptSettingManager extends TableManager {
         return Integer.parseInt(actualNumber.getText().toString());
     }
 
-    public void removePrompt(int position) {
+    public void removeQuestion(int position) {
         inputs.remove(position);
         table.removeViewAt(position);
 
