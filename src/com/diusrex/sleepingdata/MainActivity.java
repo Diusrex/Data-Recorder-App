@@ -88,8 +88,7 @@ public class MainActivity extends Activity implements CategoryCreatorHandler {
     void insertCategoryInScrollView(String groupName, int position) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View newCategoryRow = inflater
-                .inflate(R.layout.category_row, null);
+        View newCategoryRow = inflater.inflate(R.layout.category_row, null);
 
         TextView nameTextView = (TextView) newCategoryRow
                 .findViewById(R.id.name);
