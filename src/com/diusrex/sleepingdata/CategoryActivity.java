@@ -1,10 +1,13 @@
 package com.diusrex.sleepingdata;
 
+import java.util.Date;
+
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -58,6 +61,8 @@ public class CategoryActivity extends Activity implements ConfirmListener, Input
         setQuestionOutputInfo();
 
         setDataRowsOutputInfo();
+        
+        setDateChanged();
     }
 
     private void setCategoryNameTV()
@@ -94,6 +99,17 @@ public class CategoryActivity extends Activity implements ConfirmListener, Input
 
         TextView numberDataRowsInfo = (TextView) findViewById(R.id.numberOfDataRows);
         numberDataRowsInfo.setText(numberOfDataRowsOutput);
+    }
+
+
+    private void setDateChanged() {
+        Date date = CategoryManager.getLastCategoryNameChange(this, categoryName);
+        TextView dateLastChanged = (TextView) findViewById(R.id.dateLastChanged);
+        if (date == null) {
+            dateLastChanged.setText(R.string.never_changed);
+        } else {
+            dateLastChanged.setText(getString(R.string.date_changed, DateFormat.getDateFormat(this).format(date)));
+        }
     }
 
     @Override

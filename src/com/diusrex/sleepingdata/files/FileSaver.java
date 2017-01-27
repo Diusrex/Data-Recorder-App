@@ -7,6 +7,8 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.diusrex.sleepingdata.Question;
+import com.diusrex.sleepingdata.SaveFormatter;
 import com.diusrex.sleepingdata.files.FileAccessor.NoAccessException;
 
 
@@ -17,7 +19,7 @@ public class FileSaver {
         
     }
     
-    static public boolean saveQuestions(String categoryName, List<String> questions, Context appContext)
+    static public boolean saveQuestions(String categoryName, List<Question> questions, Context appContext)
     {
         File saveFile = null;
 
@@ -30,11 +32,13 @@ public class FileSaver {
         try {
             FileWriter writer = new FileWriter(saveFile, false);
 
-            for (String outputItem : questions) {
-                writer.write(outputItem + ", ");
+            String[] savedList = new String[2];
+            for (Question outputItem : questions) {
+                savedList[0] = outputItem.name;
+                savedList[1] = outputItem.type.name();
+                writer.write(SaveFormatter.join(savedList));
+                writer.write("\n");
             }
-
-            writer.write("\n");
 
             writer.close();
 
@@ -65,6 +69,7 @@ public class FileSaver {
 
             for (String[] data : allData) {
                 for (String outputItem : data) {
+                    // TODO: MUST BE FIXED....
                     writer.write(outputItem + ", ");
                 }
 
@@ -85,19 +90,14 @@ public class FileSaver {
         return true;
     }
 
-    static public boolean saveData(String categoryName, List<String> data, Context appContext)
+    static public boolean saveData(String categoryName, String[] data, Context appContext)
     {
         try {
             File saveFile = FileAccessor.openDataFile(categoryName, appContext);
 
             FileWriter writer = new FileWriter(saveFile, true);
-
-            for (String outputItem : data) {
-                writer.write(outputItem + ", ");
-            }
-
+            writer.write(SaveFormatter.join(data));
             writer.write("\n");
-
             writer.close();
 
             FileAccessor.flagFileChanges(saveFile, appContext);

@@ -51,9 +51,8 @@ public class InputDataActivity extends Activity implements ConfirmListener {
     private void setUpManager() {
         TableLayout dataTable = (TableLayout) findViewById(R.id.dataTable);
 
-        manager = new InputDataTableManager(dataTable, categoryName,
-                (LayoutInflater) getBaseContext().getSystemService(
-                        LAYOUT_INFLATER_SERVICE), (Context) this);
+        manager = new InputDataTableManager(dataTable, categoryName, (LayoutInflater) getBaseContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE), (Context) this);
     }
 
     @Override
@@ -63,8 +62,7 @@ public class InputDataActivity extends Activity implements ConfirmListener {
         manager.loadAndDisplay();
 
         // Do not want the keyboard to popup yet
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     void setUpKeyboardHandling() {
@@ -77,16 +75,15 @@ public class InputDataActivity extends Activity implements ConfirmListener {
 
                     @Override
                     public void onHidden() {
-                        findViewById(R.id.buttonRow)
-                                .setVisibility(View.VISIBLE);
+                        findViewById(R.id.buttonRow).setVisibility(View.VISIBLE);
                     }
 
                 });
     }
 
     public void chooseQuestionPosition(View view) {
-        DialogFragment fragment = QuestionPositionDialogFragment.newInstance(0,
-                manager.getNumberQuestions(), (QuestionPositionListener) this);
+        DialogFragment fragment = QuestionPositionDialogFragment.newInstance(0, manager.getNumberRows(),
+                (QuestionPositionListener) this);
         fragment.show(getFragmentManager(), "dialog");
     }
 
@@ -95,10 +92,8 @@ public class InputDataActivity extends Activity implements ConfirmListener {
         super.onBackPressed();
 
         if (manager.tempHasBeenChanged()) {
-            manager.saveTemporaryInputs();
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.question_temp_save), Toast.LENGTH_SHORT)
-                    .show();
+            manager.saveTemporaryRows();
+            Toast.makeText(getApplicationContext(), getString(R.string.question_temp_save), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -106,7 +101,7 @@ public class InputDataActivity extends Activity implements ConfirmListener {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        manager.saveTemporaryInputs();
+        manager.saveTemporaryRows();
     }
 
     public void finishButtonClicked(View view) {
@@ -120,9 +115,8 @@ public class InputDataActivity extends Activity implements ConfirmListener {
             } else {
                 output = getString(R.string.save_successful);
             }
-
-            Toast.makeText(getApplicationContext(), output, Toast.LENGTH_SHORT)
-                    .show();
+            CategoryManager.updateCategoryChangeDate(this, categoryName);
+            Toast.makeText(getApplicationContext(), output, Toast.LENGTH_SHORT).show();
 
             finish();
         } else {
@@ -132,8 +126,7 @@ public class InputDataActivity extends Activity implements ConfirmListener {
 
     public void clearButtonClicked(View view) {
         if (manager.inputsExists()) {
-            DialogFragment fragment = ConfirmDialogFragment.newInstance(
-                    getString(R.string.confirm_clear), CLEAR_CODE,
+            DialogFragment fragment = ConfirmDialogFragment.newInstance(getString(R.string.confirm_clear), CLEAR_CODE,
                     (ConfirmListener) this);
             fragment.show(getFragmentManager(), "dialog");
         }
@@ -161,14 +154,13 @@ public class InputDataActivity extends Activity implements ConfirmListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(phrase);
-        builder.setPositiveButton(getString(android.R.string.ok),
-                new OnClickListener() {
+        builder.setPositiveButton(getString(android.R.string.ok), new OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
 
         builder.show();
     }

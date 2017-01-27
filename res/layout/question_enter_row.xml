@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/enterQuestionRow"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:padding="@dimen/question_enter_row_padding" >
-    
+
     <TextView
         android:id="@+id/number"
         android:layout_width="0dp"
         android:layout_height="0dp" />
-    
+
     <TextView
         android:id="@+id/displayNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    
+
     <EditText
         android:id="@+id/input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:inputType="text"
-        android:hint="@string/question_name" >
-            <requestFocus />
-        </EditText>
+        android:hint="@string/question_name"
+        android:inputType="text" >
 
-    <Button
+        <requestFocus />
+    </EditText>
+
+    <Spinner
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </Spinner>
+
+    <ImageButton
         android:id="@+id/deleteQuestion"
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/question_delete"
         android:onClick="deleteQuestionButtonClicked"
-        style="?android:attr/buttonBarButtonStyle" />
+        android:src="@android:drawable/ic_menu_delete" />
+
 </TableRow>

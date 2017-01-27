@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="types_array">
+        <item>Single Line</item>
+        <item>Paragraph</item>
+        <item>10 Scale</item>
+        <item>Time</item>
+    </string-array>
+    
+</resources>

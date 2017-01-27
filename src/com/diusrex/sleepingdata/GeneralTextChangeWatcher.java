@@ -17,6 +17,7 @@ public class GeneralTextChangeWatcher implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         for (int i = 0; i < s.length(); ++i) {
+            // TODO: Should be able to enable this now!
             if (s.charAt(i) == ',') {
                 s.delete(i, i + 1);
             }

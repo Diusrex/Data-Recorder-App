@@ -6,7 +6,7 @@ The purpose of this app is to allow the user to easily track important data, and
 Release
 -----------------
 
-I have not released this app on the Google Play Store due to a lack of time. The app is working, I just did not manage to create a description as well as have sufficient help/information screens before school started. I will release the app once I have time, likely in mid December.
+I have not released this app on the Google Play Store due to a lack of time and interest.
 
 
 Naming

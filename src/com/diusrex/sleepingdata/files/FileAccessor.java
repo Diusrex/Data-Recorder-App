@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import com.diusrex.sleepingdata.Question;
+
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
@@ -32,7 +34,7 @@ public class FileAccessor {
         List<String[]> allData = FileLoader.loadAllData(oldCategoryName, appContext);
         FileSaver.saveAllData(newCategoryName, allData, appContext);
 
-        List<String> allQuestions = FileLoader.loadQuestions(oldCategoryName, appContext);
+        List<Question> allQuestions = FileLoader.loadQuestions(oldCategoryName, appContext);
         FileSaver.saveQuestions(newCategoryName, allQuestions, appContext);
 
         deleteCategory(oldCategoryName, appContext);

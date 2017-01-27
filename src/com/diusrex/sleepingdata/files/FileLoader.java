@@ -13,13 +13,14 @@ import java.util.List;
 import android.content.Context;
 import android.util.Log;
 
+import com.diusrex.sleepingdata.Question;
+import com.diusrex.sleepingdata.SaveFormatter;
 import com.diusrex.sleepingdata.files.FileAccessor.NoAccessException;
 
 public class FileLoader {
     static private String LOG_TAG = "FileLoader";
 
     private FileLoader() {
-        
     }
     
     static public class FailedToLoad extends Exception {
@@ -34,7 +35,7 @@ public class FileLoader {
         return loadQuestions(categoryName, appContext).size();
     }
 
-    static public List<String> loadQuestions(String categoryName, Context appContext)
+    static public List<Question> loadQuestions(String categoryName, Context appContext)
     {
         try
         {
@@ -45,18 +46,26 @@ public class FileLoader {
 
             String line = reader.readLine();
 
+            List<Question> questions = new ArrayList<Question>();
             // Means that there were no questions entered yet.
-            if (line == null || line.equals("")) {
-                return new ArrayList<String>();
+            while (line != null) {
+                if (line.equals("")) {
+                    continue;
+                }
+                
+                String[] lineInfo = SaveFormatter.split(line);
+                if (lineInfo.length == 1) {
+                    questions.add(new Question(lineInfo[0]));
+                } else {
+                    questions.add(Question.FromTypeEnumValue(lineInfo[0], lineInfo[1]));
+                }
+                
+                line = reader.readLine();
             }
-
-            return Arrays.asList(line.split(", "));
-        } catch (FailedToLoad e1) {
-            return new ArrayList<String>();
-        } catch (IOException e) {
-            return new ArrayList<String>();
-        } catch (NoAccessException e) {
-            return new ArrayList<String>();
+            Log.w("INFO", "Returned " + questions.size());
+            return questions;
+        } catch (Exception e) {
+            return new ArrayList<Question>();
         }
     }
     

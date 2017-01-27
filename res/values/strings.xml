@@ -63,9 +63,25 @@
     <string name="help_how_to_import_into_excel_1a">1a) The file is stored on your device in the directory \'Save Data\', and will be the name of the category.</string>
     <string name="help_how_to_import_into_excel_1b">1b) You can access this file by plugging your device into a computer and copying the file, uploading the file using Dropbox, or other means.</string>
     <string name="help_how_to_import_into_excel_2">2) Once the text file is on your computer (or, if you have excel on your device), you can then import the data into excel.</string>
-	<string name="help_how_to_import_into_excel_3">3) On the top of excel, select the \'Data\' tab, and then click on the button near the called \'From Text\'.</string>
-	<string name="help_how_to_import_into_excel_4">4) Locate the text file in your computer, select it, and then press \'import\'.</string>
-	<string name="help_how_to_import_into_excel_5">5) Make sure that the option \'Delimited\' has been selected, rather than \'Fixed widget\', and press Next.</string>
-	<string name="help_how_to_import_into_excel_6">6) Inside of the box labed \'Delimiters\', select \'Comma\', and press Finish.</string>
-	<string name="help_how_to_import_into_excel_7">7) Finally, select the cell that you want to contain the top right of the __inforation__, and press OK.</string>
+    <string name="help_how_to_import_into_excel_3">3) On the top of excel, select the \'Data\' tab, and then click on the button near the called \'From Text\'.</string>
+    <string name="help_how_to_import_into_excel_4">4) Locate the text file in your computer, select it, and then press \'import\'.</string>
+    <string name="help_how_to_import_into_excel_5">5) Make sure that the option \'Delimited\' has been selected, rather than \'Fixed widget\', and press Next.</string>
+    <string name="help_how_to_import_into_excel_6">6) Inside of the box labed \'Delimiters\', select \'Comma\', and press Finish.</string>
+    <string name="help_how_to_import_into_excel_7">7) Finally, select the cell that you want to contain the top right of the __inforation__, and press OK.</string>
+    
+    <string name="question_type_single_line">Single Line</string>
+    <string name="question_type_paragraph">Paragraph</string>
+    <string name="question_type_ten_scale">Ten Scale</string>
+    <string name="question_type_time">Time</string>
+    <string name="question_type_yes_no">T/F</string>
+    
+    <string name="single_line_hint">Enter a single line</string>
+    <string name="paragraph_hint">Enter a paragraph</string>
+    <string name="ten_scale_hint">Scale from 1 to 10</string>
+    <string name="time_hint">Enter date (DD/MM/YYYY)</string>
+    <string name="change_category_name">Change Category Name</string>
+    
+
+    <string name="never_changed">This category has never been edited.</string>
+    <string name="date_changed" formatted="true">Last Edited %1$s</string>
 </resources>

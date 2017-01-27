@@ -82,7 +82,6 @@ public class QuestionSettingActivity extends Activity implements
                         findViewById(R.id.buttonRow2).setVisibility(
                                 View.VISIBLE);
                     }
-
                 });
     }
 
@@ -99,12 +98,12 @@ public class QuestionSettingActivity extends Activity implements
 
     public void chooseQuestionPosition(View view) {
         DialogFragment fragment = QuestionPositionDialogFragment.newInstance(1,
-                manager.getNumberQuestions(), (QuestionPositionListener) this);
+                manager.getNumberRows(), (QuestionPositionListener) this);
         fragment.show(getFragmentManager(), "dialog");
     }
 
     public void appendQuestion(View view) {
-        questionPositionChosen(manager.getNumberQuestions());
+        questionPositionChosen(manager.getNumberRows());
     }
 
     @Override
@@ -163,7 +162,7 @@ public class QuestionSettingActivity extends Activity implements
 
     boolean saveTempInformation() {
         // Should always save these
-        manager.saveTemporaryInputs();
+        manager.saveTemporaryRows();
         dataChangeHandler.saveDataChanges();
 
         return manager.tempHasBeenChanged();
