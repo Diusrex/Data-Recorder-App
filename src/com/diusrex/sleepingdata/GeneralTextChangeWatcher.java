@@ -3,6 +3,8 @@ package com.diusrex.sleepingdata;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+// Reduces the number of functions that need to be overridden when need to create
+// a TextWatcher.
 public class GeneralTextChangeWatcher implements TextWatcher {
 
     @Override
@@ -16,11 +18,5 @@ public class GeneralTextChangeWatcher implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        for (int i = 0; i < s.length(); ++i) {
-            // TODO: Should be able to enable this now!
-            if (s.charAt(i) == ',') {
-                s.delete(i, i + 1);
-            }
-        }
     }
 };
